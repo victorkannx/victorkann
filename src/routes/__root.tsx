@@ -77,14 +77,35 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Victor Kannayo | Direct Booking Websites for Shortlets" },
+      {
+        name: "description",
+        content:
+          "Victor Kannayo builds direct booking websites for shortlet owners and Airbnb hosts in Nigeria and worldwide. Get your direct booking site live in 72 hours.",
+      },
+      { name: "author", content: "Victor Kannayo" },
+      {
+        property: "og:title",
+        content: "Victor Kannayo | Direct Booking Websites for Shortlets",
+      },
+      {
+        property: "og:description",
+        content:
+          "I build booking websites that turn Instagram views into paid bookings for shortlet owners & Airbnb hosts. Get your direct booking site live in 72 hours.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://victorkann.com" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:site", content: "@victorkannayo" },
+      {
+        name: "twitter:title",
+        content: "Victor Kannayo | Direct Booking Websites for Shortlets",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "I build booking websites that turn Instagram views into paid bookings for shortlet owners & Airbnb hosts.",
+      },
     ],
     links: [
       {
@@ -92,6 +113,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -119,7 +146,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );
