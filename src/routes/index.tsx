@@ -124,25 +124,25 @@ function Hero() {
       <div className="mx-auto max-w-4xl text-center">
         <Badge
           variant="secondary"
-          className="mb-6 inline-flex items-center gap-1.5 bg-agency-blue-light/60 px-3 py-1 text-xs font-medium text-agency-blue"
+          className="mb-5 inline-flex max-w-full items-center gap-1.5 whitespace-normal bg-agency-blue-light/60 px-3 py-1 text-[11px] font-medium leading-snug text-agency-blue sm:text-xs"
         >
-          <span className="relative flex h-2 w-2">
+          <span className="relative flex h-2 w-2 shrink-0">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
           </span>
           Available for 3 new projects this month
         </Badge>
 
-        <h1 className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="text-balance text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
           I build booking websites that turn Instagram views into paid bookings.
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-balance text-base text-muted-foreground sm:text-lg md:text-xl">
+        <p className="mx-auto mt-5 max-w-2xl text-balance text-[0.95rem] text-muted-foreground sm:text-lg md:text-xl">
           For shortlet owners & Airbnb hosts who are tired of losing 15% to Airbnb and wasting hours
           answering &quot;how much?&quot; on WhatsApp. Get your direct booking site live in 72 hours.
         </p>
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button
             size="lg"
             className="w-full gap-2 bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 sm:w-auto"
@@ -156,15 +156,17 @@ function Hero() {
           <Button
             size="lg"
             variant="outline"
-            className="w-full gap-2 border-foreground/20 px-6 text-base font-semibold text-foreground hover:bg-muted sm:w-auto"
+            className="w-full gap-2 border-foreground/20 px-6 text-sm font-semibold text-foreground hover:bg-muted sm:w-auto sm:text-base"
             asChild
           >
             <a href={WHATSAPP_HERO} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" />
-              Chat Me on WhatsApp - 08161123296
+              <MessageCircle className="h-4 w-4 shrink-0" />
+              <span className="sm:hidden">WhatsApp 08161123296</span>
+              <span className="hidden sm:inline">Chat Me on WhatsApp - 08161123296</span>
             </a>
           </Button>
         </div>
+
       </div>
     </section>
   );
@@ -185,10 +187,9 @@ function TrustBar() {
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-5 w-5 fill-current ${i < 4 ? "text-yellow-500" : "text-yellow-500"}`}
+                className={`h-4 w-4 fill-current sm:h-5 sm:w-5 ${i < 4 ? "text-yellow-500" : "text-yellow-500"}`}
               />
             ))}
-            <Star className="h-5 w-5 fill-current text-yellow-500" />
           </div>
           <span className="ml-2 text-sm font-bold text-foreground">4.9</span>
           <span className="text-sm text-muted-foreground">rating</span>
@@ -220,8 +221,8 @@ function ProblemSection() {
   return (
     <section className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             Your WhatsApp link in bio is costing you bookings.
           </h2>
         </div>
@@ -272,8 +273,8 @@ function WorkSection() {
   return (
     <section id="work" className="section-padding container-padding bg-muted/20">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             My Work
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
@@ -282,7 +283,7 @@ function WorkSection() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 md:gap-8">
           {demos.map((demo) => (
             <Card
               key={demo.title}
@@ -359,8 +360,8 @@ function ServicesSection() {
   return (
     <section id="services" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             What you get
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
@@ -431,8 +432,8 @@ function PricingSection() {
   return (
     <section id="pricing" className="section-padding container-padding bg-muted/20">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             Pricing
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
@@ -527,13 +528,13 @@ function HowItWorksSection() {
   return (
     <section className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             How it works
           </h2>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
           {steps.map((item, index) => (
             <div key={item.step} className="relative flex flex-col items-start">
               {index < steps.length - 1 && (
@@ -556,7 +557,7 @@ function FinalCTA() {
   return (
     <section className="section-padding container-padding bg-foreground text-background">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+        <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
           Ready to stop losing bookings to Airbnb?
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-balance text-base text-background/70 sm:text-lg md:text-xl">
@@ -564,12 +565,13 @@ function FinalCTA() {
         </p>
         <Button
           size="lg"
-          className="mt-8 w-full gap-2 bg-background px-8 text-base font-semibold text-foreground hover:bg-background/90 sm:w-auto"
+          className="mt-8 w-full gap-2 bg-background px-6 text-sm sm:text-base font-semibold text-foreground hover:bg-background/90 sm:w-auto"
           asChild
         >
           <a href={WHATSAPP_CTA} target="_blank" rel="noopener noreferrer">
             <MessageCircle className="h-5 w-5" />
-            Chat Victor on WhatsApp Now - 08161123296
+            <span className="sm:hidden">Chat Victor Now - 08161123296</span>
+            <span className="hidden sm:inline">Chat Victor on WhatsApp Now - 08161123296</span>
           </a>
         </Button>
       </div>
@@ -628,9 +630,9 @@ function FloatingWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/20 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="fixed bottom-4 right-4 z-50 flex h-12 w-12 sm:bottom-6 sm:right-6 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/20 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <MessageCircle className="h-7 w-7 fill-current" />
+      <MessageCircle className="h-6 w-6 fill-current sm:h-7 sm:w-7" />
     </a>
   );
 }
