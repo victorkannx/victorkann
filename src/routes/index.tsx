@@ -109,7 +109,7 @@ function Navbar() {
           <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90" asChild>
             <a href={WHATSAPP_MAIN} target="_blank" rel="noopener noreferrer">
               <MessageCircle className="h-4 w-4" />
-              <span className="hidden xs:inline">WhatsApp</span>
+              <span className="hidden sm:inline">WhatsApp</span>
             </a>
           </Button>
         </div>
