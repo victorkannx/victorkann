@@ -158,20 +158,18 @@
 @utility section-padding {
   padding-top: 5rem;
   padding-bottom: 5rem;
+
+  @media (min-width: 768px) {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
 }
 
 @utility container-padding {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-}
 
-@media (min-width: 768px) {
-  @utility section-padding {
-    padding-top: 7rem;
-    padding-bottom: 7rem;
-  }
-
-  @utility container-padding {
+  @media (min-width: 768px) {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
