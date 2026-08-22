@@ -187,10 +187,9 @@ function TrustBar() {
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-5 w-5 fill-current ${i < 4 ? "text-yellow-500" : "text-yellow-500"}`}
+                className={`h-4 w-4 fill-current sm:h-5 sm:w-5 ${i < 4 ? "text-yellow-500" : "text-yellow-500"}`}
               />
             ))}
-            <Star className="h-5 w-5 fill-current text-yellow-500" />
           </div>
           <span className="ml-2 text-sm font-bold text-foreground">4.9</span>
           <span className="text-sm text-muted-foreground">rating</span>
@@ -222,8 +221,8 @@ function ProblemSection() {
   return (
     <section className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             Your WhatsApp link in bio is costing you bookings.
           </h2>
         </div>
@@ -274,8 +273,8 @@ function WorkSection() {
   return (
     <section id="work" className="section-padding container-padding bg-muted/20">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             My Work
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
@@ -284,7 +283,7 @@ function WorkSection() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 md:gap-8">
           {demos.map((demo) => (
             <Card
               key={demo.title}
@@ -361,8 +360,8 @@ function ServicesSection() {
   return (
     <section id="services" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             What you get
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
@@ -433,8 +432,8 @@ function PricingSection() {
   return (
     <section id="pricing" className="section-padding container-padding bg-muted/20">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             Pricing
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
@@ -529,13 +528,13 @@ function HowItWorksSection() {
   return (
     <section className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        <div className="mb-8 text-center sm:mb-12">
+          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
             How it works
           </h2>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
           {steps.map((item, index) => (
             <div key={item.step} className="relative flex flex-col items-start">
               {index < steps.length - 1 && (
@@ -558,7 +557,7 @@ function FinalCTA() {
   return (
     <section className="section-padding container-padding bg-foreground text-background">
       <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+        <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
           Ready to stop losing bookings to Airbnb?
         </h2>
         <p className="mx-auto mt-6 max-w-2xl text-balance text-base text-background/70 sm:text-lg md:text-xl">
@@ -566,12 +565,13 @@ function FinalCTA() {
         </p>
         <Button
           size="lg"
-          className="mt-8 w-full gap-2 bg-background px-8 text-base font-semibold text-foreground hover:bg-background/90 sm:w-auto"
+          className="mt-8 w-full gap-2 bg-background px-6 text-sm sm:text-base font-semibold text-foreground hover:bg-background/90 sm:w-auto"
           asChild
         >
           <a href={WHATSAPP_CTA} target="_blank" rel="noopener noreferrer">
             <MessageCircle className="h-5 w-5" />
-            Chat Victor on WhatsApp Now - 08161123296
+            <span className="sm:hidden">Chat Victor Now - 08161123296</span>
+            <span className="hidden sm:inline">Chat Victor on WhatsApp Now - 08161123296</span>
           </a>
         </Button>
       </div>
@@ -630,9 +630,9 @@ function FloatingWhatsApp() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/20 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="fixed bottom-4 right-4 z-50 flex h-12 w-12 sm:bottom-6 sm:right-6 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/20 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
-      <MessageCircle className="h-7 w-7 fill-current" />
+      <MessageCircle className="h-6 w-6 fill-current sm:h-7 sm:w-7" />
     </a>
   );
 }
