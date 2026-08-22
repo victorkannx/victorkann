@@ -124,25 +124,25 @@ function Hero() {
       <div className="mx-auto max-w-4xl text-center">
         <Badge
           variant="secondary"
-          className="mb-6 inline-flex items-center gap-1.5 bg-agency-blue-light/60 px-3 py-1 text-xs font-medium text-agency-blue"
+          className="mb-5 inline-flex max-w-full items-center gap-1.5 whitespace-normal bg-agency-blue-light/60 px-3 py-1 text-[11px] font-medium leading-snug text-agency-blue sm:text-xs"
         >
-          <span className="relative flex h-2 w-2">
+          <span className="relative flex h-2 w-2 shrink-0">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
             <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
           </span>
           Available for 3 new projects this month
         </Badge>
 
-        <h1 className="text-balance text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="text-balance text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
           I build booking websites that turn Instagram views into paid bookings.
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-balance text-base text-muted-foreground sm:text-lg md:text-xl">
+        <p className="mx-auto mt-5 max-w-2xl text-balance text-[0.95rem] text-muted-foreground sm:text-lg md:text-xl">
           For shortlet owners & Airbnb hosts who are tired of losing 15% to Airbnb and wasting hours
           answering &quot;how much?&quot; on WhatsApp. Get your direct booking site live in 72 hours.
         </p>
 
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button
             size="lg"
             className="w-full gap-2 bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 sm:w-auto"
@@ -156,15 +156,17 @@ function Hero() {
           <Button
             size="lg"
             variant="outline"
-            className="w-full gap-2 border-foreground/20 px-6 text-base font-semibold text-foreground hover:bg-muted sm:w-auto"
+            className="w-full gap-2 border-foreground/20 px-6 text-sm font-semibold text-foreground hover:bg-muted sm:w-auto sm:text-base"
             asChild
           >
             <a href={WHATSAPP_HERO} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" />
-              Chat Me on WhatsApp - 08161123296
+              <MessageCircle className="h-4 w-4 shrink-0" />
+              <span className="sm:hidden">WhatsApp 08161123296</span>
+              <span className="hidden sm:inline">Chat Me on WhatsApp - 08161123296</span>
             </a>
           </Button>
         </div>
+
       </div>
     </section>
   );
