@@ -51,13 +51,14 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Agency accent tokens */
-  --color-agency-blue: var(--agency-blue);
-  --color-agency-blue-light: var(--agency-blue-light);
-  --color-agency-black: var(--agency-black);
-  --color-agency-gray: var(--agency-gray);
-  --color-agency-gray-light: var(--agency-gray-light);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Premium accent tokens */
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-emerald-deep: var(--emerald-deep);
+  --color-emerald-mid: var(--emerald-mid);
+  --color-cream: var(--cream);
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
