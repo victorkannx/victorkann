@@ -1,50 +1,60 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  MessageCircle,
   Star,
   Smartphone,
   CreditCard,
   MapPin,
-  Clock,
   CheckCircle2,
   XCircle,
   Percent,
   Instagram,
   Mail,
   Phone,
-  ArrowRight,
+  ArrowUpRight,
+  CalendarCheck,
+  Sparkles,
 } from "lucide-react";
 import cozyNestImg from "@/assets/cozy-nest-yaba.jpg";
 import averyLekkiImg from "@/assets/avery-lekki.jpg";
 
-const WHATSAPP_MAIN =
-  "https://wa.me/2348161123296?text=Hi%20Victor%2C%20I%20need%20a%20booking%20website%20for%20my%20shortlet.%20My%20name%20is%3A%20";
-const WHATSAPP_HERO =
-  "https://wa.me/2348161123296?text=Hi%20Victor%2C%20I%20need%20a%20booking%20website%20for%20my%20shortlet.";
-const WHATSAPP_CTA =
-  "https://wa.me/2348161123296?text=Hi%20Victor%2C%20I%20saw%20victorkann.com%20and%20I%20want%20a%20website%20for%20my%20shortlet.%20Name%3A%20%20Location%3A%20";
+const CALENDLY_BASE = "https://calendly.com/victorkann/30min";
+
+/** Builds a Calendly link that is specific to the request the visitor clicked. */
+function bookingLink(topic: string, slug: string) {
+  const params = new URLSearchParams({
+    utm_source: "victorkann.com",
+    utm_medium: "website",
+    utm_campaign: slug,
+    utm_content: topic,
+    a1: topic,
+  });
+  return `${CALENDLY_BASE}?${params.toString()}`;
+}
+
+const BOOK_GENERAL = bookingLink("Direct booking website — general enquiry", "general");
+const BOOK_HERO = bookingLink("Discovery call — I need a booking website for my shortlet", "hero");
+const BOOK_FINAL = bookingLink("Ready to stop losing bookings to Airbnb", "final-cta");
 
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Victor Kannayo | Direct Booking Websites for Shortlets" },
+      { title: "Victor Kannayo | Premium Direct Booking Websites for Shortlets" },
       {
         name: "description",
         content:
-          "Victor Kannayo builds direct booking websites for shortlet owners and Airbnb hosts. Professional, fast, mobile-first sites that turn Instagram views into paid bookings.",
+          "Victor Kannayo designs premium direct booking websites for shortlet owners and Airbnb hosts. Live in 72 hours, built to convert Instagram views into paid bookings.",
       },
       {
         property: "og:title",
-        content: "Victor Kannayo | Direct Booking Websites for Shortlets",
+        content: "Victor Kannayo | Premium Direct Booking Websites for Shortlets",
       },
       {
         property: "og:description",
         content:
-          "I build booking websites that turn Instagram views into paid bookings for shortlet owners & Airbnb hosts.",
+          "Premium direct booking websites for shortlet owners & Airbnb hosts. Live in 72 hours. Book a strategy call.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://victorkann.com" },
@@ -68,7 +78,7 @@ function Index() {
         <FinalCTA />
       </main>
       <Footer />
-      <FloatingWhatsApp />
+      <FloatingBooking />
     </div>
   );
 }
@@ -81,10 +91,13 @@ function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between container-padding">
-        <a href="#" className="text-lg font-bold tracking-tight text-foreground">
-          VICTOR KANN.
+        <a
+          href="#"
+          className="display-font text-base font-bold tracking-[0.14em] text-foreground sm:text-lg"
+        >
+          VICTOR KANN<span className="text-primary">.</span>
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -92,24 +105,24 @@ function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               {link.label}
             </a>
           ))}
-          <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90" asChild>
-            <a href={WHATSAPP_MAIN} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" />
-              Chat on WhatsApp
+          <Button size="sm" className="gap-2 font-semibold" asChild>
+            <a href={BOOK_GENERAL} target="_blank" rel="noopener noreferrer">
+              <CalendarCheck className="h-4 w-4" />
+              Book a Call
             </a>
           </Button>
         </div>
 
         <div className="flex items-center md:hidden">
-          <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90" asChild>
-            <a href={WHATSAPP_MAIN} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4" />
-              <span className="hidden sm:inline">WhatsApp</span>
+          <Button size="sm" className="gap-2 font-semibold" asChild>
+            <a href={BOOK_GENERAL} target="_blank" rel="noopener noreferrer">
+              <CalendarCheck className="h-4 w-4" />
+              Book a Call
             </a>
           </Button>
         </div>
@@ -120,75 +133,86 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="section-padding container-padding">
-      <div className="mx-auto max-w-4xl text-center">
-        <Badge
-          variant="secondary"
-          className="mb-5 inline-flex max-w-full items-center gap-1.5 whitespace-normal bg-agency-blue-light/60 px-3 py-1 text-[11px] font-medium leading-snug text-agency-blue sm:text-xs"
-        >
-          <span className="relative flex h-2 w-2 shrink-0">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
-          </span>
-          Available for 3 new projects this month
-        </Badge>
+    <section className="relative overflow-hidden section-padding container-padding">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 -top-40 mx-auto h-80 max-w-3xl rounded-full bg-emerald-mid/20 blur-[120px]"
+      />
+      <div className="relative mx-auto max-w-5xl">
+        <div className="grid items-end gap-8 lg:grid-cols-[1.35fr_1fr]">
+          <div>
+            <Badge
+              variant="secondary"
+              className="mb-6 inline-flex max-w-full items-center gap-2 whitespace-normal rounded-full border border-primary/30 bg-secondary px-3 py-1 text-[11px] font-medium uppercase leading-snug tracking-[0.18em] text-primary sm:text-xs"
+            >
+              <Sparkles className="h-3 w-3 shrink-0" />
+              Taking 3 new projects this month
+            </Badge>
 
-        <h1 className="text-balance text-[1.75rem] font-extrabold leading-[1.15] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
-          I build booking websites that turn Instagram views into paid bookings.
-        </h1>
+            <h1 className="display-font text-balance text-[2rem] font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">
+              Booking websites that turn Instagram views into{" "}
+              <span className="text-primary">paid bookings.</span>
+            </h1>
 
-        <p className="mx-auto mt-5 max-w-2xl text-balance text-[0.95rem] text-muted-foreground sm:text-lg md:text-xl">
-          For shortlet owners & Airbnb hosts who are tired of losing 15% to Airbnb and wasting hours
-          answering &quot;how much?&quot; on WhatsApp. Get your direct booking site live in 72 hours.
-        </p>
+            <div className="mt-6 h-px w-32 gold-rule" />
 
-        <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button
-            size="lg"
-            className="w-full gap-2 bg-primary px-6 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 sm:w-auto"
-            asChild
-          >
-            <a href="#work">
-              See My Work
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="w-full gap-2 border-foreground/20 px-6 text-sm font-semibold text-foreground hover:bg-muted sm:w-auto sm:text-base"
-            asChild
-          >
-            <a href={WHATSAPP_HERO} target="_blank" rel="noopener noreferrer">
-              <MessageCircle className="h-4 w-4 shrink-0" />
-              <span className="sm:hidden">WhatsApp 08161123296</span>
-              <span className="hidden sm:inline">Chat Me on WhatsApp - 08161123296</span>
-            </a>
-          </Button>
+            <p className="mt-6 max-w-xl text-balance text-[0.98rem] leading-relaxed text-muted-foreground sm:text-lg">
+              For shortlet owners &amp; Airbnb hosts tired of losing 15% to Airbnb and answering
+              &quot;how much?&quot; all day. Your direct booking site, live in 72 hours.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button size="lg" className="w-full gap-2 px-6 font-semibold sm:w-auto" asChild>
+                <a href={BOOK_HERO} target="_blank" rel="noopener noreferrer">
+                  <CalendarCheck className="h-4 w-4" />
+                  Schedule a Call
+                </a>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full gap-2 border-border px-6 font-semibold text-foreground hover:bg-secondary sm:w-auto"
+                asChild
+              >
+                <a href="#work">
+                  See the Work
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </Button>
+            </div>
+          </div>
+
+          <dl className="grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-4">
+            {[
+              { k: "72hrs", v: "Average delivery" },
+              { k: "20+", v: "Hosts onboarded" },
+              { k: "0%", v: "Platform commission" },
+            ].map((s) => (
+              <div key={s.k} className="premium-card p-4 lg:px-5 lg:py-4">
+                <dt className="display-font text-xl font-bold text-primary sm:text-2xl">{s.k}</dt>
+                <dd className="mt-1 text-[11px] uppercase tracking-[0.12em] text-muted-foreground sm:text-xs">
+                  {s.v}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </div>
-
       </div>
     </section>
   );
 }
 
 function TrustBar() {
-  const locations = ["Lekki", "Yaba", "Abuja", "London"];
-
   return (
-    <section className="border-y border-border/60 bg-muted/30 py-8">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-4 container-padding md:flex-row md:gap-8">
-        <p className="text-center text-sm font-medium text-muted-foreground md:text-left">
-          Trusted by shortlet owners in{" "}
-          <span className="text-foreground">{locations.join(", ")}</span>
+    <section className="border-y border-border/70 bg-secondary/40 py-7">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-3 container-padding md:flex-row md:gap-8">
+        <p className="text-center text-xs uppercase tracking-[0.16em] text-muted-foreground md:text-left">
+          Trusted by shortlet owners in <span className="text-foreground">Lekki, Yaba, Abuja &amp; London</span>
         </p>
         <div className="flex items-center gap-1">
           <div className="flex">
             {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`h-4 w-4 fill-current sm:h-5 sm:w-5 ${i < 4 ? "text-yellow-500" : "text-yellow-500"}`}
-              />
+              <Star key={i} className="h-4 w-4 fill-current text-primary" />
             ))}
           </div>
           <span className="ml-2 text-sm font-bold text-foreground">4.9</span>
@@ -199,21 +223,41 @@ function TrustBar() {
   );
 }
 
+function SectionHeading({
+  eyebrow,
+  title,
+  sub,
+}: {
+  eyebrow: string;
+  title: string;
+  sub?: string;
+}) {
+  return (
+    <div className="mb-10 max-w-2xl">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">{eyebrow}</p>
+      <h2 className="display-font mt-3 text-balance text-[1.7rem] font-bold leading-tight text-foreground sm:text-4xl">
+        {title}
+      </h2>
+      {sub && <p className="mt-4 text-base leading-relaxed text-muted-foreground">{sub}</p>}
+    </div>
+  );
+}
+
 function ProblemSection() {
   const problems = [
     {
-      icon: <XCircle className="h-6 w-6 text-destructive" />,
+      icon: <XCircle className="h-5 w-5 text-destructive" />,
       title: "Guests ask price and disappear",
       description: "No booking flow means every DM is a dead-end conversation.",
     },
     {
-      icon: <Percent className="h-6 w-6 text-destructive" />,
+      icon: <Percent className="h-5 w-5 text-destructive" />,
       title: "You lose 15% to Airbnb",
       description: "Platform fees eat your profit every single night.",
     },
     {
-      icon: <Instagram className="h-6 w-6 text-destructive" />,
-      title: "You look like every other shortlet on Instagram",
+      icon: <Instagram className="h-5 w-5 text-destructive" />,
+      title: "You look like every other shortlet",
       description: "A link-in-bio does not build trust or collect deposits.",
     },
   ];
@@ -221,30 +265,21 @@ function ProblemSection() {
   return (
     <section className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-center sm:mb-12">
-          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            Your WhatsApp link in bio is costing you bookings.
-          </h2>
-        </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <SectionHeading
+          eyebrow="The problem"
+          title="Your WhatsApp link in bio is costing you bookings."
+        />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {problems.map((problem) => (
-            <Card
-              key={problem.title}
-              className="border-border/60 bg-card text-card-foreground"
-            >
-              <CardHeader>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
-                  {problem.icon}
-                </div>
-                <CardTitle className="text-lg font-semibold">{problem.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base text-muted-foreground">
-                  {problem.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <div key={problem.title} className="premium-card p-6">
+              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-destructive/12">
+                {problem.icon}
+              </div>
+              <h3 className="display-font text-lg font-semibold text-foreground">{problem.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {problem.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>
@@ -256,76 +291,87 @@ function WorkSection() {
   const demos = [
     {
       image: cozyNestImg,
-      title: "Cozy Nest - Yaba (Budget Demo)",
-      price: "From N35k/night",
-      href: "https://cozy-nest-yaba.lovable.app",
-      alt: "Cozy Nest Yaba shortlet booking website demo",
+      title: "Cozy Nest — Yaba",
+      tag: "Budget demo",
+      price: "From ₦35k/night",
+      href: "https://cozy.victorkann.com",
+      alt: "Cozy Nest Yaba shortlet direct booking website",
+      slug: "demo-cozy-nest-yaba",
+      topic: "I want a site like Cozy Nest — Yaba (budget demo)",
+      span: "lg:col-span-3",
     },
     {
       image: averyLekkiImg,
-      title: "The Avery - Lekki (Luxury Demo)",
-      price: "From N130k/night",
-      href: "https://avery-lekki.lovable.app",
-      alt: "The Avery Lekki luxury shortlet booking website demo",
+      title: "The Avery — Lekki",
+      tag: "Luxury demo",
+      price: "From ₦130k/night",
+      href: "https://avery.victorkann.com",
+      alt: "The Avery Lekki luxury shortlet direct booking website",
+      slug: "demo-avery-lekki",
+      topic: "I want a site like The Avery — Lekki (luxury demo)",
+      span: "lg:col-span-3",
     },
   ];
 
   return (
-    <section id="work" className="section-padding container-padding bg-muted/20">
+    <section id="work" className="section-padding container-padding bg-secondary/30">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-center sm:mb-12">
-          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            My Work
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-            Live demo sites built for shortlet owners. Each one is mobile-first, fast, and designed
-            to collect bookings.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Selected work"
+          title="Live sites built for shortlet owners."
+          sub="Mobile-first, fast, and designed for one job: collecting the booking."
+        />
 
-        <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+        <div className="grid gap-5 lg:grid-cols-6">
           {demos.map((demo) => (
-            <Card
-              key={demo.title}
-              className="group overflow-hidden border-border/60 bg-card text-card-foreground"
-            >
-              <div className="aspect-[4/3] overflow-hidden">
+            <article key={demo.title} className={`premium-card group overflow-hidden ${demo.span}`}>
+              <a
+                href={demo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block aspect-[16/10] overflow-hidden border-b border-border/70"
+              >
                 <img
                   src={demo.image}
                   alt={demo.alt}
-                  width={1024}
-                  height={768}
+                  width={1280}
+                  height={800}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
                 />
+              </a>
+              <div className="p-6">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="display-font text-xl font-bold text-foreground">{demo.title}</h3>
+                  <span className="rounded-full border border-primary/30 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-primary">
+                    {demo.tag}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm font-medium text-muted-foreground">{demo.price}</p>
+                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                  <Button className="w-full gap-2 font-semibold" asChild>
+                    <a href={demo.href} target="_blank" rel="noopener noreferrer">
+                      View Live Demo
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 border-border text-foreground hover:bg-secondary"
+                    asChild
+                  >
+                    <a
+                      href={bookingLink(demo.topic, demo.slug)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <CalendarCheck className="h-4 w-4" />
+                      Book a call about this
+                    </a>
+                  </Button>
+                </div>
               </div>
-              <CardHeader>
-                <CardTitle className="text-xl font-bold">{demo.title}</CardTitle>
-                <CardDescription className="text-base font-medium text-primary">
-                  {demo.price}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-3 sm:flex-row">
-                <Button
-                  className="w-full gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
-                  asChild
-                >
-                  <a href={demo.href} target="_blank" rel="noopener noreferrer">
-                    View Live Demo
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full border-foreground/20 text-foreground hover:bg-muted"
-                  asChild
-                >
-                  <a href={WHATSAPP_MAIN} target="_blank" rel="noopener noreferrer">
-                    Get one like this
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
+            </article>
           ))}
         </div>
       </div>
@@ -336,57 +382,53 @@ function WorkSection() {
 function ServicesSection() {
   const services = [
     {
-      icon: <Smartphone className="h-6 w-6 text-primary" />,
+      icon: <Smartphone className="h-5 w-5 text-primary" />,
       title: "Direct Booking Website",
       description: "Mobile-first design that loads fast and looks expensive on every device.",
+      span: "lg:col-span-4",
     },
     {
-      icon: <MessageCircle className="h-6 w-6 text-primary" />,
-      title: "WhatsApp auto-fill system",
-      description: "Pre-filled messages that filter time-wasters and capture serious guests.",
+      icon: <CalendarCheck className="h-5 w-5 text-primary" />,
+      title: "Booking &amp; enquiry flow",
+      description: "Serious guests schedule and confirm. Time-wasters filter themselves out.",
+      span: "lg:col-span-2",
     },
     {
-      icon: <CreditCard className="h-6 w-6 text-primary" />,
+      icon: <CreditCard className="h-5 w-5 text-primary" />,
       title: "Paystack deposit collection",
       description: "Collect money even at 2am while you sleep.",
+      span: "lg:col-span-2",
     },
     {
-      icon: <MapPin className="h-6 w-6 text-primary" />,
-      title: "Google Maps setup",
+      icon: <MapPin className="h-5 w-5 text-primary" />,
+      title: "Google Maps & search setup",
       description: "Get found on Google and build trust before guests ever message you.",
+      span: "lg:col-span-4",
     },
   ];
 
   return (
     <section id="services" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-center sm:mb-12">
-          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            What you get
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-            Everything you need to start taking direct bookings in 72 hours.
-          </p>
-        </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <SectionHeading
+          eyebrow="What you get"
+          title="A complete direct booking system, not just a page."
+          sub="Everything you need to start taking direct bookings in 72 hours."
+        />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
           {services.map((service) => (
-            <Card
-              key={service.title}
-              className="border-border/60 bg-card text-card-foreground"
-            >
-              <CardHeader>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-                  {service.icon}
-                </div>
-                <CardTitle className="text-lg font-semibold">{service.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-base text-muted-foreground">
-                  {service.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <div key={service.title} className={`premium-card p-6 ${service.span}`}>
+              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/12">
+                {service.icon}
+              </div>
+              <h3
+                className="display-font text-lg font-semibold text-foreground"
+                dangerouslySetInnerHTML={{ __html: service.title }}
+              />
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {service.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>
@@ -398,14 +440,15 @@ function PricingSection() {
   const plans = [
     {
       name: "Starter",
-      price: "N95k",
-      description: "1-page site, WhatsApp system, 3 days delivery",
-      features: ["1-page direct booking site", "WhatsApp auto-fill system", "3 days delivery"],
+      price: "₦95k",
+      description: "1-page site, enquiry system, 3 days delivery",
+      features: ["1-page direct booking site", "Booking enquiry system", "3 days delivery"],
       popular: false,
+      slug: "package-starter",
     },
     {
       name: "Growth",
-      price: "N195k",
+      price: "₦195k",
       description: "Multi-page, Paystack, Google setup, 72hrs",
       features: [
         "Multi-page direct booking site",
@@ -414,91 +457,72 @@ function PricingSection() {
         "72 hours delivery",
       ],
       popular: true,
+      slug: "package-growth",
     },
     {
       name: "Premium",
-      price: "N350k",
+      price: "₦350k",
       description: "Everything + 5 pages + SEO + 30 days support",
-      features: [
-        "Everything in Growth",
-        "Up to 5 pages",
-        "SEO setup",
-        "30 days support",
-      ],
+      features: ["Everything in Growth", "Up to 5 pages", "SEO setup", "30 days support"],
       popular: false,
+      slug: "package-premium",
     },
   ];
 
   return (
-    <section id="pricing" className="section-padding container-padding bg-muted/20">
+    <section id="pricing" className="section-padding container-padding bg-secondary/30">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-center sm:mb-12">
-          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            Pricing
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground">
-            One investment. No Airbnb commission. No hourly WhatsApp back-and-forth.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Investment"
+          title="One fee. No Airbnb commission, ever."
+          sub="Pick the package that fits, then book a call to lock in your build slot."
+        />
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-3">
           {plans.map((plan) => (
-            <Card
+            <div
               key={plan.name}
-              className={`relative flex flex-col border-border/60 bg-card text-card-foreground ${
-                plan.popular ? "ring-2 ring-primary" : ""
+              className={`premium-card relative flex flex-col p-7 ${
+                plan.popular ? "ring-1 ring-primary/60" : ""
               }`}
             >
               {plan.popular && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
-                  MOST POPULAR
+                <Badge className="absolute -top-3 left-7 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]">
+                  Most popular
                 </Badge>
               )}
-              <CardHeader className="text-center">
-                <CardTitle className="text-lg font-semibold text-muted-foreground">
-                  {plan.name}
-                </CardTitle>
-                <div className="mt-2 flex items-baseline justify-center gap-1">
-                  <span className="text-4xl font-extrabold tracking-tight text-foreground">
-                    {plan.price}
-                  </span>
-                </div>
-                <CardDescription className="mt-2 text-sm text-muted-foreground">
-                  {plan.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-1 flex-col">
-                <ul className="flex-1 space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-sm text-foreground">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  className={`mt-8 w-full gap-2 font-semibold ${
-                    plan.popular
-                      ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                      : "border-foreground/20 bg-background text-foreground hover:bg-muted"
-                  }`}
-                  variant={plan.popular ? "default" : "outline"}
-                  asChild
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                {plan.name}
+              </p>
+              <p className="display-font mt-3 text-4xl font-bold text-foreground">{plan.price}</p>
+              <p className="mt-3 text-sm text-muted-foreground">{plan.description}</p>
+              <div className="my-6 h-px w-full bg-border" />
+              <ul className="flex-1 space-y-3">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-3 text-sm text-foreground">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <Button
+                className="mt-8 w-full gap-2 font-semibold"
+                variant={plan.popular ? "default" : "outline"}
+                asChild
+              >
+                <a
+                  href={bookingLink(
+                    `${plan.name} package (${plan.price}) — book my build slot`,
+                    plan.slug,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <a
-                    href={`https://wa.me/2348161123296?text=Hi%20Victor%2C%20I%20want%20the%20${plan.name.toUpperCase()}%20package%20for%20${plan.price.replace(
-                      "N",
-                      "N%23",
-                    )}.%20My%20apartment%20name%20is%3A%20`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Pay via Paystack & Start
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
+                  <CalendarCheck className="h-4 w-4" />
+                  Book {plan.name} Call
+                </a>
+              </Button>
+            </div>
           ))}
         </div>
       </div>
@@ -510,17 +534,17 @@ function HowItWorksSection() {
   const steps = [
     {
       step: "01",
-      title: "You send pictures + prices on WhatsApp",
-      description: "No forms. No meetings. Just your photos, prices, and location.",
+      title: "Book a 30-minute call",
+      description: "Pick a time that works. We map your apartment, pricing, and goals.",
     },
     {
       step: "02",
       title: "I build in 72hrs",
-      description: "Your direct booking site goes live with Paystack, maps, and WhatsApp flows.",
+      description: "Your site goes live with Paystack, maps, and a clean booking flow.",
     },
     {
       step: "03",
-      title: "You start collecting direct bookings",
+      title: "You collect direct bookings",
       description: "Guests book and pay while you focus on hosting.",
     },
   ];
@@ -528,23 +552,17 @@ function HowItWorksSection() {
   return (
     <section className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 text-center sm:mb-12">
-          <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
-            How it works
-          </h2>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
-          {steps.map((item, index) => (
-            <div key={item.step} className="relative flex flex-col items-start">
-              {index < steps.length - 1 && (
-                <div className="absolute left-6 top-12 hidden h-full w-px bg-border md:block" />
-              )}
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-base font-bold text-primary-foreground">
-                {item.step}
-              </div>
-              <h3 className="mt-5 text-lg font-bold text-foreground">{item.title}</h3>
-              <p className="mt-2 text-base text-muted-foreground">{item.description}</p>
+        <SectionHeading eyebrow="Process" title="Three steps to direct bookings." />
+        <div className="grid gap-4 md:grid-cols-3">
+          {steps.map((item) => (
+            <div key={item.step} className="premium-card p-6">
+              <span className="display-font text-3xl font-bold text-primary/70">{item.step}</span>
+              <h3 className="display-font mt-4 text-lg font-semibold text-foreground">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {item.description}
+              </p>
             </div>
           ))}
         </div>
@@ -555,25 +573,26 @@ function HowItWorksSection() {
 
 function FinalCTA() {
   return (
-    <section className="section-padding container-padding bg-foreground text-background">
-      <div className="mx-auto max-w-4xl text-center">
-        <h2 className="text-balance text-[1.6rem] font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+    <section className="section-padding container-padding">
+      <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-primary/25 bg-emerald-deep/60 px-6 py-14 text-center sm:px-12">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+          Limited slots
+        </p>
+        <h2 className="display-font mx-auto mt-4 max-w-2xl text-balance text-[1.75rem] font-bold leading-tight text-foreground sm:text-4xl md:text-5xl">
           Ready to stop losing bookings to Airbnb?
         </h2>
-        <p className="mx-auto mt-6 max-w-2xl text-balance text-base text-background/70 sm:text-lg md:text-xl">
-          Join 20+ shortlet owners who now get direct bookings daily.
+        <p className="mx-auto mt-5 max-w-xl text-balance text-base text-muted-foreground sm:text-lg">
+          Join 20+ shortlet owners who now get direct bookings daily. Schedule your strategy call.
         </p>
-        <Button
-          size="lg"
-          className="mt-8 w-full gap-2 bg-background px-6 text-sm sm:text-base font-semibold text-foreground hover:bg-background/90 sm:w-auto"
-          asChild
-        >
-          <a href={WHATSAPP_CTA} target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="h-5 w-5" />
-            <span className="sm:hidden">Chat Victor Now - 08161123296</span>
-            <span className="hidden sm:inline">Chat Victor on WhatsApp Now - 08161123296</span>
+        <Button size="lg" className="mt-8 w-full gap-2 px-7 font-semibold sm:w-auto" asChild>
+          <a href={BOOK_FINAL} target="_blank" rel="noopener noreferrer">
+            <CalendarCheck className="h-5 w-5" />
+            Schedule Your Call
           </a>
         </Button>
+        <p className="mt-4 text-xs text-muted-foreground">
+          30 minutes, no obligation. Prefer to talk first? Call 08161123296.
+        </p>
       </div>
     </section>
   );
@@ -581,34 +600,32 @@ function FinalCTA() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border/60 bg-background py-10">
+    <footer className="border-t border-border/70 py-10">
       <div className="mx-auto max-w-7xl container-padding">
         <div className="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Victor Kannayo
+          <p className="display-font text-sm tracking-[0.14em] text-muted-foreground">
+            © {new Date().getFullYear()} VICTOR KANNAYO
           </p>
           <div className="flex flex-col items-center gap-3 text-sm text-muted-foreground md:flex-row md:gap-6">
             <a
               href="mailto:hello@victorkann.com"
-              className="flex items-center gap-2 transition-colors hover:text-foreground"
+              className="flex items-center gap-2 transition-colors hover:text-primary"
             >
               <Mail className="h-4 w-4" />
               hello@victorkann.com
             </a>
             <a
-              href={WHATSAPP_MAIN}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 transition-colors hover:text-foreground"
+              href="tel:+2348161123296"
+              className="flex items-center gap-2 transition-colors hover:text-primary"
             >
               <Phone className="h-4 w-4" />
-              WhatsApp 08161123296
+              08161123296
             </a>
             <a
               href="https://instagram.com/victorkannayo"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 transition-colors hover:text-foreground"
+              className="flex items-center gap-2 transition-colors hover:text-primary"
             >
               <Instagram className="h-4 w-4" />
               @victorkannayo
@@ -616,23 +633,24 @@ function Footer() {
           </div>
         </div>
         <p className="mt-6 text-center text-xs text-muted-foreground md:text-left">
-          Built for shortlet owners worldwide.
+          Premium direct booking websites for shortlet owners worldwide.
         </p>
       </div>
     </footer>
   );
 }
 
-function FloatingWhatsApp() {
+function FloatingBooking() {
   return (
     <a
-      href={WHATSAPP_MAIN}
+      href={BOOK_GENERAL}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat on WhatsApp"
-      className="fixed bottom-4 right-4 z-50 flex h-12 w-12 sm:bottom-6 sm:right-6 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/20 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      aria-label="Book a call"
+      className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-xl shadow-black/40 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:bottom-6 sm:right-6"
     >
-      <MessageCircle className="h-6 w-6 fill-current sm:h-7 sm:w-7" />
+      <CalendarCheck className="h-5 w-5" />
+      Book a Call
     </a>
   );
 }
