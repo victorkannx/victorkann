@@ -13,29 +13,14 @@ import {
   Mail,
   Phone,
   ArrowUpRight,
-  CalendarCheck,
+  MessageCircle,
   Sparkles,
 } from "lucide-react";
+import { LeadFormProvider, useLeadForm } from "@/components/lead-form-dialog";
 import cozyNestImg from "@/assets/cozy-nest-yaba.jpg";
 import averyLekkiImg from "@/assets/avery-lekki.jpg";
 
-const CALENDLY_BASE = "https://calendly.com/victorkann/30min";
 
-/** Builds a Calendly link that is specific to the request the visitor clicked. */
-function bookingLink(topic: string, slug: string) {
-  const params = new URLSearchParams({
-    utm_source: "victorkann.com",
-    utm_medium: "website",
-    utm_campaign: slug,
-    utm_content: topic,
-    a1: topic,
-  });
-  return `${CALENDLY_BASE}?${params.toString()}`;
-}
-
-const BOOK_GENERAL = bookingLink("Direct booking website — general enquiry", "general");
-const BOOK_HERO = bookingLink("Discovery call — I need a booking website for my shortlet", "hero");
-const BOOK_FINAL = bookingLink("Ready to stop losing bookings to Airbnb", "final-cta");
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -65,7 +50,8 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <LeadFormProvider>
+      <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main>
         <Hero />
@@ -79,11 +65,13 @@ function Index() {
       </main>
       <Footer />
       <FloatingBooking />
-    </div>
+      </div>
+    </LeadFormProvider>
   );
 }
 
 function Navbar() {
+  const { openLeadForm } = useLeadForm();
   const navLinks = [
     { label: "Work", href: "#work" },
     { label: "Services", href: "#services" },
@@ -110,20 +98,24 @@ function Navbar() {
               {link.label}
             </a>
           ))}
-          <Button size="sm" className="gap-2 font-semibold" asChild>
-            <a href={BOOK_GENERAL} target="_blank" rel="noopener noreferrer">
-              <CalendarCheck className="h-4 w-4" />
-              Book a Call
-            </a>
+          <Button
+            size="sm"
+            className="gap-2 font-semibold"
+            onClick={() => openLeadForm("Navbar — start my project")}
+          >
+            <Sparkles className="h-4 w-4" />
+            Start My Project
           </Button>
         </div>
 
         <div className="flex items-center md:hidden">
-          <Button size="sm" className="gap-2 font-semibold" asChild>
-            <a href={BOOK_GENERAL} target="_blank" rel="noopener noreferrer">
-              <CalendarCheck className="h-4 w-4" />
-              Book a Call
-            </a>
+          <Button
+            size="sm"
+            className="gap-2 font-semibold"
+            onClick={() => openLeadForm("Navbar — start my project")}
+          >
+            <Sparkles className="h-4 w-4" />
+            Start Project
           </Button>
         </div>
       </nav>
@@ -132,6 +124,8 @@ function Navbar() {
 }
 
 function Hero() {
+  const { openLeadForm } = useLeadForm();
+
   return (
     <section className="relative overflow-hidden section-padding container-padding">
       <div
@@ -162,11 +156,13 @@ function Hero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button size="lg" className="w-full gap-2 px-6 font-semibold sm:w-auto" asChild>
-                <a href={BOOK_HERO} target="_blank" rel="noopener noreferrer">
-                  <CalendarCheck className="h-4 w-4" />
-                  Schedule a Call
-                </a>
+              <Button
+                size="lg"
+                className="w-full gap-2 px-6 font-semibold sm:w-auto"
+                onClick={() => openLeadForm("Hero — I need a booking website")}
+              >
+                Get My Booking Site
+                <ArrowUpRight className="h-4 w-4" />
               </Button>
               <Button
                 size="lg"
@@ -288,6 +284,7 @@ function ProblemSection() {
 }
 
 function WorkSection() {
+  const { openLeadForm } = useLeadForm();
   const demos = [
     {
       image: cozyNestImg,
@@ -358,16 +355,9 @@ function WorkSection() {
                   <Button
                     variant="outline"
                     className="w-full gap-2 border-border text-foreground hover:bg-secondary"
-                    asChild
+                    onClick={() => openLeadForm(demo.topic)}
                   >
-                    <a
-                      href={bookingLink(demo.topic, demo.slug)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <CalendarCheck className="h-4 w-4" />
-                      Book a call about this
-                    </a>
+                    Get one like this
                   </Button>
                 </div>
               </div>
@@ -389,7 +379,7 @@ function ServicesSection() {
     },
     {
       icon: <CalendarCheck className="h-5 w-5 text-primary" />,
-      title: "Booking &amp; enquiry flow",
+      title: "Booking & enquiry flow",
       description: "Serious guests schedule and confirm. Time-wasters filter themselves out.",
       span: "lg:col-span-2",
     },
@@ -421,10 +411,9 @@ function ServicesSection() {
               <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/12">
                 {service.icon}
               </div>
-              <h3
-                className="display-font text-lg font-semibold text-foreground"
-                dangerouslySetInnerHTML={{ __html: service.title }}
-              />
+              <h3 className="display-font text-lg font-semibold text-foreground">
+                {service.title}
+              </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {service.description}
               </p>
@@ -437,6 +426,7 @@ function ServicesSection() {
 }
 
 function PricingSection() {
+  const { openLeadForm } = useLeadForm();
   const plans = [
     {
       name: "Starter",
@@ -508,19 +498,12 @@ function PricingSection() {
               <Button
                 className="mt-8 w-full gap-2 font-semibold"
                 variant={plan.popular ? "default" : "outline"}
-                asChild
+                onClick={() =>
+                  openLeadForm(`${plan.name} package (${plan.price}) — claim my build slot`)
+                }
               >
-                <a
-                  href={bookingLink(
-                    `${plan.name} package (${plan.price}) — book my build slot`,
-                    plan.slug,
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <CalendarCheck className="h-4 w-4" />
-                  Book {plan.name} Call
-                </a>
+                Start with {plan.name}
+                <ArrowUpRight className="h-4 w-4" />
               </Button>
             </div>
           ))}
@@ -572,6 +555,8 @@ function HowItWorksSection() {
 }
 
 function FinalCTA() {
+  const { openLeadForm } = useLeadForm();
+
   return (
     <section className="section-padding container-padding">
       <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-primary/25 bg-emerald-deep/60 px-6 py-14 text-center sm:px-12">
@@ -584,14 +569,16 @@ function FinalCTA() {
         <p className="mx-auto mt-5 max-w-xl text-balance text-base text-muted-foreground sm:text-lg">
           Join 20+ shortlet owners who now get direct bookings daily. Schedule your strategy call.
         </p>
-        <Button size="lg" className="mt-8 w-full gap-2 px-7 font-semibold sm:w-auto" asChild>
-          <a href={BOOK_FINAL} target="_blank" rel="noopener noreferrer">
-            <CalendarCheck className="h-5 w-5" />
-            Schedule Your Call
-          </a>
+        <Button
+          size="lg"
+          className="mt-8 w-full gap-2 px-7 font-semibold sm:w-auto"
+          onClick={() => openLeadForm("Final CTA — ready to stop losing bookings")}
+        >
+          Start My Project
+          <ArrowUpRight className="h-5 w-5" />
         </Button>
         <p className="mt-4 text-xs text-muted-foreground">
-          30 minutes, no obligation. Prefer to talk first? Call 08161123296.
+          Takes 60 seconds. Sent straight to my WhatsApp — reply within a few hours.
         </p>
       </div>
     </section>
@@ -641,16 +628,17 @@ function Footer() {
 }
 
 function FloatingBooking() {
+  const { openLeadForm } = useLeadForm();
+
   return (
-    <a
-      href={BOOK_GENERAL}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Book a call"
+    <button
+      type="button"
+      onClick={() => openLeadForm("Floating button — start my project")}
+      aria-label="Start my project"
       className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-xl shadow-black/40 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:bottom-6 sm:right-6"
     >
-      <CalendarCheck className="h-5 w-5" />
-      Book a Call
-    </a>
+      <MessageCircle className="h-5 w-5" />
+      Start My Project
+    </button>
   );
 }
