@@ -378,7 +378,7 @@ function ServicesSection() {
       span: "lg:col-span-4",
     },
     {
-      icon: <CalendarCheck className="h-5 w-5 text-primary" />,
+      icon: <MessageCircle className="h-5 w-5 text-primary" />,
       title: "Booking & enquiry flow",
       description: "Serious guests schedule and confirm. Time-wasters filter themselves out.",
       span: "lg:col-span-2",
