@@ -81,6 +81,7 @@ function LeadFormDialog({
   });
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [errors, setErrors] = useState<Errors>({});
+  const [review, setReview] = useState<LeadValues | null>(null);
 
   const set = (key: keyof LeadValues, v: string) => {
     setValues((prev) => ({ ...prev, [key]: v }));
