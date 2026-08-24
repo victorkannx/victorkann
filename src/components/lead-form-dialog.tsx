@@ -34,7 +34,7 @@ const leadSchema = z.object({
 });
 
 type LeadValues = z.infer<typeof leadSchema>;
-type Errors = Partial<Record<keyof LeadValues, string>>;
+type Errors = Partial<Record<keyof LeadValues, string | undefined>>;
 
 type LeadFormContextValue = { openLeadForm: (source?: string) => void };
 const LeadFormContext = createContext<LeadFormContextValue>({ openLeadForm: () => {} });
@@ -289,8 +289,8 @@ function Field({
 }: {
   id: string;
   label: string;
-  error?: string;
-  optional?: boolean;
+  error?: string | undefined;
+  optional?: boolean | undefined;
   children: ReactNode;
 }) {
   return (
