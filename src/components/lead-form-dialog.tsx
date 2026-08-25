@@ -334,8 +334,8 @@ function LeadFormDialog({
           </Field>
 
           <Button type="submit" size="lg" className="w-full gap-2 font-semibold">
-            <MessageCircle className="h-4 w-4" />
-            Send on WhatsApp
+            <ArrowRight className="h-4 w-4" />
+            Review my details
           </Button>
 
           <div className="flex flex-col items-center gap-3 text-center">
@@ -357,7 +357,10 @@ function LeadFormDialog({
             </Badge>
           </div>
         </form>
+        </>
+        )}
       </DialogContent>
+
     </Dialog>
   );
 }
