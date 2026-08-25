@@ -114,9 +114,11 @@ function LeadFormDialog({
       setErrors(next);
       return;
     }
+    setReview(parsed.data);
+  };
 
-    const d = parsed.data;
-    const message = [
+  const buildMessage = (d: LeadValues) =>
+    [
       "New booking-website enquiry from victorkann.com",
       `Interest: ${source}`,
       "",
@@ -128,33 +130,112 @@ function LeadFormDialog({
       `Other details: ${d.notes?.trim() ? d.notes.trim() : "—"}`,
     ].join("\n");
 
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  const sendToWhatsApp = () => {
+    if (!review) return;
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(buildMessage(review))}`;
     window.open(url, "_blank", "noopener,noreferrer");
     onOpenChange(false);
+    setReview(null);
   };
 
   const calendlyLink = `${CALENDLY_BASE}?${new URLSearchParams({
     utm_source: "victorkann.com",
     utm_campaign: "lead-form",
     a1: source,
+    ...(review
+      ? { name: review.name, email: review.email, a2: `${review.siteName} — ${review.budget}` }
+      : {}),
   }).toString()}`;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        onOpenChange(next);
+        if (!next) setReview(null);
+      }}
+    >
       <DialogContent className="max-h-[92dvh] overflow-y-auto border-border/80 bg-card p-0 sm:max-w-lg">
         <div className="border-b border-border/70 px-6 pb-5 pt-6">
           <DialogHeader className="space-y-2 text-left">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
-              {source}
+              {review ? `Step 2 of 2 · ${source}` : `Step 1 of 2 · ${source}`}
             </p>
             <DialogTitle className="display-font text-xl font-bold">
-              Tell me about your shortlet
+              {review ? "Check your details" : "Tell me about your shortlet"}
             </DialogTitle>
             <DialogDescription className="text-sm">
-              Takes 60 seconds. I&apos;ll receive it on WhatsApp instantly and reply with a plan.
+              {review
+                ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
+                : "Takes 60 seconds. I'll receive it on WhatsApp instantly and reply with a plan."}
             </DialogDescription>
           </DialogHeader>
         </div>
+
+        {review ? (
+          <div className="space-y-5 px-6 pb-6 pt-5">
+            <dl className="divide-y divide-border/70 overflow-hidden rounded-xl border border-border/70">
+              {[
+                ["Name", review.name],
+                ["Email", review.email],
+                ["Website / apartment", review.siteName],
+                ["Features", review.features],
+                ["Budget", review.budget],
+                ["Other details", review.notes?.trim() ? review.notes.trim() : "—"],
+              ].map(([label, value]) => (
+                <div key={label} className="grid gap-1 px-4 py-3 sm:grid-cols-[9rem_1fr] sm:gap-4">
+                  <dt className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                    {label}
+                  </dt>
+                  <dd className="text-sm break-words text-foreground">{value}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="gap-2 font-semibold sm:flex-1"
+                onClick={() => setReview(null)}
+              >
+                <Pencil className="h-4 w-4" />
+                Edit details
+              </Button>
+              <Button
+                type="button"
+                size="lg"
+                className="gap-2 font-semibold sm:flex-1"
+                onClick={sendToWhatsApp}
+              >
+                <MessageCircle className="h-4 w-4" />
+                Send on WhatsApp
+              </Button>
+            </div>
+
+            <div className="flex flex-col items-center gap-3 text-center">
+              <a
+                href={calendlyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
+              >
+                <CalendarCheck className="h-3.5 w-3.5" />
+                Or book a 30-minute call with these details
+              </a>
+              <Badge
+                variant="secondary"
+                className="gap-1.5 rounded-full bg-secondary text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+              >
+                <ShieldCheck className="h-3 w-3" />
+                Your details stay private
+              </Badge>
+            </div>
+          </div>
+        ) : (
+        <>
+
 
         <form onSubmit={handleSubmit} className="space-y-5 px-6 pb-6 pt-5">
           <Field id="name" label="Your name" error={errors.name}>
