@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, CalendarCheck, MessageCircle, Pencil, ShieldCheck } from "lucide-react";
+import { ArrowRight, CalendarCheck, MessageCircle, Pencil, ShieldCheck, Phone } from "lucide-react";
 
 const WHATSAPP_NUMBER = "2348161123296";
 const CALENDLY_BASE = "https://calendly.com/victorkann/30min";
@@ -22,14 +22,30 @@ const FEATURE_OPTIONS = [
   "WhatsApp enquiry flow",
 ];
 
-const BUDGET_OPTIONS = ["₦95k — Starter", "₦195k — Growth", "₦350k — Premium", "Not sure yet"];
+const BUDGET_OPTIONS = [
+  "Under ₦100k",
+  "₦100k — ₦200k",
+  "₦200k — ₦350k",
+  "Above ₦350k",
+  "Not sure yet",
+];
+
+function inferredPackagePrice(source: string) {
+  if (source.includes("Starter")) return { name: "Starter", price: "₦95k" };
+  if (source.includes("Growth")) return { name: "Growth", price: "₦195k" };
+  if (source.includes("Premium")) return { name: "Premium", price: "₦350k" };
+  return null;
+}
+
+const phoneRegex = /^[+0-9][\s0-9\-()]{6,}$/;
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80, "Name is too long"),
   email: z.string().trim().email("Enter a valid email address").max(160),
+  phone: z.string().trim().regex(phoneRegex, "Enter a valid WhatsApp number").max(30),
   siteName: z.string().trim().min(2, "Tell me the apartment or website name").max(120),
   features: z.string().trim().min(2, "Pick or describe at least one feature").max(600),
-  budget: z.string().trim().min(1, "Select a budget range").max(80),
+  budget: z.string().trim().max(80).optional().or(z.literal("")),
   notes: z.string().trim().max(800).optional().or(z.literal("")),
 });
 
@@ -74,6 +90,7 @@ function LeadFormDialog({
   const [values, setValues] = useState<LeadValues>({
     name: "",
     email: "",
+    phone: "",
     siteName: "",
     features: "",
     budget: "",
@@ -117,18 +134,29 @@ function LeadFormDialog({
     setReview(parsed.data);
   };
 
-  const buildMessage = (d: LeadValues) =>
-    [
+  const buildMessage = (d: LeadValues) => {
+    const pkg = inferredPackagePrice(source);
+    const lines = [
       "New booking-website enquiry from victorkann.com",
       `Interest: ${source}`,
       "",
       `Name: ${d.name}`,
       `Email: ${d.email}`,
+      `WhatsApp number: ${d.phone}`,
       `Website / apartment name: ${d.siteName}`,
       `Features wanted: ${d.features}`,
-      `Budget: ${d.budget}`,
+      `Budget: ${d.budget?.trim() ? d.budget.trim() : "—"}`,
       `Other details: ${d.notes?.trim() ? d.notes.trim() : "—"}`,
-    ].join("\n");
+    ];
+    if (pkg) {
+      lines.push(
+        "",
+        `Package requested: ${pkg.name}`,
+        `Indicative price: ${pkg.price} (final quote depends on scope)`
+      );
+    }
+    return lines.join("\n");
+  };
 
   const sendToWhatsApp = () => {
     if (!review) return;
@@ -143,7 +171,12 @@ function LeadFormDialog({
     utm_campaign: "lead-form",
     a1: source,
     ...(review
-      ? { name: review.name, email: review.email, a2: `${review.siteName} — ${review.budget}` }
+      ? {
+          name: review.name,
+          email: review.email,
+          a2: `${review.siteName} — ${review.budget || "budget not set"}`,
+          a3: review.phone,
+        }
       : {}),
   }).toString()}`;
 
@@ -167,7 +200,7 @@ function LeadFormDialog({
             <DialogDescription className="text-sm">
               {review
                 ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
-                : "Takes 60 seconds. I'll receive it on WhatsApp instantly and reply with a plan."}
+                : "Takes 60 seconds. I'll receive it on WhatsApp instantly and reply with a plan and pricing."}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -178,9 +211,10 @@ function LeadFormDialog({
               {[
                 ["Name", review.name],
                 ["Email", review.email],
+                ["WhatsApp number", review.phone],
                 ["Website / apartment", review.siteName],
                 ["Features", review.features],
-                ["Budget", review.budget],
+                ["Budget", review.budget?.trim() ? review.budget.trim() : "—"],
                 ["Other details", review.notes?.trim() ? review.notes.trim() : "—"],
               ].map(([label, value]) => (
                 <div key={label} className="grid gap-1 px-4 py-3 sm:grid-cols-[9rem_1fr] sm:gap-4">
@@ -234,133 +268,155 @@ function LeadFormDialog({
             </div>
           </div>
         ) : (
-        <>
+          <>
+            <form onSubmit={handleSubmit} className="space-y-5 px-6 pb-6 pt-5">
+              <Field id="name" label="Your name" error={errors.name}>
+                <Input
+                  id="name"
+                  value={values.name}
+                  maxLength={80}
+                  onChange={(e) => set("name", e.target.value)}
+                  placeholder="Victor Kannayo"
+                  autoComplete="name"
+                />
+              </Field>
 
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field id="email" label="Email address" error={errors.email}>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={values.email}
+                    maxLength={160}
+                    onChange={(e) => set("email", e.target.value)}
+                    placeholder="you@email.com"
+                    autoComplete="email"
+                  />
+                </Field>
 
-        <form onSubmit={handleSubmit} className="space-y-5 px-6 pb-6 pt-5">
-          <Field id="name" label="Your name" error={errors.name}>
-            <Input
-              id="name"
-              value={values.name}
-              maxLength={80}
-              onChange={(e) => set("name", e.target.value)}
-              placeholder="Victor Kannayo"
-              autoComplete="name"
-            />
-          </Field>
+                <Field id="phone" label="WhatsApp number" error={errors.phone}>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={values.phone}
+                      maxLength={30}
+                      onChange={(e) => set("phone", e.target.value)}
+                      placeholder="+234 816 112 3296"
+                      autoComplete="tel"
+                      className="pl-9"
+                    />
+                  </div>
+                </Field>
+              </div>
 
-          <Field id="email" label="Email address" error={errors.email}>
-            <Input
-              id="email"
-              type="email"
-              value={values.email}
-              maxLength={160}
-              onChange={(e) => set("email", e.target.value)}
-              placeholder="you@email.com"
-              autoComplete="email"
-            />
-          </Field>
+              <Field id="siteName" label="Intended website / apartment name" error={errors.siteName}>
+                <Input
+                  id="siteName"
+                  value={values.siteName}
+                  maxLength={120}
+                  onChange={(e) => set("siteName", e.target.value)}
+                  placeholder="e.g. The Avery, Lekki"
+                />
+              </Field>
 
-          <Field id="siteName" label="Intended website / apartment name" error={errors.siteName}>
-            <Input
-              id="siteName"
-              value={values.siteName}
-              maxLength={120}
-              onChange={(e) => set("siteName", e.target.value)}
-              placeholder="e.g. The Avery, Lekki"
-            />
-          </Field>
+              <Field id="features" label="Features to include" error={errors.features}>
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {FEATURE_OPTIONS.map((feature) => {
+                    const active = selectedFeatures.includes(feature);
+                    return (
+                      <button
+                        key={feature}
+                        type="button"
+                        onClick={() => toggleFeature(feature)}
+                        aria-pressed={active}
+                        className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                          active
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                        }`}
+                      >
+                        {feature}
+                      </button>
+                    );
+                  })}
+                </div>
+                <Textarea
+                  id="features"
+                  value={values.features}
+                  maxLength={600}
+                  rows={2}
+                  onChange={(e) => set("features", e.target.value)}
+                  placeholder="Tap the tags above or type what you need"
+                />
+              </Field>
 
-          <Field id="features" label="Features to include" error={errors.features}>
-            <div className="mb-3 flex flex-wrap gap-2">
-              {FEATURE_OPTIONS.map((feature) => {
-                const active = selectedFeatures.includes(feature);
-                return (
-                  <button
-                    key={feature}
-                    type="button"
-                    onClick={() => toggleFeature(feature)}
-                    aria-pressed={active}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
-                      active
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
-                    }`}
-                  >
-                    {feature}
-                  </button>
-                );
-              })}
-            </div>
-            <Textarea
-              id="features"
-              value={values.features}
-              maxLength={600}
-              rows={2}
-              onChange={(e) => set("features", e.target.value)}
-              placeholder="Tap the tags above or type what you need"
-            />
-          </Field>
+              <Field id="budget" label="Your budget" error={errors.budget} optional>
+                <Input
+                  id="budget"
+                  value={values.budget}
+                  maxLength={80}
+                  onChange={(e) => set("budget", e.target.value)}
+                  placeholder="e.g. ₦150k, ₦200k — ₦350k, or 'not sure'"
+                />
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {BUDGET_OPTIONS.map((option) => (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => set("budget", option)}
+                      aria-pressed={values.budget === option}
+                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                        values.budget === option
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </Field>
 
-          <Field id="budget" label="Budget" error={errors.budget}>
-            <div className="flex flex-wrap gap-2">
-              {BUDGET_OPTIONS.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => set("budget", option)}
-                  aria-pressed={values.budget === option}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
-                    values.budget === option
-                      ? "border-primary bg-primary text-primary-foreground"
-                      : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground"
-                  }`}
+              <Field id="notes" label="Anything else I should consider?" error={errors.notes} optional>
+                <Textarea
+                  id="notes"
+                  value={values.notes ?? ""}
+                  maxLength={800}
+                  rows={3}
+                  onChange={(e) => set("notes", e.target.value)}
+                  placeholder="Launch date, number of apartments, branding, etc."
+                />
+              </Field>
+
+              <Button type="submit" size="lg" className="w-full gap-2 font-semibold">
+                <ArrowRight className="h-4 w-4" />
+                Review my details
+              </Button>
+
+              <div className="flex flex-col items-center gap-3 text-center">
+                <a
+                  href={calendlyLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
                 >
-                  {option}
-                </button>
-              ))}
-            </div>
-          </Field>
-
-          <Field id="notes" label="Anything else I should consider?" error={errors.notes} optional>
-            <Textarea
-              id="notes"
-              value={values.notes ?? ""}
-              maxLength={800}
-              rows={3}
-              onChange={(e) => set("notes", e.target.value)}
-              placeholder="Launch date, number of apartments, branding, etc."
-            />
-          </Field>
-
-          <Button type="submit" size="lg" className="w-full gap-2 font-semibold">
-            <ArrowRight className="h-4 w-4" />
-            Review my details
-          </Button>
-
-          <div className="flex flex-col items-center gap-3 text-center">
-            <a
-              href={calendlyLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
-            >
-              <CalendarCheck className="h-3.5 w-3.5" />
-              Prefer a call? Schedule 30 minutes instead
-            </a>
-            <Badge
-              variant="secondary"
-              className="gap-1.5 rounded-full bg-secondary text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground"
-            >
-              <ShieldCheck className="h-3 w-3" />
-              Your details stay private
-            </Badge>
-          </div>
-        </form>
-        </>
+                  <CalendarCheck className="h-3.5 w-3.5" />
+                  Prefer a call? Schedule 30 minutes instead
+                </a>
+                <Badge
+                  variant="secondary"
+                  className="gap-1.5 rounded-full bg-secondary text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+                >
+                  <ShieldCheck className="h-3 w-3" />
+                  Your details stay private
+                </Badge>
+              </div>
+            </form>
+          </>
         )}
       </DialogContent>
-
     </Dialog>
   );
 }
