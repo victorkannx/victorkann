@@ -430,7 +430,6 @@ function PricingSection() {
   const plans = [
     {
       name: "Starter",
-      price: "₦95k",
       description: "1-page site, enquiry system, 3 days delivery",
       features: ["1-page direct booking site", "Booking enquiry system", "3 days delivery"],
       popular: false,
@@ -438,7 +437,6 @@ function PricingSection() {
     },
     {
       name: "Growth",
-      price: "₦195k",
       description: "Multi-page, Paystack, Google setup, 72hrs",
       features: [
         "Multi-page direct booking site",
@@ -451,7 +449,6 @@ function PricingSection() {
     },
     {
       name: "Premium",
-      price: "₦350k",
       description: "Everything + 5 pages + SEO + 30 days support",
       features: ["Everything in Growth", "Up to 5 pages", "SEO setup", "30 days support"],
       popular: false,
@@ -464,8 +461,8 @@ function PricingSection() {
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           eyebrow="Investment"
-          title="One fee. No Airbnb commission, ever."
-          sub="Pick the package that fits, then book a call to lock in your build slot."
+          title="Tailored pricing for your shortlet."
+          sub="Every build is different. Pick a package, then get a custom quote sent to your WhatsApp in minutes."
         />
 
         <div className="grid gap-5 lg:grid-cols-3">
@@ -484,8 +481,8 @@ function PricingSection() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 {plan.name}
               </p>
-              <p className="display-font mt-3 text-4xl font-bold text-foreground">{plan.price}</p>
-              <p className="mt-3 text-sm text-muted-foreground">{plan.description}</p>
+              <p className="display-font mt-3 text-lg font-semibold text-foreground">{plan.description}</p>
+              <p className="mt-2 text-xs italic text-muted-foreground">Pricing available on request</p>
               <div className="my-6 h-px w-full bg-border" />
               <ul className="flex-1 space-y-3">
                 {plan.features.map((feature) => (
@@ -499,10 +496,10 @@ function PricingSection() {
                 className="mt-8 w-full gap-2 font-semibold"
                 variant={plan.popular ? "default" : "outline"}
                 onClick={() =>
-                  openLeadForm(`${plan.name} package (${plan.price}) — claim my build slot`)
+                  openLeadForm(`${plan.name} package — request pricing and build slot`)
                 }
               >
-                Start with {plan.name}
+                Request {plan.name} Quote
                 <ArrowUpRight className="h-4 w-4" />
               </Button>
             </div>
