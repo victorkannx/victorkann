@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { CalendarCheck, MessageCircle, ShieldCheck } from "lucide-react";
+import { ArrowRight, CalendarCheck, MessageCircle, Pencil, ShieldCheck } from "lucide-react";
 
 const WHATSAPP_NUMBER = "2348161123296";
 const CALENDLY_BASE = "https://calendly.com/victorkann/30min";
