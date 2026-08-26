@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -15,6 +16,7 @@ import {
   ArrowUpRight,
   MessageCircle,
   Sparkles,
+  ChevronDown,
 } from "lucide-react";
 import { LeadFormProvider, useLeadForm } from "@/components/lead-form-dialog";
 import cozyNestImg from "@/assets/cozy-nest-yaba.jpg";
@@ -61,6 +63,7 @@ function Index() {
         <ServicesSection />
         <PricingSection />
         <HowItWorksSection />
+        <FAQSection />
         <FinalCTA />
       </main>
       <Footer />
@@ -76,6 +79,7 @@ function Navbar() {
     { label: "Work", href: "#work" },
     { label: "Services", href: "#services" },
     { label: "Pricing", href: "#pricing" },
+    { label: "FAQ", href: "#faq" },
   ];
 
   return (
@@ -545,6 +549,106 @@ function HowItWorksSection() {
               </p>
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const faqs = [
+    {
+      question: "How long does it take to get my site live?",
+      answer:
+        "Most direct booking sites go live within 72 hours after I receive your photos, prices, and apartment details. Larger builds with multiple apartments or custom SEO campaigns may take a few extra days, but you'll always get a clear delivery date before we start.",
+    },
+    {
+      question: "What do I need to give you to get started?",
+      answer:
+        "Just your apartment photos, nightly rates, location, and a few details about your brand. If you have a logo or preferred colours, send those too. I handle the design, mobile layout, Paystack setup, maps integration, and the WhatsApp enquiry flow — you don't need any technical skills.",
+    },
+    {
+      question: "How many revisions are included?",
+      answer:
+        "Every build includes two rounds of revisions. You can request changes to text, images, colours, and layout. Additional revision rounds are available if needed, and premium packages include a 30-day support window after launch.",
+    },
+    {
+      question: "How does the WhatsApp auto-fill system work?",
+      answer:
+        "When a visitor clicks 'Request Quote' or 'Get one like this', they fill a short form with their name, email, apartment name, budget, and required features. On submit, their answers are formatted into a ready-to-send WhatsApp message that opens automatically with your details pre-filled — so you receive complete enquiries instead of endless 'how much?' DMs.",
+    },
+  ];
+
+  return (
+    <section id="faq" className="section-padding container-padding bg-secondary/30">
+      <div className="mx-auto max-w-3xl">
+        <SectionHeading
+          eyebrow="FAQ"
+          title="Questions shortlet owners ask before they start."
+          sub="Everything you need to know about delivery, revisions, and how the enquiry system works."
+        />
+
+        <div className="space-y-3">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+            return (
+              <div
+                key={faq.question}
+                className={`premium-card overflow-hidden transition-all duration-300 ${
+                  isOpen ? "ring-1 ring-primary/40" : ""
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center justify-between gap-4 p-5 text-left sm:p-6"
+                >
+                  <span className="display-font text-base font-semibold text-foreground sm:text-lg">
+                    {faq.question}
+                  </span>
+                  <span
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary/10 transition-transform duration-300 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  >
+                    <ChevronDown className="h-4 w-4 text-primary" />
+                  </span>
+                </button>
+                <div
+                  className={`grid transition-all duration-300 ease-in-out ${
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground sm:px-6 sm:pb-6 sm:text-base">
+                      {faq.answer}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-10 rounded-2xl border border-primary/25 bg-emerald-deep/40 p-6 text-center sm:p-8">
+          <p className="text-sm font-medium text-foreground sm:text-base">
+            Still have questions?
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Send me a message and I'll reply within a few hours.
+          </p>
+          <a
+            href="https://wa.me/2348161123296?text=Hi%20Victor%2C%20I%20have%20a%20question%20about%20getting%20a%20direct%20booking%20website."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Ask on WhatsApp
+          </a>
         </div>
       </div>
     </section>
