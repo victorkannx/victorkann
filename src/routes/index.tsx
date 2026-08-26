@@ -62,6 +62,7 @@ function Index() {
         <ServicesSection />
         <PricingSection />
         <HowItWorksSection />
+        <FAQSection />
         <FinalCTA />
       </main>
       <Footer />
