@@ -3,45 +3,45 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Star,
-  Smartphone,
-  CreditCard,
-  MapPin,
-  CheckCircle2,
-  XCircle,
-  Percent,
-  Instagram,
-  Mail,
-  Phone,
   ArrowUpRight,
-  MessageCircle,
-  Sparkles,
+  Bot,
+  BriefcaseBusiness,
+  BookOpen,
+  CalendarDays,
+  CheckCircle2,
   ChevronDown,
+  CircleDot,
+  ExternalLink,
+  Funnel,
+  GitBranch,
+  Layers3,
+  Mail,
+  Megaphone,
+  MessageCircle,
+  Workflow,
 } from "lucide-react";
 import { LeadFormProvider, useLeadForm } from "@/components/lead-form-dialog";
 import cozyNestImg from "@/assets/cozy-nest-yaba.jpg";
 import averyLekkiImg from "@/assets/avery-lekki.jpg";
 
-
-
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Victor Kannayo | Premium Direct Booking Websites for Shortlets" },
+      { title: "Victor Kann | Systems, Audiences & Digital Income" },
       {
         name: "description",
         content:
-          "Victor Kannayo designs premium direct booking websites for shortlet owners and Airbnb hosts. Live in 72 hours, built to convert Instagram views into paid bookings.",
+          "Victor Kann builds and documents practical systems across AI, funnels, automation, marketing and online business.",
       },
       {
         property: "og:title",
-        content: "Victor Kannayo | Premium Direct Booking Websites for Shortlets",
+        content: "Victor Kann | Systems, Audiences & Digital Income",
       },
       {
         property: "og:description",
         content:
-          "Premium direct booking websites for shortlet owners & Airbnb hosts. Live in 72 hours. Book a strategy call.",
+          "Building systems, audiences and digital income through practical experiments in AI, funnels, automation and online business.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://victorkann.com" },
@@ -53,21 +53,22 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <LeadFormProvider>
-      <div className="min-h-screen bg-background text-foreground">
-      <Navbar />
-      <main>
-        <Hero />
-        <TrustBar />
-        <ProblemSection />
-        <WorkSection />
-        <ServicesSection />
-        <PricingSection />
-        <HowItWorksSection />
-        <FAQSection />
-        <FinalCTA />
-      </main>
-      <Footer />
-      <FloatingBooking />
+      <div id="top" className="min-h-screen bg-background text-foreground">
+        <Navbar />
+        <main>
+          <Hero />
+          <ExploringSection />
+          <BuildingSection />
+          <HelpSection />
+          <SelectedWorkSection />
+          <WritingSection />
+          <AboutSection />
+          <WorkWithMeSection />
+          <BookCallSection />
+          <ContactSection />
+        </main>
+        <Footer />
+        <FloatingBooking />
       </div>
     </LeadFormProvider>
   );
@@ -76,52 +77,39 @@ function Index() {
 function Navbar() {
   const { openLeadForm } = useLeadForm();
   const navLinks = [
+    { label: "Exploring", href: "#exploring" },
     { label: "Work", href: "#work" },
-    { label: "Services", href: "#services" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "FAQ", href: "#faq" },
+    { label: "Writing", href: "#writing" },
+    { label: "About", href: "#about" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/70 bg-background/80 backdrop-blur-xl">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between container-padding">
-        <a
-          href="#"
-          className="display-font text-base font-bold tracking-[0.14em] text-foreground sm:text-lg"
-        >
-          VICTOR KANN<span className="text-primary">.</span>
+    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-xl">
+      <nav className="mx-auto grid h-16 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 container-padding sm:flex sm:justify-between">
+        <a href="#top" className="display-font min-w-0 text-base font-bold tracking-[0.12em] text-foreground sm:text-lg">
+          VICTOR KANN<span className="text-muted-foreground">.</span>
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-7 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
             </a>
           ))}
-          <Button
-            size="sm"
-            className="gap-2 font-semibold"
-            onClick={() => openLeadForm("Navbar — start my project")}
-          >
-            <Sparkles className="h-4 w-4" />
-            Start My Project
+          <Button size="sm" className="gap-2 font-semibold" onClick={() => openLeadForm("Navbar — work with Victor") }>
+            Work with me
+            <ArrowUpRight className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className="flex items-center md:hidden">
-          <Button
-            size="sm"
-            className="gap-2 font-semibold"
-            onClick={() => openLeadForm("Navbar — start my project")}
-          >
-            <Sparkles className="h-4 w-4" />
-            Start Project
-          </Button>
-        </div>
+        <Button size="sm" className="gap-2 font-semibold md:hidden" onClick={() => openLeadForm("Navbar — work with Victor") }>
+          Work with me
+          <ArrowUpRight className="h-4 w-4" />
+        </Button>
       </nav>
     </header>
   );
@@ -131,155 +119,75 @@ function Hero() {
   const { openLeadForm } = useLeadForm();
 
   return (
-    <section className="relative overflow-hidden section-padding container-padding">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-40 mx-auto h-80 max-w-3xl rounded-full bg-emerald-mid/20 blur-[120px]"
-      />
-      <div className="relative mx-auto max-w-5xl">
-        <div className="grid items-end gap-8 lg:grid-cols-[1.35fr_1fr]">
-          <div>
-            <Badge
-              variant="secondary"
-              className="mb-6 inline-flex max-w-full items-center gap-2 whitespace-normal rounded-full border border-primary/30 bg-secondary px-3 py-1 text-[11px] font-medium uppercase leading-snug tracking-[0.18em] text-primary sm:text-xs"
-            >
-              <Sparkles className="h-3 w-3 shrink-0" />
-              Taking 3 new projects this month
-            </Badge>
-
-            <h1 className="display-font text-balance text-[2rem] font-bold leading-[1.08] text-foreground sm:text-5xl lg:text-6xl">
-              Booking websites that turn Instagram views into{" "}
-              <span className="text-primary">paid bookings.</span>
-            </h1>
-
-            <div className="mt-6 h-px w-32 gold-rule" />
-
-            <p className="mt-6 max-w-xl text-balance text-[0.98rem] leading-relaxed text-muted-foreground sm:text-lg">
-              For shortlet owners &amp; Airbnb hosts tired of losing 15% to Airbnb and answering
-              &quot;how much?&quot; all day. Your direct booking site, live in 72 hours.
-            </p>
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button
-                size="lg"
-                className="w-full gap-2 px-6 font-semibold sm:w-auto"
-                onClick={() => openLeadForm("Hero — I need a booking website")}
-              >
-                Get My Booking Site
+    <section className="bg-ink text-ink-foreground">
+      <div className="mx-auto grid min-h-[min(760px,82svh)] max-w-7xl items-end gap-12 container-padding section-padding lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)]">
+        <div className="max-w-4xl">
+          <p className="mb-8 text-xs font-semibold uppercase tracking-[0.24em] text-ink-muted">Victor Kann</p>
+          <h1 className="display-font max-w-4xl text-balance text-[clamp(2.8rem,8vw,6.8rem)] font-bold leading-[0.96]">
+            Building systems, audiences &amp; digital income.
+          </h1>
+          <p className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-ink-muted sm:text-xl">
+            I build and experiment with AI, funnels, automation and online business systems, while documenting what I learn along the way.
+          </p>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <Button size="lg" className="w-full gap-2 bg-ink-foreground text-ink hover:bg-ink-foreground/90 sm:w-auto" onClick={() => openLeadForm("Hero — work with Victor") }>
+              Work with me
+              <ArrowUpRight className="h-4 w-4" />
+            </Button>
+            <Button size="lg" variant="outline" className="w-full gap-2 border-ink-border bg-transparent text-ink-foreground hover:bg-ink-soft sm:w-auto" asChild>
+              <a href="#building">
+                See what I&apos;m building
                 <ArrowUpRight className="h-4 w-4" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full gap-2 border-border px-6 font-semibold text-foreground hover:bg-secondary sm:w-auto"
-                asChild
-              >
-                <a href="#work">
-                  See the Work
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
-              </Button>
+              </a>
+            </Button>
+          </div>
+        </div>
+
+        <div className="border-l border-ink-border pl-5 sm:pl-7">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-muted">A personal workspace</p>
+          <div className="mt-6 space-y-5 text-sm leading-relaxed text-ink-muted">
+            <p>Curious about what makes digital work compound: better systems, clearer ideas and consistent distribution.</p>
+            <div className="flex items-center gap-3 text-ink-foreground">
+              <CircleDot className="h-4 w-4 shrink-0 text-ink-muted" />
+              <span>Building in public, one useful experiment at a time.</span>
             </div>
           </div>
-
-          <dl className="grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-4">
-            {[
-              { k: "72hrs", v: "Average delivery" },
-              { k: "20+", v: "Hosts onboarded" },
-              { k: "0%", v: "Platform commission" },
-            ].map((s) => (
-              <div key={s.k} className="premium-card p-4 lg:px-5 lg:py-4">
-                <dt className="display-font text-xl font-bold text-primary sm:text-2xl">{s.k}</dt>
-                <dd className="mt-1 text-[11px] uppercase tracking-[0.12em] text-muted-foreground sm:text-xs">
-                  {s.v}
-                </dd>
-              </div>
-            ))}
-          </dl>
         </div>
       </div>
     </section>
   );
 }
 
-function TrustBar() {
+function SectionHeading({ eyebrow, title, sub }: { eyebrow: string; title: string; sub?: string }) {
   return (
-    <section className="border-y border-border/70 bg-secondary/40 py-7">
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-3 container-padding md:flex-row md:gap-8">
-        <p className="text-center text-xs uppercase tracking-[0.16em] text-muted-foreground md:text-left">
-          Trusted by shortlet owners in <span className="text-foreground">Lekki, Yaba, Abuja &amp; London</span>
-        </p>
-        <div className="flex items-center gap-1">
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="h-4 w-4 fill-current text-primary" />
-            ))}
-          </div>
-          <span className="ml-2 text-sm font-bold text-foreground">4.9</span>
-          <span className="text-sm text-muted-foreground">rating</span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function SectionHeading({
-  eyebrow,
-  title,
-  sub,
-}: {
-  eyebrow: string;
-  title: string;
-  sub?: string;
-}) {
-  return (
-    <div className="mb-10 max-w-2xl">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">{eyebrow}</p>
-      <h2 className="display-font mt-3 text-balance text-[1.7rem] font-bold leading-tight text-foreground sm:text-4xl">
-        {title}
-      </h2>
-      {sub && <p className="mt-4 text-base leading-relaxed text-muted-foreground">{sub}</p>}
+    <div className="mb-10 max-w-3xl">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">{eyebrow}</p>
+      <h2 className="display-font mt-4 text-balance text-3xl font-bold leading-tight sm:text-5xl">{title}</h2>
+      {sub && <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">{sub}</p>}
     </div>
   );
 }
 
-function ProblemSection() {
-  const problems = [
-    {
-      icon: <XCircle className="h-5 w-5 text-destructive" />,
-      title: "Guests ask price and disappear",
-      description: "No booking flow means every DM is a dead-end conversation.",
-    },
-    {
-      icon: <Percent className="h-5 w-5 text-destructive" />,
-      title: "You lose 15% to Airbnb",
-      description: "Platform fees eat your profit every single night.",
-    },
-    {
-      icon: <Instagram className="h-5 w-5 text-destructive" />,
-      title: "You look like every other shortlet",
-      description: "A link-in-bio does not build trust or collect deposits.",
-    },
+function ExploringSection() {
+  const topics = [
+    { icon: <Bot className="h-5 w-5" />, title: "AI", description: "Practical AI tools, workflows and systems." },
+    { icon: <Funnel className="h-5 w-5" />, title: "Funnels", description: "Turning attention into leads and customers." },
+    { icon: <Workflow className="h-5 w-5" />, title: "Automation", description: "Reducing repetitive work with better systems." },
+    { icon: <Megaphone className="h-5 w-5" />, title: "Marketing", description: "Learning what earns attention, trust and action." },
+    { icon: <BriefcaseBusiness className="h-5 w-5" />, title: "Online Business", description: "Building, testing and documenting digital businesses." },
   ];
 
   return (
-    <section className="section-padding container-padding">
+    <section id="exploring" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          eyebrow="The problem"
-          title="Your WhatsApp link in bio is costing you bookings."
-        />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {problems.map((problem) => (
-            <div key={problem.title} className="premium-card p-6">
-              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-destructive/12">
-                {problem.icon}
-              </div>
-              <h3 className="display-font text-lg font-semibold text-foreground">{problem.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {problem.description}
-              </p>
-            </div>
+        <SectionHeading eyebrow="What I&apos;m exploring" title="The ideas and systems I keep coming back to." />
+        <div className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
+          {topics.map((topic) => (
+            <article key={topic.title} className="bg-background p-6 transition-colors hover:bg-surface-dim sm:p-7">
+              <div className="mb-12 text-muted-foreground">{topic.icon}</div>
+              <h3 className="display-font text-xl font-semibold">{topic.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{topic.description}</p>
+            </article>
           ))}
         </div>
       </div>
@@ -287,81 +195,122 @@ function ProblemSection() {
   );
 }
 
-function WorkSection() {
+function BuildingSection() {
+  return (
+    <section id="building" className="border-y border-border bg-surface-dim section-padding container-padding">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)] lg:items-end">
+        <div>
+          <SectionHeading
+            eyebrow="Currently building"
+            title="OneLink Funnel"
+            sub="A focused project for turning scattered attention into a clearer path from click to conversation."
+          />
+          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground">
+            It is being built, tested and improved in public. The goal is not to ship a shiny idea and disappear, but to learn what actually helps people move from interest to action.
+          </p>
+          <Button variant="outline" className="mt-8 gap-2 border-border font-semibold" asChild>
+            <a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer">
+              Follow the build
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          </Button>
+        </div>
+        <div className="border-t border-border pt-5 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0">
+          <Badge variant="outline" className="rounded-full border-border px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            Active experiment
+          </Badge>
+          <p className="mt-5 text-sm leading-relaxed text-muted-foreground">Notes, iterations and lessons will live here as the project takes shape.</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HelpSection() {
   const { openLeadForm } = useLeadForm();
-  const demos = [
+  const areas = [
+    { icon: <GitBranch className="h-5 w-5" />, title: "Lead Generation", description: "Build systems that turn attention into qualified leads." },
+    { icon: <Funnel className="h-5 w-5" />, title: "Funnels", description: "Create a clearer path from visitor to lead to customer." },
+    { icon: <Workflow className="h-5 w-5" />, title: "Automation", description: "Connect tools and workflows so less work has to be done manually." },
+    { icon: <Bot className="h-5 w-5" />, title: "AI Systems", description: "Use AI where it can genuinely improve a business workflow." },
+  ];
+
+  return (
+    <section className="section-padding container-padding">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading eyebrow="What I can help with" title="Useful systems for the part of the business that feels stuck." />
+        <div className="grid gap-4 md:grid-cols-2">
+          {areas.map((area) => (
+            <article key={area.title} className="border border-border p-6 sm:p-8">
+              <div className="flex items-start justify-between gap-5">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-border text-muted-foreground">{area.icon}</div>
+                <span className="text-xs text-muted-foreground">0{areas.indexOf(area) + 1}</span>
+              </div>
+              <h3 className="display-font mt-12 text-2xl font-semibold">{area.title}</h3>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">{area.description}</p>
+            </article>
+          ))}
+        </div>
+        <Button className="mt-8 gap-2 font-semibold" onClick={() => openLeadForm("What I can help with — work with Victor") }>
+          Work with me
+          <ArrowUpRight className="h-4 w-4" />
+        </Button>
+      </div>
+    </section>
+  );
+}
+
+function SelectedWorkSection() {
+  const { openLeadForm } = useLeadForm();
+  const projects = [
     {
       image: cozyNestImg,
       title: "Cozy Nest — Yaba",
-      tag: "Budget demo",
-      price: "From ₦35k/night",
+      type: "Direct booking website",
+      description: "A conversion-focused shortlet website built around clear information and a simple enquiry path.",
       href: "https://cozy.victorkann.com",
-      alt: "Cozy Nest Yaba shortlet direct booking website",
-      slug: "demo-cozy-nest-yaba",
-      topic: "I want a site like Cozy Nest — Yaba (budget demo)",
-      span: "lg:col-span-3",
+      alt: "Cozy Nest Yaba direct booking website",
+      source: "Selected work — Cozy Nest Yaba",
     },
     {
       image: averyLekkiImg,
       title: "The Avery — Lekki",
-      tag: "Luxury demo",
-      price: "From ₦130k/night",
+      type: "Hospitality website",
+      description: "A more elevated direction for a luxury apartment brand, with the experience doing the selling.",
       href: "https://avery.victorkann.com",
-      alt: "The Avery Lekki luxury shortlet direct booking website",
-      slug: "demo-avery-lekki",
-      topic: "I want a site like The Avery — Lekki (luxury demo)",
-      span: "lg:col-span-3",
+      alt: "The Avery Lekki luxury apartment website",
+      source: "Selected work — The Avery Lekki",
     },
   ];
 
   return (
-    <section id="work" className="section-padding container-padding bg-secondary/30">
+    <section id="work" className="border-y border-border bg-surface-dim section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          eyebrow="Selected work"
-          title="Live sites built for shortlet owners."
-          sub="Mobile-first, fast, and designed for one job: collecting the booking."
-        />
-
-        <div className="grid gap-5 lg:grid-cols-6">
-          {demos.map((demo) => (
-            <article key={demo.title} className={`premium-card group overflow-hidden ${demo.span}`}>
-              <a
-                href={demo.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block aspect-[16/10] overflow-hidden border-b border-border/70"
-              >
-                <img
-                  src={demo.image}
-                  alt={demo.alt}
-                  width={1280}
-                  height={800}
-                  loading="lazy"
-                  className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.04]"
-                />
+        <SectionHeading eyebrow="Selected work" title="Systems, websites and digital projects I&apos;ve built or worked on." sub="Shortlet websites are one part of the work, not the whole story." />
+        <div className="grid gap-6 lg:grid-cols-2">
+          {projects.map((project) => (
+            <article key={project.title} className="overflow-hidden border border-border bg-background">
+              <a href={project.href} target="_blank" rel="noopener noreferrer" className="group block aspect-[16/10] overflow-hidden border-b border-border">
+                <img src={project.image} alt={project.alt} width={1280} height={800} loading="lazy" className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]" />
               </a>
-              <div className="p-6">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h3 className="display-font text-xl font-bold text-foreground">{demo.title}</h3>
-                  <span className="rounded-full border border-primary/30 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-primary">
-                    {demo.tag}
-                  </span>
+              <div className="p-6 sm:p-8">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{project.type}</p>
+                    <h3 className="display-font mt-3 text-2xl font-semibold">{project.title}</h3>
+                  </div>
+                  <ArrowUpRight className="h-5 w-5 text-muted-foreground" />
                 </div>
-                <p className="mt-2 text-sm font-medium text-muted-foreground">{demo.price}</p>
-                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                  <Button className="w-full gap-2 font-semibold" asChild>
-                    <a href={demo.href} target="_blank" rel="noopener noreferrer">
-                      View Live Demo
-                      <ArrowUpRight className="h-4 w-4" />
+                <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">{project.description}</p>
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                  <Button className="w-full gap-2 font-semibold sm:w-auto" asChild>
+                    <a href={project.href} target="_blank" rel="noopener noreferrer">
+                      View live site
+                      <ExternalLink className="h-4 w-4" />
                     </a>
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full gap-2 border-border text-foreground hover:bg-secondary"
-                    onClick={() => openLeadForm(demo.topic)}
-                  >
-                    Get one like this
+                  <Button variant="outline" className="w-full gap-2 border-border font-semibold sm:w-auto" onClick={() => openLeadForm(project.source)}>
+                    Build something similar
                   </Button>
                 </div>
               </div>
@@ -373,55 +322,22 @@ function WorkSection() {
   );
 }
 
-function ServicesSection() {
-  const services = [
-    {
-      icon: <Smartphone className="h-5 w-5 text-primary" />,
-      title: "Direct Booking Website",
-      description: "Mobile-first design that loads fast and looks expensive on every device.",
-      span: "lg:col-span-4",
-    },
-    {
-      icon: <MessageCircle className="h-5 w-5 text-primary" />,
-      title: "Booking & enquiry flow",
-      description: "Serious guests schedule and confirm. Time-wasters filter themselves out.",
-      span: "lg:col-span-2",
-    },
-    {
-      icon: <CreditCard className="h-5 w-5 text-primary" />,
-      title: "Paystack deposit collection",
-      description: "Collect money even at 2am while you sleep.",
-      span: "lg:col-span-2",
-    },
-    {
-      icon: <MapPin className="h-5 w-5 text-primary" />,
-      title: "Google Maps & search setup",
-      description: "Get found on Google and build trust before guests ever message you.",
-      span: "lg:col-span-4",
-    },
-  ];
+function WritingSection() {
+  const categories = ["AI", "Funnels", "Automation", "Marketing", "Building Online"];
 
   return (
-    <section id="services" className="section-padding container-padding">
+    <section id="writing" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          eyebrow="What you get"
-          title="A complete direct booking system, not just a page."
-          sub="Everything you need to start taking direct bookings in 72 hours."
-        />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
-          {services.map((service) => (
-            <div key={service.title} className={`premium-card p-6 ${service.span}`}>
-              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/12">
-                {service.icon}
+        <SectionHeading eyebrow="Build log / writing" title="Notes from the work, not polished lessons from a mountaintop." sub="A place for future posts, experiments and build-in-public updates." />
+        <div className="grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
+          {categories.map((category, index) => (
+            <article key={category} className="flex min-h-44 flex-col justify-between bg-background p-6 transition-colors hover:bg-surface-dim">
+              <BookOpen className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Coming soon · 0{index + 1}</p>
+                <h3 className="display-font mt-3 text-xl font-semibold">{category}</h3>
               </div>
-              <h3 className="display-font text-lg font-semibold text-foreground">
-                {service.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {service.description}
-              </p>
-            </div>
+            </article>
           ))}
         </div>
       </div>
@@ -429,300 +345,135 @@ function ServicesSection() {
   );
 }
 
-function PricingSection() {
-  const { openLeadForm } = useLeadForm();
-  const plans = [
-    {
-      name: "Starter",
-      description: "1-page site, enquiry system, 3 days delivery",
-      features: ["1-page direct booking site", "Booking enquiry system", "3 days delivery"],
-      popular: false,
-      slug: "package-starter",
-    },
-    {
-      name: "Growth",
-      description: "Multi-page, Paystack, Google setup, 72hrs",
-      features: [
-        "Multi-page direct booking site",
-        "Paystack deposit collection",
-        "Google Maps setup",
-        "72 hours delivery",
-      ],
-      popular: true,
-      slug: "package-growth",
-    },
-    {
-      name: "Premium",
-      description: "Everything + 5 pages + SEO + 30 days support",
-      features: ["Everything in Growth", "Up to 5 pages", "SEO setup", "30 days support"],
-      popular: false,
-      slug: "package-premium",
-    },
-  ];
-
+function AboutSection() {
   return (
-    <section id="pricing" className="section-padding container-padding bg-secondary/30">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          eyebrow="Investment"
-          title="Tailored pricing for your shortlet."
-          sub="Every build is different. Pick a package, then get a custom quote sent to your WhatsApp in minutes."
-        />
-
-        <div className="grid gap-5 lg:grid-cols-3">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`premium-card relative flex flex-col p-7 ${
-                plan.popular ? "ring-1 ring-primary/60" : ""
-              }`}
-            >
-              {plan.popular && (
-                <Badge className="absolute -top-3 left-7 rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]">
-                  Most popular
-                </Badge>
-              )}
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                {plan.name}
-              </p>
-              <p className="display-font mt-3 text-lg font-semibold text-foreground">{plan.description}</p>
-              <p className="mt-2 text-xs italic text-muted-foreground">Pricing available on request</p>
-              <div className="my-6 h-px w-full bg-border" />
-              <ul className="flex-1 space-y-3">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3 text-sm text-foreground">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <Button
-                className="mt-8 w-full gap-2 font-semibold"
-                variant={plan.popular ? "default" : "outline"}
-                onClick={() =>
-                  openLeadForm(`${plan.name} package — request pricing and build slot`)
-                }
-              >
-                Request {plan.name} Quote
-                <ArrowUpRight className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
+    <section id="about" className="border-y border-border bg-ink text-ink-foreground section-padding container-padding">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-start">
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ink-muted">About</p>
+        <div className="max-w-3xl">
+          <h2 className="display-font text-3xl font-bold sm:text-5xl">I&apos;m Victor Kann.</h2>
+          <div className="mt-7 space-y-5 text-lg leading-relaxed text-ink-muted">
+            <p>I&apos;m interested in the intersection of AI, marketing, automation and online business.</p>
+            <p>I&apos;m building systems, testing ideas and documenting what works, what doesn&apos;t, and what I&apos;m learning along the way.</p>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function HowItWorksSection() {
-  const steps = [
-    {
-      step: "01",
-      title: "Book a 30-minute call",
-      description: "Pick a time that works. We map your apartment, pricing, and goals.",
-    },
-    {
-      step: "02",
-      title: "I build in 72hrs",
-      description: "Your site goes live with Paystack, maps, and a clean booking flow.",
-    },
-    {
-      step: "03",
-      title: "You collect direct bookings",
-      description: "Guests book and pay while you focus on hosting.",
-    },
-  ];
+function WorkWithMeSection() {
+  const { openLeadForm } = useLeadForm();
 
   return (
     <section className="section-padding container-padding">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow="Process" title="Three steps to direct bookings." />
-        <div className="grid gap-4 md:grid-cols-3">
-          {steps.map((item) => (
-            <div key={item.step} className="premium-card p-6">
-              <span className="display-font text-3xl font-bold text-primary/70">{item.step}</span>
-              <h3 className="display-font mt-4 text-lg font-semibold text-foreground">
-                {item.title}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {item.description}
-              </p>
+      <div className="mx-auto max-w-7xl border border-border p-7 sm:p-12 lg:p-16">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.65fr)] lg:items-end">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Work with me</p>
+            <h2 className="display-font mt-4 max-w-3xl text-balance text-3xl font-bold leading-tight sm:text-5xl">Have something you&apos;re trying to build or improve?</h2>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">Tell me what you&apos;re working on, where you&apos;re stuck and what you&apos;re trying to achieve. I&apos;ll use that information to understand whether I can help.</p>
+          </div>
+          <div>
+            <div className="border-t border-border pt-5 text-sm leading-relaxed text-muted-foreground">
+              <Layers3 className="mb-4 h-5 w-5" />
+              Start with a few practical details. The enquiry form is the first version of the prospecting system we&apos;ll improve later.
             </div>
-          ))}
+            <Button size="lg" className="mt-7 w-full gap-2 font-semibold sm:w-auto" onClick={() => openLeadForm("Work with me — start a conversation") }>
+              Start a conversation
+              <ArrowUpRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function FAQSection() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const faqs = [
-    {
-      question: "How long does it take to get my site live?",
-      answer:
-        "Most direct booking sites go live within 72 hours after I receive your photos, prices, and apartment details. Larger builds with multiple apartments or custom SEO campaigns may take a few extra days, but you'll always get a clear delivery date before we start.",
-    },
-    {
-      question: "What do I need to give you to get started?",
-      answer:
-        "Just your apartment photos, nightly rates, location, and a few details about your brand. If you have a logo or preferred colours, send those too. I handle the design, mobile layout, Paystack setup, maps integration, and the WhatsApp enquiry flow — you don't need any technical skills.",
-    },
-    {
-      question: "How many revisions are included?",
-      answer:
-        "Every build includes two rounds of revisions. You can request changes to text, images, colours, and layout. Additional revision rounds are available if needed, and premium packages include a 30-day support window after launch.",
-    },
-    {
-      question: "How does the WhatsApp auto-fill system work?",
-      answer:
-        "When a visitor clicks 'Request Quote' or 'Get one like this', they fill a short form with their name, email, apartment name, budget, and required features. On submit, their answers are formatted into a ready-to-send WhatsApp message that opens automatically with your details pre-filled — so you receive complete enquiries instead of endless 'how much?' DMs.",
-    },
-  ];
-
+function BookCallSection() {
   return (
-    <section id="faq" className="section-padding container-padding bg-secondary/30">
-      <div className="mx-auto max-w-3xl">
-        <SectionHeading
-          eyebrow="FAQ"
-          title="Questions shortlet owners ask before they start."
-          sub="Everything you need to know about delivery, revisions, and how the enquiry system works."
-        />
-
-        <div className="space-y-3">
-          {faqs.map((faq, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <div
-                key={faq.question}
-                className={`premium-card overflow-hidden transition-all duration-300 ${
-                  isOpen ? "ring-1 ring-primary/40" : ""
-                }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  aria-expanded={isOpen}
-                  className="flex w-full items-center justify-between gap-4 p-5 text-left sm:p-6"
-                >
-                  <span className="display-font text-base font-semibold text-foreground sm:text-lg">
-                    {faq.question}
-                  </span>
-                  <span
-                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-primary/30 bg-primary/10 transition-transform duration-300 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
-                  >
-                    <ChevronDown className="h-4 w-4 text-primary" />
-                  </span>
-                </button>
-                <div
-                  className={`grid transition-all duration-300 ease-in-out ${
-                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <p className="px-5 pb-5 text-sm leading-relaxed text-muted-foreground sm:px-6 sm:pb-6 sm:text-base">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+    <section className="border-y border-border bg-surface-dim section-padding container-padding">
+      <div className="mx-auto flex max-w-7xl flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Book a call</p>
+          <h2 className="display-font mt-4 text-3xl font-bold sm:text-4xl">Prefer to talk it through?</h2>
+          <p className="mt-4 text-base leading-relaxed text-muted-foreground">Book a short discovery call and tell me what you&apos;re working on.</p>
         </div>
-
-        <div className="mt-10 rounded-2xl border border-primary/25 bg-emerald-deep/40 p-6 text-center sm:p-8">
-          <p className="text-sm font-medium text-foreground sm:text-base">
-            Still have questions?
-          </p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Send me a message and I'll reply within a few hours.
-          </p>
-          <a
-            href="https://wa.me/2348161123296?text=Hi%20Victor%2C%20I%20have%20a%20question%20about%20getting%20a%20direct%20booking%20website."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-          >
-            <MessageCircle className="h-4 w-4" />
-            Ask on WhatsApp
+        <Button size="lg" className="w-full gap-2 font-semibold sm:w-auto" asChild>
+          <a href="https://cal.com/autogrowhq/15" target="_blank" rel="noopener noreferrer">
+            <CalendarDays className="h-4 w-4" />
+            Book a 15-minute call
+            <ExternalLink className="h-4 w-4" />
           </a>
-        </div>
+        </Button>
       </div>
     </section>
   );
 }
 
-function FinalCTA() {
-  const { openLeadForm } = useLeadForm();
-
+function ContactSection() {
   return (
     <section className="section-padding container-padding">
-      <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-primary/25 bg-emerald-deep/60 px-6 py-14 text-center sm:px-12">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-          Limited slots
-        </p>
-        <h2 className="display-font mx-auto mt-4 max-w-2xl text-balance text-[1.75rem] font-bold leading-tight text-foreground sm:text-4xl md:text-5xl">
-          Ready to stop losing bookings to Airbnb?
-        </h2>
-        <p className="mx-auto mt-5 max-w-xl text-balance text-base text-muted-foreground sm:text-lg">
-          Join 20+ shortlet owners who now get direct bookings daily. Schedule your strategy call.
-        </p>
-        <Button
-          size="lg"
-          className="mt-8 w-full gap-2 px-7 font-semibold sm:w-auto"
-          onClick={() => openLeadForm("Final CTA — ready to stop losing bookings")}
-        >
-          Start My Project
-          <ArrowUpRight className="h-5 w-5" />
-        </Button>
-        <p className="mt-4 text-xs text-muted-foreground">
-          Takes 60 seconds. Sent straight to my WhatsApp — reply within a few hours.
-        </p>
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 border-t border-border pt-7 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Other contact option</p>
+          <p className="mt-3 text-base text-muted-foreground">Prefer email or don&apos;t use WhatsApp?</p>
+        </div>
+        <a href="mailto:iamvictorkann@outlook.com" className="inline-flex items-center gap-3 text-base font-semibold text-foreground underline-offset-4 hover:underline">
+          <Mail className="h-5 w-5 text-muted-foreground" />
+          iamvictorkann@outlook.com
+        </a>
       </div>
     </section>
   );
 }
 
 function Footer() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const faqs = [
+    ["What is this site about?", "This is my working space for AI, funnels, automation, marketing and online business experiments."],
+    ["Can I work with you?", "Yes. Start a conversation with the enquiry form and share what you are building, where you are stuck and what you want to improve."],
+  ];
+
   return (
-    <footer className="border-t border-border/70 py-10">
-      <div className="mx-auto max-w-7xl container-padding">
-        <div className="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
-          <p className="display-font text-sm tracking-[0.14em] text-muted-foreground">
-            © {new Date().getFullYear()} VICTOR KANNAYO
-          </p>
-          <div className="flex flex-col items-center gap-3 text-sm text-muted-foreground md:flex-row md:gap-6">
-            <a
-              href="mailto:hello@victorkann.com"
-              className="flex items-center gap-2 transition-colors hover:text-primary"
-            >
-              <Mail className="h-4 w-4" />
-              hello@victorkann.com
+    <footer className="border-t border-border bg-surface-dim py-10 container-padding">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-start">
+          <div>
+            <p className="display-font text-lg font-bold tracking-[0.12em]">VICTOR KANN</p>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">AI · Funnels · Automation · Marketing · Online Business</p>
+          </div>
+          <div className="flex flex-col gap-3 text-sm text-muted-foreground md:items-end">
+            <a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-foreground">
+              X: @iamVictorKann
+              <ExternalLink className="h-3.5 w-3.5" />
             </a>
-            <a
-              href="tel:+2348161123296"
-              className="flex items-center gap-2 transition-colors hover:text-primary"
-            >
-              <Phone className="h-4 w-4" />
-              08161123296
-            </a>
-            <a
-              href="https://instagram.com/victorkannayo"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 transition-colors hover:text-primary"
-            >
-              <Instagram className="h-4 w-4" />
-              @victorkannayo
+            <a href="mailto:iamvictorkann@outlook.com" className="inline-flex items-center gap-2 hover:text-foreground">
+              Email: iamvictorkann@outlook.com
+              <Mail className="h-3.5 w-3.5" />
             </a>
           </div>
         </div>
-        <p className="mt-6 text-center text-xs text-muted-foreground md:text-left">
-          Premium direct booking websites for shortlet owners worldwide.
-        </p>
+
+        <div className="mt-10 border-t border-border pt-7">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">A couple of quick answers</p>
+          <div className="mt-4 grid gap-2 md:grid-cols-2">
+            {faqs.map(([question, answer], index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div key={question} className="border border-border bg-background">
+                  <Button variant="ghost" className="h-auto w-full justify-between gap-4 px-4 py-4 text-left font-semibold hover:bg-surface-dim" onClick={() => setOpenFaq(isOpen ? null : index)} aria-expanded={isOpen}>
+                    {question}
+                    <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                  </Button>
+                  {isOpen && <p className="border-t border-border px-4 pb-4 pt-3 text-sm leading-relaxed text-muted-foreground">{answer}</p>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <p className="mt-10 text-xs text-muted-foreground">© {new Date().getFullYear()} Victor Kann</p>
       </div>
     </footer>
   );
@@ -732,14 +483,10 @@ function FloatingBooking() {
   const { openLeadForm } = useLeadForm();
 
   return (
-    <button
-      type="button"
-      onClick={() => openLeadForm("Floating button — start my project")}
-      aria-label="Start my project"
-      className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-xl shadow-black/40 transition-transform hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:bottom-6 sm:right-6"
-    >
-      <MessageCircle className="h-5 w-5" />
-      Start My Project
-    </button>
+    <Button type="button" onClick={() => openLeadForm("Floating button — work with Victor")} aria-label="Work with Victor" className="fixed bottom-4 right-4 z-50 h-12 gap-2 rounded-full px-4 font-semibold shadow-lg shadow-foreground/15 transition-transform hover:scale-105 sm:bottom-6 sm:right-6">
+      <MessageCircle className="h-4 w-4" />
+      <span className="hidden sm:inline">Work with me</span>
+      <span className="sm:hidden">Work with me</span>
+    </Button>
   );
 }
