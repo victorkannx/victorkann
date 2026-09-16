@@ -250,7 +250,7 @@ function LeadFormDialog({
 
             <div className="flex flex-col items-center gap-3 text-center">
               <a
-                href={calendlyLink}
+                  href={calLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
