@@ -166,7 +166,7 @@ function LeadFormDialog({
     setReview(null);
   };
 
-  const calendlyLink = `${CALENDLY_BASE}?${new URLSearchParams({
+  const calLink = `${CAL_BASE}?${new URLSearchParams({
     utm_source: "victorkann.com",
     utm_campaign: "lead-form",
     a1: source,
