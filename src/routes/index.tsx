@@ -483,10 +483,9 @@ function FloatingBooking() {
   const { openLeadForm } = useLeadForm();
 
   return (
-    <Button type="button" onClick={() => openLeadForm("Floating button — work with Victor")} aria-label="Work with Victor" className="fixed bottom-4 right-4 z-50 h-12 gap-2 rounded-full px-4 font-semibold shadow-lg shadow-foreground/15 transition-transform hover:scale-105 sm:bottom-6 sm:right-6">
+    <Button type="button" onClick={() => openLeadForm("Floating button — work with Victor")} aria-label="Work with Victor" className="fixed bottom-4 right-4 z-50 h-12 w-12 gap-2 rounded-full px-0 font-semibold shadow-lg shadow-foreground/15 transition-transform hover:scale-105 sm:bottom-6 sm:right-6 sm:w-auto sm:px-4">
       <MessageCircle className="h-4 w-4" />
       <span className="hidden sm:inline">Work with me</span>
-      <span className="sm:hidden">Work with me</span>
     </Button>
   );
 }

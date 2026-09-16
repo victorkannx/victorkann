@@ -9,17 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CalendarCheck, MessageCircle, Pencil, ShieldCheck, Phone } from "lucide-react";
 
 const WHATSAPP_NUMBER = "2348161123296";
-const CALENDLY_BASE = "https://calendly.com/victorkann/30min";
+const CAL_BASE = "https://cal.com/autogrowhq/15";
 
 const FEATURE_OPTIONS = [
-  "Paystack deposits",
-  "Booking calendar",
-  "Photo gallery",
-  "Google Maps",
-  "Multiple apartments",
-  "Reviews section",
-  "SEO setup",
-  "WhatsApp enquiry flow",
+  "AI workflow",
+  "Lead generation",
+  "Funnel strategy",
+  "Automation",
+  "Content system",
+  "Landing page",
+  "Email sequence",
+  "Analytics setup",
 ];
 
 const BUDGET_OPTIONS = [
@@ -43,7 +43,7 @@ const leadSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80, "Name is too long"),
   email: z.string().trim().email("Enter a valid email address").max(160),
   phone: z.string().trim().regex(phoneRegex, "Enter a valid WhatsApp number").max(30),
-  siteName: z.string().trim().min(2, "Tell me the apartment or website name").max(120),
+  siteName: z.string().trim().min(2, "Tell me the project or website name").max(120),
   features: z.string().trim().min(2, "Pick or describe at least one feature").max(600),
   budget: z.string().trim().max(80).optional().or(z.literal("")),
   notes: z.string().trim().max(800).optional().or(z.literal("")),
@@ -137,7 +137,7 @@ function LeadFormDialog({
   const buildMessage = (d: LeadValues) => {
     const pkg = inferredPackagePrice(source);
     const lines = [
-      "New booking-website enquiry from victorkann.com",
+      "New project enquiry from victorkann.com",
       `Interest: ${source}`,
       "",
       `Name: ${d.name}`,
@@ -166,7 +166,7 @@ function LeadFormDialog({
     setReview(null);
   };
 
-  const calendlyLink = `${CALENDLY_BASE}?${new URLSearchParams({
+  const calLink = `${CAL_BASE}?${new URLSearchParams({
     utm_source: "victorkann.com",
     utm_campaign: "lead-form",
     a1: source,
@@ -195,12 +195,12 @@ function LeadFormDialog({
               {review ? `Step 2 of 2 · ${source}` : `Step 1 of 2 · ${source}`}
             </p>
             <DialogTitle className="display-font text-xl font-bold">
-              {review ? "Check your details" : "Tell me about your shortlet"}
+              {review ? "Check your details" : "Tell me about your project"}
             </DialogTitle>
             <DialogDescription className="text-sm">
               {review
-                ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
-                : "Takes 60 seconds. I'll receive it on WhatsApp instantly and reply with a plan and pricing."}
+                 ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
+                 : "Share a few details about what you are building or improving. I’ll reply with a useful next step."}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -250,13 +250,13 @@ function LeadFormDialog({
 
             <div className="flex flex-col items-center gap-3 text-center">
               <a
-                href={calendlyLink}
+                  href={calLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
               >
                 <CalendarCheck className="h-3.5 w-3.5" />
-                Or book a 30-minute call with these details
+                Or book a 15-minute call
               </a>
               <Badge
                 variant="secondary"
@@ -311,17 +311,17 @@ function LeadFormDialog({
                 </Field>
               </div>
 
-              <Field id="siteName" label="Intended website / apartment name" error={errors.siteName}>
+               <Field id="siteName" label="Project / website name" error={errors.siteName}>
                 <Input
                   id="siteName"
                   value={values.siteName}
                   maxLength={120}
                   onChange={(e) => set("siteName", e.target.value)}
-                  placeholder="e.g. The Avery, Lekki"
+                  placeholder="e.g. OneLink Funnel or your business name"
                 />
               </Field>
 
-              <Field id="features" label="Features to include" error={errors.features}>
+              <Field id="features" label="What would you like to include?" error={errors.features}>
                 <div className="mb-3 flex flex-wrap gap-2">
                   {FEATURE_OPTIONS.map((feature) => {
                     const active = selectedFeatures.includes(feature);
@@ -348,7 +348,7 @@ function LeadFormDialog({
                   maxLength={600}
                   rows={2}
                   onChange={(e) => set("features", e.target.value)}
-                  placeholder="Tap the tags above or type what you need"
+                  placeholder="Tap the tags above or describe what you need"
                 />
               </Field>
 
@@ -397,13 +397,13 @@ function LeadFormDialog({
 
               <div className="flex flex-col items-center gap-3 text-center">
                 <a
-                  href={calendlyLink}
+                  href={calLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
                 >
                   <CalendarCheck className="h-3.5 w-3.5" />
-                  Prefer a call? Schedule 30 minutes instead
+                  Prefer a call? Schedule 15 minutes instead
                 </a>
                 <Badge
                   variant="secondary"

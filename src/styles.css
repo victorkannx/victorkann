@@ -4,10 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Victor Kannayo — Direct Booking Websites
- * Design system: clean, minimal, agency-grade.
- */
+/* Victor Kann — personal builder workspace */
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -51,91 +48,56 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Premium accent tokens */
-  --color-gold: var(--gold);
-  --color-gold-soft: var(--gold-soft);
-  --color-emerald-deep: var(--emerald-deep);
-  --color-emerald-mid: var(--emerald-mid);
-  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-ink-foreground: var(--ink-foreground);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-border: var(--ink-border);
+  --color-surface-dim: var(--surface-dim);
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.75rem;
-  --background: oklch(0.19 0.042 165);
-  --foreground: oklch(0.96 0.022 92);
-  --card: oklch(0.235 0.045 165);
-  --card-foreground: oklch(0.96 0.022 92);
-  --popover: oklch(0.235 0.045 165);
-  --popover-foreground: oklch(0.96 0.022 92);
-  --primary: oklch(0.76 0.115 86);
-  --primary-foreground: oklch(0.19 0.042 165);
-  --secondary: oklch(0.28 0.048 165);
-  --secondary-foreground: oklch(0.96 0.022 92);
-  --muted: oklch(0.27 0.042 165);
-  --muted-foreground: oklch(0.79 0.028 150);
-  --accent: oklch(0.55 0.105 165);
-  --accent-foreground: oklch(0.97 0.02 92);
-  --destructive: oklch(0.62 0.19 27);
-  --destructive-foreground: oklch(0.98 0.01 92);
-  --border: oklch(0.34 0.04 165);
-  --input: oklch(0.34 0.04 165);
-  --ring: oklch(0.76 0.115 86);
-  --chart-1: oklch(0.76 0.115 86);
-  --chart-2: oklch(0.6 0.118 165);
-  --chart-3: oklch(0.398 0.07 165);
-  --chart-4: oklch(0.828 0.09 92);
-  --chart-5: oklch(0.5 0.1 165);
-  --sidebar: oklch(0.235 0.045 165);
-  --sidebar-foreground: oklch(0.96 0.022 92);
-  --sidebar-primary: oklch(0.76 0.115 86);
-  --sidebar-primary-foreground: oklch(0.19 0.042 165);
-  --sidebar-accent: oklch(0.28 0.048 165);
-  --sidebar-accent-foreground: oklch(0.96 0.022 92);
-  --sidebar-border: oklch(0.34 0.04 165);
-  --sidebar-ring: oklch(0.76 0.115 86);
-
-  --gold: oklch(0.76 0.115 86);
-  --gold-soft: oklch(0.88 0.07 92);
-  --emerald-deep: oklch(0.34 0.075 165);
-  --emerald-mid: oklch(0.55 0.105 165);
-  --cream: oklch(0.96 0.022 92);
-}
-
-.dark {
-  --background: oklch(0.145 0.02 264);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.68 0.18 264.1);
-  --primary-foreground: oklch(0.145 0.02 264);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.68 0.18 264.1);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --radius: 0.25rem;
+  --background: oklch(0.975 0.004 90);
+  --foreground: oklch(0.16 0.008 270);
+  --card: oklch(0.99 0.002 90);
+  --card-foreground: oklch(0.16 0.008 270);
+  --popover: oklch(0.99 0.002 90);
+  --popover-foreground: oklch(0.16 0.008 270);
+  --primary: oklch(0.16 0.008 270);
+  --primary-foreground: oklch(0.98 0.002 90);
+  --secondary: oklch(0.92 0.004 90);
+  --secondary-foreground: oklch(0.16 0.008 270);
+  --muted: oklch(0.92 0.004 90);
+  --muted-foreground: oklch(0.46 0.008 270);
+  --accent: oklch(0.88 0.005 90);
+  --accent-foreground: oklch(0.16 0.008 270);
+  --destructive: oklch(0.55 0.17 25);
+  --destructive-foreground: oklch(0.98 0.002 90);
+  --border: oklch(0.82 0.006 270);
+  --input: oklch(0.82 0.006 270);
+  --ring: oklch(0.46 0.008 270);
+  --chart-1: oklch(0.16 0.008 270);
+  --chart-2: oklch(0.46 0.008 270);
+  --chart-3: oklch(0.66 0.006 270);
+  --chart-4: oklch(0.82 0.006 270);
+  --chart-5: oklch(0.35 0.008 270);
+  --sidebar: oklch(0.92 0.004 90);
+  --sidebar-foreground: oklch(0.16 0.008 270);
+  --sidebar-primary: oklch(0.16 0.008 270);
+  --sidebar-primary-foreground: oklch(0.98 0.002 90);
+  --sidebar-accent: oklch(0.88 0.005 90);
+  --sidebar-accent-foreground: oklch(0.16 0.008 270);
+  --sidebar-border: oklch(0.82 0.006 270);
+  --sidebar-ring: oklch(0.46 0.008 270);
+  --ink: oklch(0.16 0.008 270);
+  --ink-foreground: oklch(0.98 0.002 90);
+  --ink-muted: oklch(0.76 0.006 270);
+  --ink-soft: oklch(0.22 0.008 270);
+  --ink-border: oklch(0.36 0.008 270);
+  --surface-dim: oklch(0.94 0.004 90);
 }
 
 @layer base {
@@ -157,39 +119,24 @@
 }
 
 @utility section-padding {
-  padding-top: 3.5rem;
-  padding-bottom: 3.5rem;
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
   scroll-margin-top: 4.5rem;
 
   @media (min-width: 640px) {
-    padding-top: 5rem;
-    padding-bottom: 5rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
 
   @media (min-width: 768px) {
-    padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
   }
 }
 
 @utility display-font {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
-}
-
-@utility gold-rule {
-  background-image: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
-}
-
-@utility premium-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-2xl);
-  background-image: linear-gradient(
-    145deg,
-    color-mix(in oklab, var(--card) 92%, var(--gold) 8%),
-    var(--card)
-  );
-  box-shadow: 0 24px 60px -32px oklch(0 0 0 / 0.65);
+  letter-spacing: 0;
 }
 
 @utility container-padding {

@@ -77,34 +77,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Victor Kannayo | Direct Booking Websites for Shortlets" },
+      { title: "Victor Kann | Systems, Audiences & Digital Income" },
       {
         name: "description",
         content:
-          "Victor Kannayo builds direct booking websites for shortlet owners and Airbnb hosts in Nigeria and worldwide. Get your direct booking site live in 72 hours.",
+          "Victor Kann builds and documents practical systems across AI, funnels, automation, marketing and online business.",
       },
       { name: "author", content: "Victor Kannayo" },
       {
         property: "og:title",
-        content: "Victor Kannayo | Direct Booking Websites for Shortlets",
+        content: "Victor Kann | Systems, Audiences & Digital Income",
       },
       {
         property: "og:description",
         content:
-          "I build booking websites that turn Instagram views into paid bookings for shortlet owners & Airbnb hosts. Get your direct booking site live in 72 hours.",
+          "Building systems, audiences and digital income through practical experiments in AI, funnels, automation and online business.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://victorkann.com" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@victorkannayo" },
+      { name: "twitter:site", content: "@iamVictorKann" },
       {
         name: "twitter:title",
-        content: "Victor Kannayo | Direct Booking Websites for Shortlets",
+        content: "Victor Kann | Systems, Audiences & Digital Income",
       },
       {
         name: "twitter:description",
         content:
-          "I build booking websites that turn Instagram views into paid bookings for shortlet owners & Airbnb hosts.",
+          "Building systems, audiences and digital income through practical experiments in AI, funnels, automation and online business.",
       },
     ],
     links: [
