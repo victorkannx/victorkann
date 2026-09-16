@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CalendarCheck, MessageCircle, Pencil, ShieldCheck, Phone } from "lucide-react";
 
 const WHATSAPP_NUMBER = "2348161123296";
-const CALENDLY_BASE = "https://calendly.com/victorkann/30min";
+const CAL_BASE = "https://cal.com/autogrowhq/15";
 
 const FEATURE_OPTIONS = [
   "Paystack deposits",
@@ -137,7 +137,7 @@ function LeadFormDialog({
   const buildMessage = (d: LeadValues) => {
     const pkg = inferredPackagePrice(source);
     const lines = [
-      "New booking-website enquiry from victorkann.com",
+      "New project enquiry from victorkann.com",
       `Interest: ${source}`,
       "",
       `Name: ${d.name}`,
@@ -195,12 +195,12 @@ function LeadFormDialog({
               {review ? `Step 2 of 2 · ${source}` : `Step 1 of 2 · ${source}`}
             </p>
             <DialogTitle className="display-font text-xl font-bold">
-              {review ? "Check your details" : "Tell me about your shortlet"}
+              {review ? "Check your details" : "Tell me about your project"}
             </DialogTitle>
             <DialogDescription className="text-sm">
               {review
-                ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
-                : "Takes 60 seconds. I'll receive it on WhatsApp instantly and reply with a plan and pricing."}
+                 ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
+                 : "Share a few details about what you are building or improving. I’ll reply with a useful next step."}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -256,7 +256,7 @@ function LeadFormDialog({
                 className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
               >
                 <CalendarCheck className="h-3.5 w-3.5" />
-                Or book a 30-minute call with these details
+                Or book a 15-minute call
               </a>
               <Badge
                 variant="secondary"
@@ -397,13 +397,13 @@ function LeadFormDialog({
 
               <div className="flex flex-col items-center gap-3 text-center">
                 <a
-                  href={calendlyLink}
+                  href={calLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs font-medium text-primary underline-offset-4 hover:underline"
                 >
                   <CalendarCheck className="h-3.5 w-3.5" />
-                  Prefer a call? Schedule 30 minutes instead
+                  Prefer a call? Schedule 15 minutes instead
                 </a>
                 <Badge
                   variant="secondary"
