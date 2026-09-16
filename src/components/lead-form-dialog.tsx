@@ -12,14 +12,14 @@ const WHATSAPP_NUMBER = "2348161123296";
 const CAL_BASE = "https://cal.com/autogrowhq/15";
 
 const FEATURE_OPTIONS = [
-  "Paystack deposits",
-  "Booking calendar",
-  "Photo gallery",
-  "Google Maps",
-  "Multiple apartments",
-  "Reviews section",
-  "SEO setup",
-  "WhatsApp enquiry flow",
+  "AI workflow",
+  "Lead generation",
+  "Funnel strategy",
+  "Automation",
+  "Content system",
+  "Landing page",
+  "Email sequence",
+  "Analytics setup",
 ];
 
 const BUDGET_OPTIONS = [
@@ -43,7 +43,7 @@ const leadSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name").max(80, "Name is too long"),
   email: z.string().trim().email("Enter a valid email address").max(160),
   phone: z.string().trim().regex(phoneRegex, "Enter a valid WhatsApp number").max(30),
-  siteName: z.string().trim().min(2, "Tell me the apartment or website name").max(120),
+  siteName: z.string().trim().min(2, "Tell me the project or website name").max(120),
   features: z.string().trim().min(2, "Pick or describe at least one feature").max(600),
   budget: z.string().trim().max(80).optional().or(z.literal("")),
   notes: z.string().trim().max(800).optional().or(z.literal("")),
@@ -311,17 +311,17 @@ function LeadFormDialog({
                 </Field>
               </div>
 
-              <Field id="siteName" label="Intended website / apartment name" error={errors.siteName}>
+               <Field id="siteName" label="Project / website name" error={errors.siteName}>
                 <Input
                   id="siteName"
                   value={values.siteName}
                   maxLength={120}
                   onChange={(e) => set("siteName", e.target.value)}
-                  placeholder="e.g. The Avery, Lekki"
+                  placeholder="e.g. OneLink Funnel or your business name"
                 />
               </Field>
 
-              <Field id="features" label="Features to include" error={errors.features}>
+              <Field id="features" label="What would you like to include?" error={errors.features}>
                 <div className="mb-3 flex flex-wrap gap-2">
                   {FEATURE_OPTIONS.map((feature) => {
                     const active = selectedFeatures.includes(feature);
@@ -348,7 +348,7 @@ function LeadFormDialog({
                   maxLength={600}
                   rows={2}
                   onChange={(e) => set("features", e.target.value)}
-                  placeholder="Tap the tags above or type what you need"
+                  placeholder="Tap the tags above or describe what you need"
                 />
               </Field>
 
