@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Tables } from "@/integrations/supabase/types";
 
 const statusSchema = z.enum([
   "New",
@@ -12,23 +13,7 @@ const statusSchema = z.enum([
   "Not Now",
 ]);
 
-const prospectColumns = [
-  "id",
-  "created_at",
-  "name",
-  "email",
-  "whatsapp",
-  "country",
-  "currency",
-  "business_type",
-  "service_interest",
-  "challenge",
-  "desired_outcome",
-  "investment_range",
-  "source",
-  "status",
-  "notes",
-].join(",");
+export type Prospect = Tables<"prospects">;
 
 async function requireAdmin(context: { supabase: any; userId: string }) {
   const { data, error } = await context.supabase
@@ -49,7 +34,7 @@ export const getAdminProspects = createServerFn({ method: "GET" })
 
     const { data, error } = await context.supabase
       .from("prospects")
-      .select(prospectColumns)
+      .select("*")
       .order("created_at", { ascending: false });
 
     if (error) throw new Error("Unable to load prospects");
@@ -72,7 +57,7 @@ export const updateAdminProspect = createServerFn({ method: "POST" })
       .from("prospects")
       .update({ status: data.status, notes: data.notes || null })
       .eq("id", data.id)
-      .select(prospectColumns)
+      .select("*")
       .single();
 
     if (error) throw new Error("Unable to update this prospect");

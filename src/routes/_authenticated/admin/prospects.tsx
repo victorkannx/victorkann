@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { getAdminProspects, updateAdminProspect } from "@/lib/prospects.functions";
+import type { Prospect } from "@/lib/prospects.functions";
 import { PROSPECT_STATUSES, currencySymbol } from "@/lib/prospect-config";
 
 const prospectsQueryOptions = queryOptions({
@@ -30,8 +31,6 @@ export const Route = createFileRoute("/_authenticated/admin/prospects")({
   }),
   component: AdminProspects,
 });
-
-type Prospect = Awaited<ReturnType<typeof getAdminProspects>>[number];
 
 function AdminProspects() {
   const queryClient = useQueryClient();
