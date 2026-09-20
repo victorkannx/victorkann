@@ -143,7 +143,7 @@ function Navbar() {
 function Hero() {
   return (
     <section className="bg-ink text-ink-foreground">
-      <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-14 container-padding section-padding lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-20">
+      <div className="mx-auto grid min-h-[680px] max-w-7xl items-center gap-14 container-padding section-padding lg:min-h-[min(820px,calc(100svh-4.5rem))] lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-20">
         <div className="max-w-3xl">
           <p className="mb-7 text-[11px] font-semibold uppercase tracking-[0.25em] text-ink-muted">Business systems &amp; automation</p>
           <h1 className="display-font max-w-3xl text-balance text-[clamp(3.1rem,8vw,7.3rem)] font-bold leading-[0.92]">
@@ -380,7 +380,7 @@ function AboutSection() {
         <div className="max-w-3xl">
           <SectionHeading eyebrow="About" title="I’m Victor Kanayo." light />
           <div className="space-y-5 text-lg leading-relaxed text-ink-muted sm:text-xl"><p>I build digital systems for businesses.</p><p>My work sits somewhere between web development, automation, marketing and AI.</p><p>I like taking complicated business processes and turning them into simple systems that actually work.</p></div>
-          <div className="mt-9 flex flex-wrap gap-5 text-sm text-ink-muted"><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-ink-foreground">X <ExternalLink className="h-3.5 w-3.5" /></a><span className="text-ink-border">/</span><span>Instagram — coming soon</span><span className="text-ink-border">/</span><span>LinkedIn — coming soon</span></div>
+          <div className="mt-9 flex flex-wrap gap-5 text-sm text-ink-muted"><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-ink-foreground">X <ExternalLink className="h-3.5 w-3.5" /></a></div>
         </div>
       </div>
     </section>
