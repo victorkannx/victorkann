@@ -390,16 +390,16 @@ function AboutSection() {
 function EngagementSection() {
   const { openLeadForm } = useLeadForm();
   const paths: Array<{ title: string; description: string; items: string[] }> = [
-    ["Build", "For businesses that need a new digital system.", ["Websites", "Funnels", "Booking", "Automation"]],
-    ["Automate", "For businesses that already have a process but want to remove manual work.", ["Workflows", "CRM", "AI", "Integrations"]],
-    ["Optimize", "For businesses that already have a system and want to improve it.", ["Conversion", "Automation", "UX", "Analytics"]],
-  ].map(([title, description, items]) => ({ title, description, items }));
+    { title: "Build", description: "For businesses that need a new digital system.", items: ["Websites", "Funnels", "Booking", "Automation"] },
+    { title: "Automate", description: "For businesses that already have a process but want to remove manual work.", items: ["Workflows", "CRM", "AI", "Integrations"] },
+    { title: "Optimize", description: "For businesses that already have a system and want to improve it.", items: ["Conversion", "Automation", "UX", "Analytics"] },
+  ];
   return (
     <section id="contact" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
         <SectionHeading eyebrow="Engagement" title="What can I build for you?" />
         <div className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
-          {paths.map(([title, description, items]) => <article key={title} className="flex min-h-72 flex-col bg-background p-6 sm:p-8"><span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{title}</span><p className="mt-7 max-w-xs text-base leading-relaxed">{description}</p><div className="mt-auto flex flex-wrap gap-2 pt-8">{items.map((item) => <span key={item} className="text-xs text-muted-foreground">{item}</span>)}</div></article>)}
+          {paths.map(({ title, description, items }) => <article key={title} className="flex min-h-72 flex-col bg-background p-6 sm:p-8"><span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{title}</span><p className="mt-7 max-w-xs text-base leading-relaxed">{description}</p><div className="mt-auto flex flex-wrap gap-2 pt-8">{items.map((item) => <span key={item} className="text-xs text-muted-foreground">{item}</span>)}</div></article>)}
         </div>
         <Button className="mt-8 gap-2 font-semibold" onClick={() => openLeadForm("Engagement — let’s discuss the project")}>Let’s discuss your project <ArrowRight className="h-4 w-4" /></Button>
       </div>
