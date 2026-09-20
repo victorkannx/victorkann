@@ -8,3 +8,4 @@
 - [x] Create the prospects CRM table with currency mapping, validation, attribution, timestamps, and protected access.
 - [ ] Connect the Work With Me form to prospects in a later step.
 - [x] Add a simple admin prospect view with status and notes management.
+- [x] Reposition the homepage as Victor Kanayo’s business systems and automation studio.

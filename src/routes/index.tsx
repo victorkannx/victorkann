@@ -143,7 +143,7 @@ function Navbar() {
 function Hero() {
   return (
     <section className="bg-ink text-ink-foreground">
-      <div className="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-7xl items-center gap-14 container-padding section-padding lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-20">
+      <div className="mx-auto grid min-h-[680px] max-w-7xl items-center gap-14 container-padding section-padding lg:min-h-[min(820px,calc(100svh-4.5rem))] lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-20">
         <div className="max-w-3xl">
           <p className="mb-7 text-[11px] font-semibold uppercase tracking-[0.25em] text-ink-muted">Business systems &amp; automation</p>
           <h1 className="display-font max-w-3xl text-balance text-[clamp(3.1rem,8vw,7.3rem)] font-bold leading-[0.92]">
@@ -380,7 +380,7 @@ function AboutSection() {
         <div className="max-w-3xl">
           <SectionHeading eyebrow="About" title="I’m Victor Kanayo." light />
           <div className="space-y-5 text-lg leading-relaxed text-ink-muted sm:text-xl"><p>I build digital systems for businesses.</p><p>My work sits somewhere between web development, automation, marketing and AI.</p><p>I like taking complicated business processes and turning them into simple systems that actually work.</p></div>
-          <div className="mt-9 flex flex-wrap gap-5 text-sm text-ink-muted"><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-ink-foreground">X <ExternalLink className="h-3.5 w-3.5" /></a><span className="text-ink-border">/</span><span>Instagram — coming soon</span><span className="text-ink-border">/</span><span>LinkedIn — coming soon</span></div>
+          <div className="mt-9 flex flex-wrap gap-5 text-sm text-ink-muted"><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-ink-foreground">X <ExternalLink className="h-3.5 w-3.5" /></a></div>
         </div>
       </div>
     </section>
@@ -389,17 +389,17 @@ function AboutSection() {
 
 function EngagementSection() {
   const { openLeadForm } = useLeadForm();
-  const paths = [
-    ["Build", "For businesses that need a new digital system.", ["Websites", "Funnels", "Booking", "Automation"]],
-    ["Automate", "For businesses that already have a process but want to remove manual work.", ["Workflows", "CRM", "AI", "Integrations"]],
-    ["Optimize", "For businesses that already have a system and want to improve it.", ["Conversion", "Automation", "UX", "Analytics"]],
+  const paths: Array<{ title: string; description: string; items: string[] }> = [
+    { title: "Build", description: "For businesses that need a new digital system.", items: ["Websites", "Funnels", "Booking", "Automation"] },
+    { title: "Automate", description: "For businesses that already have a process but want to remove manual work.", items: ["Workflows", "CRM", "AI", "Integrations"] },
+    { title: "Optimize", description: "For businesses that already have a system and want to improve it.", items: ["Conversion", "Automation", "UX", "Analytics"] },
   ];
   return (
     <section id="contact" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
         <SectionHeading eyebrow="Engagement" title="What can I build for you?" />
         <div className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
-          {paths.map(([title, description, items]) => <article key={title} className="flex min-h-72 flex-col bg-background p-6 sm:p-8"><span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{title}</span><p className="mt-7 max-w-xs text-base leading-relaxed">{description}</p><div className="mt-auto flex flex-wrap gap-2 pt-8">{items.map((item) => <span key={item} className="text-xs text-muted-foreground">{item}</span>)}</div></article>)}
+          {paths.map(({ title, description, items }) => <article key={title} className="flex min-h-72 flex-col bg-background p-6 sm:p-8"><span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{title}</span><p className="mt-7 max-w-xs text-base leading-relaxed">{description}</p><div className="mt-auto flex flex-wrap gap-2 pt-8">{items.map((item) => <span key={item} className="text-xs text-muted-foreground">{item}</span>)}</div></article>)}
         </div>
         <Button className="mt-8 gap-2 font-semibold" onClick={() => openLeadForm("Engagement — let’s discuss the project")}>Let’s discuss your project <ArrowRight className="h-4 w-4" /></Button>
       </div>
