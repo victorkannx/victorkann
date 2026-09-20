@@ -77,21 +77,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Victor Kann | Systems, Audiences & Digital Income" },
+      { title: "Victor Kanayo — Business Systems & Automation Builder" },
       {
         name: "description",
         content:
-          "Victor Kann builds and documents practical systems across AI, funnels, automation, marketing and online business.",
+          "Victor Kanayo builds the websites, funnels, booking systems, automations and AI workflows behind growing businesses.",
       },
       { name: "author", content: "Victor Kannayo" },
       {
         property: "og:title",
-        content: "Victor Kann | Systems, Audiences & Digital Income",
+        content: "Victor Kanayo — Business Systems & Automation Builder",
       },
       {
         property: "og:description",
         content:
-          "Building systems, audiences and digital income through practical experiments in AI, funnels, automation and online business.",
+          "I build the systems behind growing businesses: websites, funnels, booking systems, automations and AI workflows.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://victorkann.com" },
@@ -99,12 +99,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@iamVictorKann" },
       {
         name: "twitter:title",
-        content: "Victor Kann | Systems, Audiences & Digital Income",
+        content: "Victor Kanayo — Business Systems & Automation Builder",
       },
       {
         name: "twitter:description",
         content:
-          "Building systems, audiences and digital income through practical experiments in AI, funnels, automation and online business.",
+          "I build the systems behind growing businesses: websites, funnels, booking systems, automations and AI workflows.",
       },
     ],
     links: [

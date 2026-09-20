@@ -389,11 +389,11 @@ function AboutSection() {
 
 function EngagementSection() {
   const { openLeadForm } = useLeadForm();
-  const paths = [
+  const paths: Array<{ title: string; description: string; items: string[] }> = [
     ["Build", "For businesses that need a new digital system.", ["Websites", "Funnels", "Booking", "Automation"]],
     ["Automate", "For businesses that already have a process but want to remove manual work.", ["Workflows", "CRM", "AI", "Integrations"]],
     ["Optimize", "For businesses that already have a system and want to improve it.", ["Conversion", "Automation", "UX", "Analytics"]],
-  ];
+  ].map(([title, description, items]) => ({ title, description, items }));
   return (
     <section id="contact" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
