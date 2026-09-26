@@ -67,7 +67,7 @@ export function investmentRangesForCountry(country: string) {
   return INVESTMENT_TIERS.map((tier, i) => ({
     tier,
     currency,
-    label: i < 4 ? `${f(b[i])} – ${f(b[i + 1])}` : `${f(b[4])}+`,
+    label: i < 4 ? `${f(b[i]!)} – ${f(b[i + 1]!)}` : `${f(b[4])}+`,
   }));
 }
 
