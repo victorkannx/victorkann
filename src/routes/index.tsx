@@ -30,15 +30,15 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Victor Kanayo — Business Systems & Automation Builder" },
+      { title: "Victor Kann — Business Systems & Automation Builder" },
       {
         name: "description",
         content:
-          "Victor Kanayo builds the websites, funnels, booking systems, automations and AI workflows behind growing businesses.",
+          "Victor Kann builds the websites, funnels, booking systems, automations and AI workflows behind growing businesses.",
       },
       {
         property: "og:title",
-        content: "Victor Kanayo — Business Systems & Automation Builder",
+        content: "Victor Kann — Business Systems & Automation Builder",
       },
       {
         property: "og:description",
@@ -91,7 +91,7 @@ function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-xl">
       <nav className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between container-padding">
         <a href="#top" className="display-font text-sm font-bold tracking-[0.16em] text-foreground sm:text-base">
-          VICTOR KANAYO<span className="text-muted-foreground">.</span>
+          VICTOR KANN<span className="text-muted-foreground">.</span>
         </a>
 
         <div className="hidden items-center gap-7 md:flex">
@@ -378,7 +378,7 @@ function AboutSection() {
           <div><div className="display-font text-7xl font-bold leading-none text-ink-foreground sm:text-8xl">VK</div><p className="mt-4 text-[10px] uppercase tracking-[0.2em] text-ink-muted">Based in Nigeria<br />Working globally</p></div>
         </div>
         <div className="max-w-3xl">
-          <SectionHeading eyebrow="About" title="I’m Victor Kanayo." light />
+          <SectionHeading eyebrow="About" title="I’m Victor Kann." light />
           <div className="space-y-5 text-lg leading-relaxed text-ink-muted sm:text-xl"><p>I build digital systems for businesses.</p><p>My work sits somewhere between web development, automation, marketing and AI.</p><p>I like taking complicated business processes and turning them into simple systems that actually work.</p></div>
           <div className="mt-9 flex flex-wrap gap-5 text-sm text-ink-muted"><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-ink-foreground">X <ExternalLink className="h-3.5 w-3.5" /></a></div>
         </div>
@@ -422,8 +422,8 @@ function Footer() {
   return (
     <footer className="border-t border-border py-10 container-padding">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-start"><div><a href="#top" className="display-font text-base font-bold tracking-[0.14em]">VICTOR KANAYO</a><p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">Building websites, funnels, booking systems and automations for modern businesses.</p></div><div className="grid grid-cols-2 gap-x-10 gap-y-3 text-sm text-muted-foreground"><a href="#work" className="hover:text-foreground">Work</a><a href="#services" className="hover:text-foreground">Services</a><a href="#about" className="hover:text-foreground">About</a><a href="#contact" className="hover:text-foreground">Contact</a><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-foreground">X <ExternalLink className="h-3 w-3" /></a><a href="mailto:iamvictorkann@outlook.com" className="inline-flex items-center gap-2 hover:text-foreground">Email <Mail className="h-3 w-3" /></a></div></div>
-        <div className="mt-10 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"><span>© 2026 Victor Kanayo</span><span>Business systems · Automation · AI</span></div>
+        <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-start"><div><a href="#top" className="display-font text-base font-bold tracking-[0.14em]">VICTOR KANN</a><p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">Building websites, funnels, booking systems and automations for modern businesses.</p></div><div className="grid grid-cols-2 gap-x-10 gap-y-3 text-sm text-muted-foreground"><a href="#work" className="hover:text-foreground">Work</a><a href="#services" className="hover:text-foreground">Services</a><a href="#about" className="hover:text-foreground">About</a><a href="#contact" className="hover:text-foreground">Contact</a><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-foreground">X <ExternalLink className="h-3 w-3" /></a><a href="mailto:iamvictorkann@outlook.com" className="inline-flex items-center gap-2 hover:text-foreground">Email <Mail className="h-3 w-3" /></a></div></div>
+        <div className="mt-10 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"><span>© 2026 Victor Kann</span><span>Business systems · Automation · AI</span></div>
       </div>
     </footer>
   );

@@ -77,16 +77,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Victor Kanayo — Business Systems & Automation Builder" },
+      { title: "Victor Kann — Business Systems & Automation Builder" },
       {
         name: "description",
         content:
-          "Victor Kanayo builds the websites, funnels, booking systems, automations and AI workflows behind growing businesses.",
+          "Victor Kann builds the websites, funnels, booking systems, automations and AI workflows behind growing businesses.",
       },
       { name: "author", content: "Victor Kannayo" },
       {
         property: "og:title",
-        content: "Victor Kanayo — Business Systems & Automation Builder",
+        content: "Victor Kann — Business Systems & Automation Builder",
       },
       {
         property: "og:description",
@@ -99,7 +99,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@iamVictorKann" },
       {
         name: "twitter:title",
-        content: "Victor Kanayo — Business Systems & Automation Builder",
+        content: "Victor Kann — Business Systems & Automation Builder",
       },
       {
         name: "twitter:description",
