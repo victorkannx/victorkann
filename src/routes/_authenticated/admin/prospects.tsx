@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { supabase } from "@/integrations/supabase/client";
 import { getAdminProspects, updateAdminProspect } from "@/lib/prospects.functions";
 import type { Prospect } from "@/lib/prospects.functions";
-import { PROSPECT_STATUSES, currencySymbol } from "@/lib/prospect-config";
+import { PROSPECT_STATUSES } from "@/lib/prospect-config";
 
 const prospectsQueryOptions = queryOptions({
   queryKey: ["admin", "prospects"],
