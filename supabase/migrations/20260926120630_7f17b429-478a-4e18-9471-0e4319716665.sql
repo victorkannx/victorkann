@@ -1,0 +1,1 @@
+DELETE FROM public.prospects WHERE email = 't@example.com' AND name = 'Test';
