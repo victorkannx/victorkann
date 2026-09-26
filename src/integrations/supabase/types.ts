@@ -27,11 +27,13 @@ export type Database = {
           email_clicked: boolean
           id: string
           investment_range: string
+          investment_tier: string | null
           name: string
           notes: string | null
           service_interest: string
           source: string | null
           status: string
+          submission_id: string | null
           updated_at: string
           utm_campaign: string | null
           utm_content: string | null
@@ -53,11 +55,13 @@ export type Database = {
           email_clicked?: boolean
           id?: string
           investment_range: string
+          investment_tier?: string | null
           name: string
           notes?: string | null
           service_interest: string
           source?: string | null
           status?: string
+          submission_id?: string | null
           updated_at?: string
           utm_campaign?: string | null
           utm_content?: string | null
@@ -79,11 +83,13 @@ export type Database = {
           email_clicked?: boolean
           id?: string
           investment_range?: string
+          investment_tier?: string | null
           name?: string
           notes?: string | null
           service_interest?: string
           source?: string | null
           status?: string
+          submission_id?: string | null
           updated_at?: string
           utm_campaign?: string | null
           utm_content?: string | null
