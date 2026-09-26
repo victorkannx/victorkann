@@ -6,6 +6,6 @@
 - [x] Defer CRM/database integration and advanced prospecting logic until a later step.
 - [x] Verify the redesigned homepage at desktop and mobile sizes.
 - [x] Create the prospects CRM table with currency mapping, validation, attribution, timestamps, and protected access.
-- [ ] Connect the Work With Me form to prospects in a later step.
+- [ ] Connect the Work With Me form to prospects (next step; backend ready with submission_id duplicate guard).
 - [x] Add a simple admin prospect view with status and notes management.
 - [x] Reposition the homepage as Victor Kanayo’s business systems and automation studio.
