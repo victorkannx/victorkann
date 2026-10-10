@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.scoreboard_leads (
   email TEXT NOT NULL,
   name TEXT,
   consent BOOLEAN NOT NULL DEFAULT FALSE CHECK (consent = TRUE),
+  consent_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   source TEXT NOT NULL DEFAULT 'x',
   utm_source TEXT,
   utm_medium TEXT,
@@ -37,10 +38,10 @@ CREATE TABLE IF NOT EXISTS public.scoreboard_assessments (
     ON DELETE CASCADE,
   CONSTRAINT scoreboard_assessments_email_format
     CHECK (email = lower(trim(email)) AND email ~* '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'),
-  CONSTRAINT scoreboard_assessments_answers_shape
-    CHECK (jsonb_typeof(answers) = 'array' AND jsonb_array_length(answers) = 10),
-  CONSTRAINT scoreboard_assessments_stage_scores_shape
-    CHECK (jsonb_typeof(stage_scores) = 'object' AND jsonb_object_length(stage_scores) = 5)
+  CONSTRAINT scoreboard_assessments_answers_type
+    CHECK (jsonb_typeof(answers) = 'array'),
+  CONSTRAINT scoreboard_assessments_stage_scores_type
+    CHECK (jsonb_typeof(stage_scores) = 'object')
 );
 
 CREATE OR REPLACE FUNCTION private.validate_scoreboard_assessment()
@@ -51,6 +52,7 @@ AS $$
 DECLARE
   answer_total INTEGER;
   stage_total INTEGER;
+  stage_count INTEGER;
   highest_stage_score INTEGER;
 BEGIN
   NEW.email := lower(trim(NEW.email));
@@ -73,22 +75,19 @@ BEGIN
     INTO answer_total
   FROM jsonb_array_elements_text(NEW.answers) AS a(value);
 
-  IF jsonb_typeof(NEW.stage_scores) <> 'object'
-     OR jsonb_object_length(NEW.stage_scores) <> 5 THEN
-    RAISE EXCEPTION 'Stage scores must contain exactly five stages';
+  IF jsonb_typeof(NEW.stage_scores) <> 'object' THEN
+    RAISE EXCEPTION 'Stage scores must be a JSON object';
   END IF;
 
-  IF EXISTS (
-    SELECT 1
-    FROM jsonb_each_text(NEW.stage_scores) AS s(stage, value)
-    WHERE s.value !~ '^[0-4]$'
-  ) THEN
-    RAISE EXCEPTION 'Each stage score must be an integer from 0 to 4';
-  END IF;
+  SELECT COUNT(*), COALESCE(SUM(s.value::INTEGER), 0), COALESCE(MAX(s.value::INTEGER), -1)
+    INTO stage_count, stage_total, highest_stage_score
+  FROM jsonb_each_text(NEW.stage_scores) AS s(stage, value)
+  WHERE s.value ~ '^[0-4]$';
 
-  SELECT COALESCE(SUM(s.value::INTEGER), 0), COALESCE(MAX(s.value::INTEGER), -1)
-    INTO stage_total, highest_stage_score
-  FROM jsonb_each_text(NEW.stage_scores) AS s(stage, value);
+  IF stage_count <> 5
+     OR (SELECT COUNT(*) FROM jsonb_each_text(NEW.stage_scores)) <> 5 THEN
+    RAISE EXCEPTION 'Stage scores must contain exactly five integer scores from 0 to 4';
+  END IF;
 
   IF answer_total <> stage_total OR answer_total NOT BETWEEN 0 AND 20 THEN
     RAISE EXCEPTION 'Answer total and stage-score total must match and be between 0 and 20';
@@ -98,6 +97,7 @@ BEGIN
     SELECT 1
     FROM jsonb_each_text(NEW.stage_scores) AS s(stage, value)
     WHERE s.stage = NEW.priority_leak
+      AND s.value ~ '^[0-4]$'
       AND s.value::INTEGER = highest_stage_score
   ) THEN
     RAISE EXCEPTION 'Priority leak must be a highest-scoring stage key';
