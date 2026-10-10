@@ -53,6 +53,7 @@ DECLARE
   answer_total INTEGER;
   stage_total INTEGER;
   stage_count INTEGER;
+  raw_stage_count INTEGER;
   highest_stage_score INTEGER;
 BEGIN
   NEW.email := lower(trim(NEW.email));
@@ -84,8 +85,10 @@ BEGIN
   FROM jsonb_each_text(NEW.stage_scores) AS s(stage, value)
   WHERE s.value ~ '^[0-4]$';
 
-  IF stage_count <> 5
-     OR (SELECT COUNT(*) FROM jsonb_each_text(NEW.stage_scores)) <> 5 THEN
+  SELECT COUNT(*) INTO raw_stage_count
+  FROM jsonb_each_text(NEW.stage_scores);
+
+  IF stage_count <> 5 OR raw_stage_count <> 5 THEN
     RAISE EXCEPTION 'Stage scores must contain exactly five integer scores from 0 to 4';
   END IF;
 
@@ -109,6 +112,8 @@ BEGIN
 END;
 $$;
 
+REVOKE ALL ON FUNCTION private.validate_scoreboard_assessment() FROM PUBLIC, anon, authenticated;
+
 DROP TRIGGER IF EXISTS validate_scoreboard_assessment_before_write
   ON public.scoreboard_assessments;
 CREATE TRIGGER validate_scoreboard_assessment_before_write
@@ -119,6 +124,9 @@ CREATE TRIGGER validate_scoreboard_assessment_before_write
 ALTER TABLE public.scoreboard_leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.scoreboard_assessments ENABLE ROW LEVEL SECURITY;
 
+-- Explicitly remove any inherited/default grants before applying the minimum.
+REVOKE ALL ON public.scoreboard_leads FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON public.scoreboard_assessments FROM PUBLIC, anon, authenticated;
 GRANT INSERT ON public.scoreboard_leads TO anon, authenticated;
 GRANT INSERT ON public.scoreboard_assessments TO anon, authenticated;
 GRANT SELECT ON public.scoreboard_leads TO authenticated;
