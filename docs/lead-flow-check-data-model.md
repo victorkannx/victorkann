@@ -121,7 +121,7 @@ Before implementing the server function, confirm the secret environment variable
 The database is empty, but the migration must still be forward-only and preserve existing table names and lead structure.
 
 Required DDL:
-1. Alter `scoreboard_assessments.priority_leak` from `text` to `text[]`.
+1. Drop the existing non-empty text check on `priority_leak`, then alter the column from `text` to `text[]`; the new array may be empty when total score is zero.
 2. Replace the 0–20 check with a 0–10 check.
 3. Replace the trigger body with strict five-key JSON validation and DB-derived score/priority logic.
 4. Require the exact scoring version.
