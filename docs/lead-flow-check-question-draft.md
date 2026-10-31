@@ -1,43 +1,53 @@
-# Lead Flow Check: Five-Question Draft
+# Conversion Leak Scoreboard: Five-Question Assessment v1
 
-Status: Proposed copy and scoring, not approved for production
-Related design: [Lead Flow Check data model](./lead-flow-check-data-model.md)
+Status: **Approved for v1 implementation**  
+Public-facing working label: **Conversion Leak Scoreboard**  
+Implementation identifier: `lead-flow-check-v1`
 
-## Scoring direction
+## Scoring
 
-This draft uses a **leak-severity score**:
-- **0 = working:** the process is reliable and repeatable.
-- **1 = inconsistent:** the process exists but breaks or depends on manual effort.
-- **2 = leaking:** the process is missing, unclear, or frequently missed.
+Each answer is scored by leak severity:
+- **0 — Working:** the process is reliable and repeatable.
+- **1 — Inconsistent:** the process exists but breaks or depends on manual effort.
+- **2 — Leaking:** the process is missing, unclear, or frequently missed.
 
-A higher total therefore means more conversion friction. The total is five answers added together, out of 10. The highest-scoring stage is the strongest candidate for the priority leak.
+The total is the sum of the five answers, from 0 to 10. A higher score means more conversion friction.
 
-## Proposed questions
+## Approved stages and questions
 
-| Stage key | Stage | Question | 0 points | 1 point | 2 points |
-|---|---|---|---|---|---|
-| attention | Turn attention into action | When someone discovers your business, is the next step to enquire or buy obvious? | Clear CTA across key touchpoints | CTA exists but is inconsistent or easy to miss | No clear next step |
-| capture | Capture interested leads | Can an interested visitor leave their details in a simple, reliable way? | Leads are captured in one reliable place | Some leads are captured, but channels are fragmented | No consistent lead-capture process |
-| response | Respond to enquiries | Do new enquiries receive a useful response within one business day? | Reliably within one business day | Sometimes delayed or missed | Frequently delayed or unanswered |
-| follow_up | Follow up consistently | Does every unconverted lead receive a planned follow-up? | Repeatable follow-up is in place | Follow-up happens, but depends on memory/manual effort | No consistent follow-up |
-| conversion | Track conversion | Can you see which enquiries become paying customers and where others drop off? | Enquiry-to-sale progress is visible | Tracking is partial or scattered | No reliable way to track conversion |
+| Order | Stage key | Stage | Question | 0 points | 1 point | 2 points |
+|---:|---|---|---|---|---|---|
+| 1 | `attention` | Turn attention into action | When someone discovers your business, is the next step to enquire or buy obvious? | Clear CTA across key touchpoints | CTA exists but is inconsistent or easy to miss | No clear next step |
+| 2 | `capture` | Capture interested leads | Can an interested visitor leave their details in a simple, reliable way? | Leads are captured in one reliable place | Some leads are captured, but channels are fragmented | No consistent lead-capture process |
+| 3 | `response` | Respond to enquiries | Do new enquiries receive a useful response within one business day? | Reliably within one business day | Sometimes delayed or missed | Frequently delayed or unanswered |
+| 4 | `follow_up` | Follow up consistently | Does every unconverted lead receive a planned follow-up? | Repeatable follow-up is in place | Follow-up happens, but depends on memory/manual effort | No consistent follow-up |
+| 5 | `conversion` | Track conversion | Can you see which enquiries become paying customers and where others drop off? | Enquiry-to-sale progress is visible | Tracking is partial or scattered | No reliable way to track conversion |
 
-## Suggested result interpretation (not yet locked)
+## Priority leak and ties
 
-- 0–3: Flow is mostly working. Look for one small improvement.
-- 4–7: There are meaningful leaks. Fix the weakest stage first.
-- 8–10: The path from attention to customer is breaking in multiple places. Prioritize the largest leak before adding more traffic.
+The priority leak is the stage or stages with the highest individual score. If multiple stages tie for the highest score, show every tied stage. If all five scores are zero, there is no priority leak and the priority list is empty.
 
-These bands are a starting hypothesis. Validate them against real audit conversations before using them as claims about business performance.
+The assessment data model must represent priority leaks as an array of stage keys, not a single text value.
 
-## Tie handling
+## Result bands
 
-If two or more stages share the highest score, show all tied stages as priority leaks rather than implying that one is uniquely worse. The current live `priority_leak` column is a single text value, so the implementation design must be updated to represent ties (for example, a JSON array of priority stage keys) before this behavior is shipped.
+Result bands and their explanatory copy remain **unapproved**. Do not hard-code the earlier suggested 0–3, 4–7, and 8–10 bands as authoritative diagnosis until they are validated against real audit conversations. The exact score and highest-scoring stages can be shown without inventing a benchmark.
 
-## Approval checklist
+## Product positioning and next step
 
-- Confirm the five stages and question wording.
-- Confirm the answer anchors (0/1/2).
-- Confirm the score bands and result copy.
-- Confirm whether the result should show all tied priority leaks.
-- Confirm whether the public-facing name is Lead Flow Check or Conversion Leak Scoreboard.
+The lead magnet supports the positioning:
+
+> I build systems that help online businesses turn attention into customers.
+
+The Scoreboard should lead into the flagship conversion service once its final name and scope are locked. Do not introduce unrelated secondary offers into this flow.
+
+## Acceptance criteria
+
+- Exactly five questions appear in the approved order.
+- Each answer accepts only 0, 1, or 2.
+- Total score is derived from the five answers and stays within 0–10.
+- Stage scores use exactly the five keys listed above.
+- Every tied highest-scoring stage is returned as a priority leak.
+- A zero total returns an empty priority-leak array.
+- Scoring version is stored as `lead-flow-check-v1`.
+- No unapproved score bands or claims are presented as established facts.
