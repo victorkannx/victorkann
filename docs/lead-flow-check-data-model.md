@@ -1,143 +1,160 @@
 # Lead Flow Check: Data Model and Integration Plan
 
-Status: Draft for implementation
+Status: Approved v1 assessment design; database implementation pending
 Target Supabase project: `victor-kann-x-strategy` (`kquimjniutsgmbgdonmi`, `eu-west-2`)
 Working branch: `strategy/lead-flow-check-v1`
 
 ## 1. Product contract
 
-The assessment is the lead magnet for Victor Kann's flagship conversion service. The positioning remains:
+The public-facing lead magnet remains **Conversion Leak Scoreboard**. The implementation/scoring version is `lead-flow-check-v1`.
+
+Positioning:
 
 > I build systems that help online businesses turn attention into customers.
 
-The project brief uses the name **Conversion Leak Scoreboard**. The current implementation direction uses **Lead Flow Check**. Treat Lead Flow Check as the working product/UI name until the brand naming is confirmed; do not silently rename the existing Scoreboard database objects during this pass.
+The approved assessment has five questions and five stages in this order:
+1. `attention` — When someone discovers your business, is the next step to enquire or buy obvious?
+2. `capture` — Can an interested visitor leave their details in a simple, reliable way?
+3. `response` — Do new enquiries receive a useful response within one business day?
+4. `follow_up` — Does every unconverted lead receive a planned follow-up?
+5. `conversion` — Can you see which enquiries become paying customers and where others drop off?
 
-The current agreed assessment shape is:
-- Five questions.
-- Each answer contributes 0, 1, or 2 points.
-- Total score is 0–10.
-- Five scored dimensions/stages, one per question.
-- The highest-scoring dimension is the priority leak.
+Each answer is an integer from 0 to 2:
+- 0 = working
+- 1 = inconsistent
+- 2 = leaking
 
-Question wording, stage keys/labels, score interpretation bands, and tie-breaking behavior are product decisions and remain explicitly open until approved. Do not invent production copy or result thresholds in code.
+Total score is 0–10. Higher means more conversion friction. Score interpretation bands remain unapproved and must not be hard-coded as authoritative.
 
-## 2. Live database baseline
+## 2. Verified live database baseline (2026-10-31)
 
-The live target currently contains:
-- `public.scoreboard_leads`
-- `public.scoreboard_assessments`
+The dedicated Supabase project is now `ACTIVE_HEALTHY`:
+- Name: `victor-kann-x-strategy`
+- Ref: `kquimjniutsgmbgdonmi`
+- Region: `eu-west-2`
+- PostgreSQL: 17.11.0.003
 
-Both tables have RLS enabled and currently contain zero rows. There are three recorded migrations:
+X Dispatcher is confirmed `INACTIVE` (paused).
+
+The target project contains two empty tables, both with RLS enabled:
+- `public.scoreboard_leads` (0 rows)
+- `public.scoreboard_assessments` (0 rows)
+
+Recorded migrations:
 - `20261010141646_initial_scoreboard_schema`
 - `20261010211724_assessment_idempotency`
 - `20261011192035_add_scoreboard_business_context`
 
-Current live assessment constraints are incompatible with the five-question model:
-- The trigger currently expects ten answer values.
-- The trigger currently expects five stage values from 0–4.
-- `total_score` is constrained to 0–20.
-- The trigger checks the answer and stage totals but does not currently enforce that `priority_leak` identifies a highest-scoring stage.
+The live trigger `private.validate_scoreboard_assessment()` currently expects 10 answer values (0–2) and five stage scores (0–4). The existing total constraint allows 0–20. This does not match the approved v1 contract and must be changed.
 
-The security advisor reports RLS enabled with no policies on both tables. Direct `anon`/`authenticated` table grants were not found in the inspected table grants. Do not add broad public SELECT policies to silence the advisory.
+The live `priority_leak` is currently a single text column. V1 needs to represent all tied highest-scoring stages, so change it to `text[]` in a forward-only migration. When total score is zero, store an empty array; otherwise store all tied maximum-score stage keys in approved stage order.
 
-## 3. Canonical assessment payload (proposed)
+The assessment table currently has a `submission_key` column, but the inspected schema did not show it as unique. Add uniqueness after confirming no existing duplicate values (table is currently empty).
 
-Use JSON objects with stable stage keys, rather than positional arrays, to make the answer-to-stage relationship explicit and to fit the existing live table/trigger shape.
-
-Example structure only; the keys below are placeholders, not approved product dimensions:
+## 3. Canonical assessment structure
 
 ```json
 {
   "answers": {
-    "stage_1": 0,
-    "stage_2": 1,
-    "stage_3": 2,
-    "stage_4": 0,
-    "stage_5": 1
+    "attention": 0,
+    "capture": 1,
+    "response": 2,
+    "follow_up": 0,
+    "conversion": 1
   },
   "stage_scores": {
-    "stage_1": 0,
-    "stage_2": 1,
-    "stage_3": 2,
-    "stage_4": 0,
-    "stage_5": 1
+    "attention": 0,
+    "capture": 1,
+    "response": 2,
+    "follow_up": 0,
+    "conversion": 1
   },
   "total_score": 4,
-  "priority_leak": "stage_3",
+  "priority_leak": ["response"],
   "scoring_version": "lead-flow-check-v1"
 }
 ```
 
-Database invariants:
-1. `answers` must be a JSON object with exactly five expected keys.
-2. Each answer must be an integer in the inclusive range 0–2.
-3. `stage_scores` must be a JSON object with exactly the same five keys and integer values 0–2.
-4. `total_score` must equal the sum of the five answers and the sum of the five stage scores, and be between 0 and 10.
-5. `priority_leak` must identify a stage whose score equals the maximum stage score.
-6. Tie handling must be deterministic and documented. Until approved, the application must not pretend that one tied stage is uniquely worse than another.
-7. `scoring_version` is required so historical assessments remain interpretable if questions or scoring change.
+The example is illustrative only. The database trigger must derive `total_score` and `priority_leak` from validated answers; do not trust browser-supplied totals or priorities.
+
+Validation invariants:
+1. `answers` is a JSON object with exactly the five approved keys.
+2. Each answer is a JSON number representing an integer 0, 1, or 2. Reject strings, floats, booleans, nulls, arrays, and unexpected keys.
+3. `stage_scores` is an object with exactly the same five keys and each score equals the corresponding answer.
+4. `total_score` is derived as the sum of answers and is between 0 and 10.
+5. `priority_leak` is derived as an ordered array containing all keys tied at the maximum score; if the total is zero, it is an empty array.
+6. `scoring_version` must be `lead-flow-check-v1`.
 
 ## 4. Lead record mapping
 
-Preserve the live lead table and its existing attribution/consent capabilities:
+Preserve the existing live lead table and its fields:
 - `id`: generated UUID primary key.
 - `email` and generated `email_normalized`: normalized email identity.
 - `first_name`: optional.
 - `consent_status`, `consent_text_version`, `consented_at`: explicit consent evidence.
 - `source` and UTM fields: acquisition attribution.
 - `submission_key`: unique idempotency key.
-- `business_context`: optional, validated structured business context.
+- `business_context`: optional validated structured context.
 - `created_at`: database timestamp.
 
-Do not collect more personal or business data than the approved form requires. Do not insert fake values to satisfy required legacy columns.
+Do not add unapproved mandatory form fields or fabricate defaults to satisfy constraints.
 
 ## 5. Submission and access architecture
 
-Preferred security posture:
-- Browser submits to a server-side endpoint/server function.
-- Server validates the request with a shared schema, normalizes email, validates consent and attribution, and derives the score instead of trusting a browser-supplied total.
-- Server uses a server-only Supabase credential. Never expose a service-role/secret key in client code or any `VITE_`/public environment variable.
-- Use `submission_key` for idempotency and safe retries.
-- Do not return broad lead records to anonymous callers. Return only the minimum result needed by the submitting visitor.
-- Admin reads and updates remain behind authenticated server-side role verification and database-side authorization. Preserve the existing admin model; inspect the live role schema before wiring it.
-- Keep RLS enabled. Do not add public SELECT/UPDATE/DELETE policies. If direct browser inserts are ever chosen instead, design narrowly scoped INSERT-only policies and test the exact returning behavior before launch.
+The current repo uses TanStack Start server functions and a Supabase publishable-key client. The inspected auth middleware validates signed-in user claims; it is not suitable as-is for an anonymous lead-magnet submission.
 
-The existing admin prospect code checks `user_roles` for the admin role. Confirm that the dedicated project's role tables, policies, and auth setup match before reusing it. The Scoreboard migrations previously prepared for a new project mention `private.has_role()`; the live project currently has no policies, so verify that helper and its authorization source before creating admin policies.
+Preferred flow:
+- Add a dedicated public server function for Scoreboard submission.
+- Validate input server-side with Zod (or the existing shared schema).
+- Normalize email, validate consent and attribution, and generate/validate a submission key.
+- Use a server-only Supabase secret/service-role credential from server environment only. Never expose it through `VITE_`, browser code, logs, or generated client types.
+- Insert lead and assessment atomically so a failed assessment cannot leave a partial lead. Use the unique submission key for safe retries.
+- Return only the minimum score/result payload to the browser, never the lead row or private CRM data.
+- Keep admin reads behind authenticated server-side role verification and database-side authorization.
+- Do not add anonymous SELECT, UPDATE, or DELETE policies.
+- Keep RLS enabled. The current tables have no policies; this is currently a fail-closed posture. The security advisor reports this as informational. Do not add permissive policies merely to clear the advisory.
 
-## 6. Migration plan (not yet applied)
+Before implementing the server function, confirm the secret environment variable exists in the intended Vercel runtime by name only. If absent, create a secure setup task; do not fall back to a public key for privileged writes.
 
-Prepare a forward-only migration after product dimensions and tie behavior are approved:
-1. Preserve table names and existing lead records.
-2. Update assessment checks and trigger validation for five answers at 0–2 and five stage scores at 0–2.
-3. Change the total score constraint to 0–10.
-4. Enforce exact key count, integer-only values, matching totals, valid scoring version, and highest-score priority.
-5. Add/verify uniqueness and foreign-key behavior for lead-to-assessment submission idempotency.
-6. Revoke any unnecessary API-role privileges; retain only the access model required by the chosen server-side submission flow.
-7. Keep admin access restricted. Never create anonymous read access to leads or assessments.
-8. Run security and performance advisors and test both allowed and denied access paths.
+## 6. Migration plan (not applied)
 
-Do not edit migration history or rewrite existing migrations. Do not apply a schema change until the migration has been reviewed against the live project and local migration tooling is available.
+The database is empty, but the migration must still be forward-only and preserve existing table names and lead structure.
+
+Required DDL:
+1. Alter `scoreboard_assessments.priority_leak` from `text` to `text[]`.
+2. Replace the 0–20 check with a 0–10 check.
+3. Replace the trigger body with strict five-key JSON validation and DB-derived score/priority logic.
+4. Require the exact scoring version.
+5. Add unique constraint/index for assessment `submission_key` after duplicate check.
+6. Keep existing foreign key from assessment to lead.
+7. Preserve RLS and keep anonymous direct table access closed if using the server-only submission path.
+8. Inspect actual table grants and Data API exposure before wiring clients. Supabase announced a change to Data API table exposure defaults on 2026-10-30; do not assume newly created or altered tables are reachable from the API.
+9. Run security/performance advisors and test positive and negative access paths.
+
+Do not rewrite existing migration history. Do not apply DDL until a CLI-generated migration is reviewed and explicitly approved for the dedicated project.
 
 ## 7. Acceptance criteria
 
-- Five submitted answers are accepted; four or six are rejected.
-- Values outside 0–2, floats, strings, nulls, and unexpected keys are rejected.
-- Score is derived and equals 0–10; client-supplied totals cannot override it.
-- Stage scores equal the answer values and sum to the total.
-- Priority leak is a highest-scoring stage; ties follow the approved rule.
+- Exactly five answers are accepted; four or six are rejected.
+- Only the five approved stage keys are accepted.
+- Only numeric integer values 0–2 are accepted.
+- Stage scores exactly match answers.
+- Server/database derive total score 0–10.
+- All tied maximum stages are returned in stable stage order.
+- A zero total returns no priority leak.
 - Repeated submission keys do not create duplicate leads or assessments.
+- Lead and assessment are committed atomically.
 - Anonymous users cannot read, update, or delete lead/assessment records.
-- Admin access requires a valid authenticated admin role.
-- Consent status and consent version are persisted accurately.
-- UTM/source attribution is preserved.
-- The public result response contains no unnecessary personal data.
-- Tests cover both success and denial cases; advisors are rerun after DDL changes.
+- Admin access requires an authenticated admin role.
+- Consent status/version and UTM attribution are persisted accurately.
+- Public response contains no unnecessary personal data.
+- Tests cover malformed payloads, duplicate submissions, ties, zero-score case, and denied access.
+- Advisors are rerun after DDL changes.
 
-## 8. Open decisions before migration
+## 8. Remaining implementation decisions
 
-1. Confirm whether the public-facing name is **Lead Flow Check** or **Conversion Leak Scoreboard**.
-2. Approve the five question wordings and their five corresponding stage keys/labels.
-3. Approve score interpretation bands and the user-facing result copy.
-4. Approve tie handling for equal highest stage scores.
-5. Confirm the exact lead fields required on the form and the consent wording/version.
-6. Confirm the admin roles/users in the dedicated Supabase project.
+- Confirm exact consent wording and consent text version.
+- Decide which optional business-context fields are worth collecting at v1; do not add them by default.
+- Validate result interpretation bands through real audit conversations before shipping them.
+- Confirm server-side Supabase secret availability in Vercel.
+- Confirm the dedicated project's admin role source before wiring CRM reads.
