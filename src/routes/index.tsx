@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LeadFormProvider, useLeadForm } from "@/components/lead-form-dialog";
 import {
   ArrowDown,
+  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   Check,
@@ -292,125 +293,143 @@ function FrictionSection() {
 function ScoreboardSection() {
   const { openLeadForm } = useLeadForm();
   const [answers, setAnswers] = useState<Answers>({});
+  const [currentStep, setCurrentStep] = useState(0);
   const [showResult, setShowResult] = useState(false);
-  const completed = stages.every((stage) => answers[stage.key] !== undefined);
+
   const answeredCount = stages.filter((stage) => answers[stage.key] !== undefined).length;
   const total = stages.reduce((sum, stage) => sum + (answers[stage.key] ?? 0), 0);
   const highest = Math.max(...stages.map((stage) => answers[stage.key] ?? 0));
   const priorities = total === 0 ? [] : stages.filter((stage) => answers[stage.key] === highest);
+  const stage = stages[currentStep];
+  const selectedAnswer = stage ? answers[stage.key] : undefined;
+
+  const chooseAnswer = (score: 0 | 1 | 2) => {
+    if (!stage) return;
+    setAnswers((current) => ({ ...current, [stage.key]: score }));
+    if (currentStep === stages.length - 1) {
+      setShowResult(true);
+    } else {
+      setCurrentStep((step) => step + 1);
+    }
+  };
+
+  const goBack = () => {
+    if (showResult) {
+      setShowResult(false);
+      setCurrentStep(stages.length - 1);
+      return;
+    }
+    setCurrentStep((step) => Math.max(0, step - 1));
+  };
 
   const reset = () => {
     setAnswers({});
+    setCurrentStep(0);
     setShowResult(false);
   };
 
   return (
     <section id="scoreboard" className="border-y border-border bg-surface-dim section-padding container-padding">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
-          <div className="lg:sticky lg:top-28 lg:self-start">
-            <SectionHeading
-              eyebrow="Free business assessment"
-              title="How well does your business turn interest into sales?"
-              description="Answer five simple questions to find out where potential customers may be getting lost between discovering your business and paying you."
-            />
-            <div className="border-l-2 border-primary pl-5">
-              <p className="text-sm font-semibold text-foreground">How to complete your assessment</p>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Read each question and select one answer that best describes what happens in your business today. Complete all five sections to see your score and the areas that may need attention.</p>
+      <div className="mx-auto max-w-4xl">
+        <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">Free business assessment</p>
+          <h2 className="display-font mt-3 text-balance text-3xl font-bold leading-[1.04] tracking-[-0.035em] sm:text-5xl">
+            Find where you may be losing customers.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Answer five quick questions about how your business works today. Choose one answer each time. Your result will show where to focus first.
+          </p>
+        </div>
+
+        <div className="mx-auto max-w-2xl border border-border bg-background p-5 shadow-sm sm:p-8">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Conversion Leak Assessment</p>
+              <p className="mt-1 text-xs text-muted-foreground">{showResult ? "Assessment complete" : `Question ${currentStep + 1} of ${stages.length}`}</p>
             </div>
-            <div className="mt-6 space-y-2 text-xs text-muted-foreground">
-              <p><strong className="text-foreground">5 questions</strong> · About 2 minutes · No right or wrong answers</p>
-              <p>Your score runs from 0 to 10. A higher score means more parts of the customer journey may need attention.</p>
-            </div>
+            <span className="text-xs font-semibold tabular-nums text-muted-foreground">{answeredCount}/5</span>
           </div>
 
-          <div className="border border-border bg-background p-5 sm:p-8">
-            <div className="flex items-center justify-between gap-4 border-b border-border pb-5">
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Your 5-step business assessment</p>
-                <p className="mt-1 text-sm text-muted-foreground">{showResult ? "Your assessment result" : "Select one answer in each section below"}</p>
-              </div>
-              <span className="text-xs font-semibold tabular-nums text-muted-foreground">{answeredCount} of 5 complete</span>
-            </div>
-
-            {!showResult ? (
-              <>
-                <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Choose just one option for each question. You can change an answer before viewing your result.</p>
-                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-secondary">
-                  <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${(answeredCount / stages.length) * 100}%` }} />
-                </div>
-                <div className="mt-7 space-y-8">
-                  {stages.map((stage) => (
-                    <fieldset key={stage.key} className="border-b border-border pb-7 last:border-0 last:pb-0">
-                      <legend className="w-full">
-                        <div className="flex items-start gap-3">
-                          <span className="mt-0.5 text-xs font-semibold text-primary">{stage.number}</span>
-                          <div>
-                            <h3 className="text-base font-semibold">{stage.title}</h3>
-                            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{stage.question}</p>
-                          </div>
-                        </div>
-                      </legend>
-                      <div className="mt-4 space-y-2 pl-7">
-                        {stage.options.map((option, score) => {
-                          const selected = answers[stage.key] === score;
-                          return (
-                            <button
-                              key={option}
-                              type="button"
-                              aria-pressed={selected}
-                              onClick={() => setAnswers((current) => ({ ...current, [stage.key]: score as 0 | 1 | 2 }))}
-                              className={`flex w-full items-start gap-3 border px-3.5 py-3 text-left text-sm transition-colors sm:px-4 ${selected ? "border-primary bg-primary/5 text-foreground" : "border-border hover:border-primary/50 hover:bg-surface-dim"}`}
-                            >
-                              <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold ${selected ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40 text-muted-foreground"}`}>{selected ? <Check className="h-3 w-3" /> : score === 0 ? "✓" : score === 1 ? "–" : "!"}</span>
-                              <span className="leading-relaxed">{option}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </fieldset>
-                  ))}
-                </div>
-                <div className="mt-8 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-muted-foreground">{answeredCount} of 5 questions answered</p>
-                  <Button disabled={!completed} onClick={() => setShowResult(true)} className="gap-2 rounded-full px-6">
-                    See my result <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <div className="py-7">
-                <div className="grid gap-7 sm:grid-cols-[auto_1fr] sm:items-center">
-                  <div className="flex h-32 w-32 flex-col items-center justify-center rounded-full border-[6px] border-primary/20 text-center">
-                    <span className="display-font text-4xl font-bold tabular-nums">{total}<span className="text-xl text-muted-foreground">/10</span></span>
-                    <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">Your score</span>
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Your self-check is complete</p>
-                    <h3 className="display-font mt-3 text-2xl font-semibold sm:text-3xl">{total === 0 ? "No clear leak surfaced." : priorities.length > 1 ? "A few stages need attention." : "Start with this stage."}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{total === 0 ? "Your answers suggest these five steps are working consistently. Keep checking them as your business grows." : "Your highest-scoring stage or stages are the best place to begin a closer look. This score is a self-check, not a validated industry benchmark."}</p>
-                  </div>
-                </div>
-                {priorities.length > 0 && (
-                  <div className="mt-8 border border-primary/30 bg-primary/5 p-5">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.17em] text-primary">Priority {priorities.length > 1 ? "leaks" : "leak"}</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {priorities.map((stage) => <span key={stage.key} className="rounded-full border border-primary/30 bg-background px-3 py-1.5 text-xs font-medium">{stage.title}</span>)}
-                    </div>
-                  </div>
-                )}
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Button onClick={() => openLeadForm(`Conversion Leak Scoreboard: ${total}/10 · Priority: ${priorities.map((stage) => stage.title).join(", ") || "No priority leak"}`)} className="gap-2 rounded-full px-6">
-                    Book a call to discuss my result <ArrowUpRight className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" onClick={reset} className="gap-2 rounded-full">
-                    <RotateCcw className="h-4 w-4" /> Retake the check
-                  </Button>
-                </div>
-                <p className="mt-5 text-xs leading-relaxed text-muted-foreground">This is a simple self-assessment, not an industry benchmark. Your answers are calculated in this browser and are not saved or emailed.</p>
-              </div>
-            )}
+          <div
+            className="mt-4 h-1.5 overflow-hidden rounded-full bg-secondary"
+            role="progressbar"
+            aria-label="Assessment progress"
+            aria-valuemin={0}
+            aria-valuemax={5}
+            aria-valuenow={answeredCount}
+          >
+            <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${(answeredCount / stages.length) * 100}%` }} />
           </div>
+
+          {!showResult && stage ? (
+            <div className="pt-7 sm:pt-9" key={stage.key}>
+              <p className="text-xs font-semibold text-primary">STEP {stage.number}</p>
+              <h3 className="display-font mt-2 text-2xl font-bold leading-tight sm:text-3xl">{stage.title}</h3>
+              <p className="mt-3 text-base leading-relaxed text-muted-foreground sm:text-lg">{stage.question}</p>
+              <p className="mt-5 text-xs font-medium text-muted-foreground">Choose the answer that fits your business today.</p>
+
+              <div className="mt-4 grid gap-3">
+                {stage.options.map((option, score) => {
+                  const selected = selectedAnswer === score;
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => chooseAnswer(score as 0 | 1 | 2)}
+                      className={`group flex min-h-[64px] w-full items-center gap-4 border px-4 py-4 text-left transition-all duration-150 sm:min-h-[72px] sm:px-5 ${selected ? "border-primary bg-primary/5" : "border-border hover:border-primary/60 hover:bg-surface-dim"}`}
+                    >
+                      <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold ${selected ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground group-hover:border-primary/50"}`}>
+                        {selected ? <Check className="h-4 w-4" /> : String.fromCharCode(65 + score)}
+                      </span>
+                      <span className="text-sm leading-relaxed sm:text-base">{option}</span>
+                      <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-muted-foreground" />
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-6 flex items-center justify-between border-t border-border pt-5">
+                <Button type="button" variant="ghost" disabled={currentStep === 0} onClick={goBack} className="gap-2 px-2">
+                  <ArrowLeft className="h-4 w-4" /> Back
+                </Button>
+                <p className="text-xs text-muted-foreground">Your answer takes you to the next question.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="pt-7 sm:pt-9">
+              <div className="grid gap-5 sm:grid-cols-[auto_1fr] sm:items-center">
+                <div className="flex h-28 w-28 flex-col items-center justify-center rounded-full border-[6px] border-primary/20 text-center">
+                  <span className="display-font text-4xl font-bold tabular-nums">{total}<span className="text-xl text-muted-foreground">/10</span></span>
+                  <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">Your score</span>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Your assessment is complete</p>
+                  <h3 className="display-font mt-2 text-2xl font-bold leading-tight sm:text-3xl">{total === 0 ? "Your process looks consistent." : priorities.length > 1 ? "These areas deserve a closer look." : "Start by reviewing this area."}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{total === 0 ? "Your answers suggest the five steps are working consistently. Keep checking them as your business grows." : "Your result highlights where your customer journey may need attention. It is a self-assessment, not an industry benchmark."}</p>
+                </div>
+              </div>
+
+              {priorities.length > 0 && (
+                <div className="mt-6 border border-primary/30 bg-primary/5 p-4 sm:p-5">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.17em] text-primary">Areas to review first</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {priorities.map((item) => <span key={item.key} className="border border-primary/30 bg-background px-3 py-2 text-xs font-medium">{item.title}</span>)}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <Button onClick={() => openLeadForm(`Conversion Leak Assessment: ${total}/10 · Priority: ${priorities.map((item) => item.title).join(", ") || "No priority area"}`)} className="gap-2 rounded-full px-6">
+                  Book a call to discuss my result <ArrowUpRight className="h-4 w-4" />
+                </Button>
+                <Button variant="outline" onClick={reset} className="gap-2 rounded-full">
+                  <RotateCcw className="h-4 w-4" /> Start again
+                </Button>
+              </div>
+              <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Your answers are calculated in this browser. They are not saved or emailed.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
