@@ -16,6 +16,7 @@ export function LeadFormProvider({ children }: { children: ReactNode }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState<Record<string, FormDataEntryValue> | null>(null);
 
   const openLeadForm = useCallback((nextSource?: string, nextAssessment?: AssessmentPayload) => {
     setSource(nextSource || "Free Conversion Review"); setAssessment(nextAssessment); setError(""); setSubmitted(false); setIsOpen(true);
@@ -44,12 +45,39 @@ export function LeadFormProvider({ children }: { children: ReactNode }) {
       });
       const result = await response.json();
       if (!response.ok || !result.ok) throw new Error(result.error || "We could not submit your request. Please try again.");
+      setBookingDetails(values);
       setSubmitted(true); form.reset();
     } catch (submitError) { setError(submitError instanceof Error ? submitError.message : "Something went wrong. Please try again."); }
     finally { setSubmitting(false); }
   };
 
-  const bookingUrl = useMemo(() => { const url = new URL(CAL_BASE); url.searchParams.set("utm_source", "victorkann.com"); url.searchParams.set("utm_campaign", "free-conversion-review"); url.searchParams.set("a1", source); return url.toString(); }, [source]);
+  const bookingUrl = useMemo(() => {
+    const url = new URL(CAL_BASE);
+    url.searchParams.set("utm_source", "victorkann.com");
+    url.searchParams.set("utm_campaign", "free-conversion-review");
+    if (bookingDetails) {
+      const name = String(bookingDetails.full_name || "").trim();
+      const email = String(bookingDetails.email || "").trim();
+      if (name) url.searchParams.set("name", name);
+      if (email) url.searchParams.set("email", email);
+      const context = [
+        `Request: ${source}`,
+        bookingDetails.business_name ? `Business: ${bookingDetails.business_name}` : "",
+        bookingDetails.business_type ? `Business type: ${bookingDetails.business_type}` : "",
+        bookingDetails.website_url ? `Website: ${bookingDetails.website_url}` : "",
+        bookingDetails.country ? `Country: ${bookingDetails.country}` : "",
+        bookingDetails.whatsapp ? `WhatsApp: ${bookingDetails.whatsapp}` : "",
+        bookingDetails.primary_challenge ? `Main challenge: ${bookingDetails.primary_challenge}` : "",
+        bookingDetails.desired_outcome ? `Desired outcome: ${bookingDetails.desired_outcome}` : "",
+        assessment ? `Scoreboard: ${Object.entries(assessment.scores).map(([key, score]) => `${key.replace("_", " ")} ${score}/2`).join(", ")} (total ${Object.values(assessment.scores).reduce((sum, score) => sum + score, 0)}/10)` : "",
+        assessment?.priority_areas.length ? `Priority areas: ${assessment.priority_areas.join(", ").replaceAll("_", " ")}` : ""
+      ].filter(Boolean);
+      if (context.length) url.searchParams.set("a1", context.join("\\n"));
+    } else {
+      url.searchParams.set("a1", source);
+    }
+    return url.toString();
+  }, [assessment, bookingDetails, source]);
   const value = useMemo(() => ({ openLeadForm }), [openLeadForm]);
 
   return (
