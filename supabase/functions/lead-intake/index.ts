@@ -66,7 +66,7 @@ Deno.serve(async (req: Request) => {
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
     const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip + supabaseUrl));
     const ipHash = Array.from(new Uint8Array(digest)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
-    const rateTable = admin.schema("private").from("lead_intake_rate_limits");
+    const rateTable = admin.from("crm_intake_rate_limits");
     const { data: rate, error: readError } = await rateTable.select("window_started_at,request_count").eq("ip_hash", ipHash).maybeSingle();
     if (readError) throw readError;
     const now = Date.now();
