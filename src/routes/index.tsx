@@ -28,55 +28,55 @@ const stages: {
     key: "attention",
     number: "01",
     title: "Turn attention into action",
-    question: "When someone discovers your business, is the next step to enquire or buy obvious?",
+    question: "When someone finds your business, is it clear how to contact you or buy from you?",
     options: [
-      "Yes. The next step is clear wherever people find me.",
-      "It is there, but people can miss it.",
-      "There is no clear next step.",
+      "Yes. People can easily see how to contact me or buy.",
+      "The next step is there, but it is easy to miss.",
+      "People are not shown what to do next.",
     ],
   },
   {
     key: "capture",
     number: "02",
     title: "Capture interested leads",
-    question: "Can an interested visitor leave their details in a simple, reliable way?",
+    question: "Can an interested person leave their contact details in one easy place?",
     options: [
-      "Yes. Leads go into one reliable place.",
-      "Some are captured, but they come from scattered places.",
-      "I do not have a consistent way to capture leads.",
+      "Yes. Their details go into one organised place.",
+      "Some details are saved, but they are spread across different places.",
+      "I do not have a reliable way to collect their details.",
     ],
   },
   {
     key: "response",
     number: "03",
     title: "Respond to enquiries",
-    question: "Do new enquiries receive a useful response within one business day?",
+    question: "When someone asks about your offer, how quickly do they get a helpful reply?",
     options: [
-      "Yes. New enquiries are answered within one business day.",
-      "Sometimes replies are delayed or missed.",
-      "Enquiries are often delayed or go unanswered.",
+      "I reply within one business day.",
+      "Sometimes my reply is late.",
+      "Messages are often missed or left unanswered.",
     ],
   },
   {
     key: "follow_up",
     number: "04",
     title: "Follow up consistently",
-    question: "Does every lead who has not bought receive a planned follow-up?",
+    question: "If someone is interested but does not buy, what happens next?",
     options: [
-      "Yes. Follow-up happens through a repeatable process.",
-      "Sometimes. It still depends on memory or manual effort.",
-      "No. There is no consistent follow-up process.",
+      "I have a clear plan to follow up with them.",
+      "I follow up sometimes, but I have to remember to do it.",
+      "I usually do not follow up after the first conversation.",
     ],
   },
   {
     key: "conversion",
     number: "05",
     title: "Track conversion",
-    question: "Can you see which enquiries become paying customers and where others drop off?",
+    question: "Can you tell which enquiries become paying customers and which ones do not?",
     options: [
-      "Yes. I can follow an enquiry through to a sale.",
-      "I can see some of it, but the information is scattered.",
-      "No. I cannot reliably track what happens after an enquiry.",
+      "Yes. I can see which enquiries turn into sales.",
+      "I can see some results, but the information is scattered.",
+      "No. I cannot tell which enquiries become customers.",
     ],
   },
 ];
@@ -310,28 +310,33 @@ function ScoreboardSection() {
         <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
           <div className="lg:sticky lg:top-28 lg:self-start">
             <SectionHeading
-              eyebrow="Free self-check"
-              title="Find the gaps between attention and sales."
-              description="The Conversion Leak Scoreboard is a short five-question check of the journey from first discovery to paying customer."
+              eyebrow="Free business assessment"
+              title="How well does your business turn interest into sales?"
+              description="Answer five simple questions to find out where potential customers may be getting lost between discovering your business and paying you."
             />
             <div className="border-l-2 border-primary pl-5">
-              <p className="text-sm leading-relaxed text-muted-foreground">Answer based on what happens today, not what you hope happens. There are no trick questions and no made-up industry benchmarks.</p>
+              <p className="text-sm font-semibold text-foreground">How to complete your assessment</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">Read each question and select one answer that best describes what happens in your business today. Complete all five sections to see your score and the areas that may need attention.</p>
             </div>
-            <p className="mt-7 text-xs text-muted-foreground">Five stages · About two minutes · Score from 0 to 10</p>
+            <div className="mt-6 space-y-2 text-xs text-muted-foreground">
+              <p><strong className="text-foreground">5 questions</strong> · About 2 minutes · No right or wrong answers</p>
+              <p>Your score runs from 0 to 10. A higher score means more parts of the customer journey may need attention.</p>
+            </div>
           </div>
 
           <div className="border border-border bg-background p-5 sm:p-8">
             <div className="flex items-center justify-between gap-4 border-b border-border pb-5">
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Conversion Leak Scoreboard</p>
-                <p className="mt-1 text-sm text-muted-foreground">{showResult ? "Your self-check result" : "Choose the answer that best describes today"}</p>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Your 5-step business assessment</p>
+                <p className="mt-1 text-sm text-muted-foreground">{showResult ? "Your assessment result" : "Select one answer in each section below"}</p>
               </div>
-              <span className="text-xs font-semibold tabular-nums text-muted-foreground">{answeredCount}/5</span>
+              <span className="text-xs font-semibold tabular-nums text-muted-foreground">{answeredCount} of 5 complete</span>
             </div>
 
             {!showResult ? (
               <>
-                <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-secondary">
+                <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Choose just one option for each question. You can change an answer before viewing your result.</p>
+                <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-secondary">
                   <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${(answeredCount / stages.length) * 100}%` }} />
                 </div>
                 <div className="mt-7 space-y-8">
@@ -357,7 +362,7 @@ function ScoreboardSection() {
                               onClick={() => setAnswers((current) => ({ ...current, [stage.key]: score as 0 | 1 | 2 }))}
                               className={`flex w-full items-start gap-3 border px-3.5 py-3 text-left text-sm transition-colors sm:px-4 ${selected ? "border-primary bg-primary/5 text-foreground" : "border-border hover:border-primary/50 hover:bg-surface-dim"}`}
                             >
-                              <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold ${selected ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40 text-muted-foreground"}`}>{selected ? <Check className="h-3 w-3" /> : score}</span>
+                              <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold ${selected ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40 text-muted-foreground"}`}>{selected ? <Check className="h-3 w-3" /> : score === 0 ? "✓" : score === 1 ? "–" : "!"}</span>
                               <span className="leading-relaxed">{option}</span>
                             </button>
                           );
@@ -367,7 +372,7 @@ function ScoreboardSection() {
                   ))}
                 </div>
                 <div className="mt-8 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-muted-foreground">Your answers stay in this browser session.</p>
+                  <p className="text-xs text-muted-foreground">{answeredCount} of 5 questions answered</p>
                   <Button disabled={!completed} onClick={() => setShowResult(true)} className="gap-2 rounded-full px-6">
                     See my result <ArrowRight className="h-4 w-4" />
                   </Button>
@@ -402,7 +407,7 @@ function ScoreboardSection() {
                     <RotateCcw className="h-4 w-4" /> Retake the check
                   </Button>
                 </div>
-                <p className="mt-5 text-xs leading-relaxed text-muted-foreground">This result is calculated in your browser. It is not saved or emailed. If you request a review, you can choose to send your details and result to Victor on WhatsApp.</p>
+                <p className="mt-5 text-xs leading-relaxed text-muted-foreground">This is a simple self-assessment, not an industry benchmark. Your answers are calculated in this browser and are not saved or emailed.</p>
               </div>
             )}
           </div>
