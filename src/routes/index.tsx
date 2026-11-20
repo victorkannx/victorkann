@@ -422,7 +422,7 @@ function ScoreboardSection() {
               )}
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <Button onClick={() => openLeadForm(`Free Conversion Review · Assessment score: ${total}/10 · Priority areas: ${priorities.map((item) => item.title).join(", ") || "No priority area"}`)} className="gap-2 rounded-full px-6">
+                <Button onClick={() => openLeadForm("Free Conversion Review", { scores: answers as Record<StageKey, 0 | 1 | 2>, priority_areas: priorities.map((item) => item.key), answers })} className="gap-2 rounded-full px-6">
                   Book my free Conversion Review <ArrowUpRight className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" onClick={reset} className="gap-2 rounded-full">
