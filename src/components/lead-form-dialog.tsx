@@ -72,9 +72,9 @@ export function LeadFormProvider({ children }: { children: ReactNode }) {
         assessment ? `Scoreboard: ${Object.entries(assessment.scores).map(([key, score]) => `${key.replace("_", " ")} ${score}/2`).join(", ")} (total ${Object.values(assessment.scores).reduce((sum, score) => sum + score, 0)}/10)` : "",
         assessment?.priority_areas.length ? `Priority areas: ${assessment.priority_areas.join(", ").replaceAll("_", " ")}` : ""
       ].filter(Boolean);
-      if (context.length) url.searchParams.set("a1", context.join("\\n"));
+      if (context.length) url.searchParams.set("title", context.join("\\n"));
     } else {
-      url.searchParams.set("a1", source);
+      url.searchParams.set("title", source);
     }
     return url.toString();
   }, [assessment, bookingDetails, source]);
