@@ -289,7 +289,7 @@ function LeadFormDialog({
                       value={values.phone}
                       maxLength={30}
                       onChange={(e) => set("phone", e.target.value)}
-                      placeholder="+234 816 112 3296"
+                      placeholder="e.g. +234 800 000 0000"
                       autoComplete="tel"
                       className="pl-9"
                     />
