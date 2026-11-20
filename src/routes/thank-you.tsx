@@ -27,14 +27,13 @@ function ThankYouPage() {
         </div>
         <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Your next step</p>
         <h1 className="display-font mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-5xl">
-          "Your enquiry message is ready."
+          Your enquiry message is ready.
         </h1>
         <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-          "WhatsApp should have opened with your details addressed to Victor. Please check the message and press Send. Your enquiry is only submitted when you send that message."
+          WhatsApp should have opened with your details addressed to Victor. Please check the message and press Send. Your enquiry is only submitted when you send that message.
         </p>
 
-        {true && (
-          <div className="mt-7 border-l-2 border-primary bg-surface-dim p-4">
+        <div className="mt-7 border-l-2 border-primary bg-surface-dim p-4">
             <p className="text-sm font-semibold">Before you leave WhatsApp</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               Check that your name, email, WhatsApp number, business details and main challenge are correct, then press Send. The message goes to Victor at +234 816 112 3296.
@@ -42,8 +41,7 @@ function ThankYouPage() {
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline">
               Reopen WhatsApp <MessageCircle className="h-4 w-4" />
             </a>
-          </div>
-        )}
+        </div>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Button asChild className="gap-2 rounded-full">
