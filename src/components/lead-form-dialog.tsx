@@ -128,7 +128,6 @@ function LeadFormDialog({
   };
 
   const buildMessage = (d: LeadValues) => {
-    const pkg = inferredPackagePrice(source);
     const lines = [
       "New project enquiry from victorkann.com",
       `Interest: ${source}`,
@@ -198,8 +197,8 @@ function LeadFormDialog({
                 ["Name", review.name],
                 ["Email", review.email],
                 ["WhatsApp number", review.phone],
-                ["Website / apartment", review.siteName],
-                ["Features", review.features],
+                ["Business / website", review.siteName],
+                ["Main challenge", review.features],
                 ["Timing", review.budget?.trim() ? review.budget.trim() : "—"],
                 ["Additional context", review.notes?.trim() ? review.notes.trim() : "—"],
               ].map(([label, value]) => (
@@ -375,6 +374,8 @@ function LeadFormDialog({
                   placeholder="A little context about your offer, audience or current process"
                 />
               </Field>
+
+              <p className="text-xs leading-relaxed text-muted-foreground">Your details are not saved on this website. You can review the message first, and nothing is sent until you choose to send it in WhatsApp.</p>
 
               <Button type="submit" size="lg" className="w-full gap-2 font-semibold">
                 <ArrowRight className="h-4 w-4" />
