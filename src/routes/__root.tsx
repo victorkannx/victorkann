@@ -77,21 +77,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Victor Kann — Business Systems & Automation Builder" },
+      { title: "Victor Kann | Turn Attention Into Customers" },
       {
         name: "description",
         content:
-          "Victor Kann builds the websites, funnels, booking systems, automations and AI workflows behind growing businesses.",
+          "I build systems that help online businesses turn attention into customers. Find where leads are slipping through your customer journey.",
       },
       { name: "author", content: "Victor Kannayo" },
       {
         property: "og:title",
-        content: "Victor Kann — Business Systems & Automation Builder",
+        content: "Victor Kann | Turn Attention Into Customers",
       },
       {
         property: "og:description",
         content:
-          "I build the systems behind growing businesses: websites, funnels, booking systems, automations and AI workflows.",
+          "A clearer path from first click to paying customer. Find where leads are slipping through your business.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://victorkann.com" },
@@ -99,12 +99,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@iamVictorKann" },
       {
         name: "twitter:title",
-        content: "Victor Kann — Business Systems & Automation Builder",
+        content: "Victor Kann | Turn Attention Into Customers",
       },
       {
         name: "twitter:description",
         content:
-          "I build the systems behind growing businesses: websites, funnels, booking systems, automations and AI workflows.",
+          "A clearer path from first click to paying customer. Find where leads are slipping through your business.",
       },
     ],
     links: [
