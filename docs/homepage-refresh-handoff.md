@@ -19,7 +19,7 @@ Remove the previous public services grid and selected-work/portfolio section. Ke
 - Replaced the previous homepage structure with a conversion-first landing page.
 - Updated navigation to The problem, Scoreboard, My approach, and About.
 - Added a five-stage customer-journey visual: attention, capture, response, follow-up, conversion.
-- Added an interactive five-question Conversion Leak Scoreboard using the approved five-stage scoring model, with simpler visitor-facing questions, clear completion instructions, and a visible one-answer-per-question workflow.
+- Added an interactive five-question Conversion Leak Assessment using the approved five-stage scoring model, with one question shown at a time. Selecting an answer advances directly to the next question; visitors can go back, review, and change answers without scrolling through a long questionnaire.
 - Scoring remains 0–2 per stage, total 0–10, and all tied highest-scoring stages are returned as priorities. A zero score returns no priority leak.
 - No unapproved score bands or diagnostic benchmarks are presented.
 - Added an audit-first explanation and a focused contact CTA.
@@ -46,7 +46,8 @@ Remove the previous public services grid and selected-work/portfolio section. Ke
 ## Review checklist
 
 - [ ] Confirm responsive layout on phone and desktop.
-- [ ] Complete all five Scoreboard questions and verify score /10.
+- [ ] Complete all five assessment questions using the one-at-a-time flow and verify score /10.
+- [ ] Verify selecting an answer advances to the next question and Back allows answer changes.
 - [ ] Verify tied highest stages are all shown.
 - [ ] Verify a zero score shows no priority leak.
 - [ ] Verify the retake control clears all answers.
