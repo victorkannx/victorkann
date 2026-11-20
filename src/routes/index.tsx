@@ -115,6 +115,7 @@ function Index() {
           <FrictionSection />
           <ScoreboardSection />
           <ApproachSection />
+          <OfferPathSection />
           <AboutSection />
           <FinalCta />
         </main>
@@ -132,6 +133,7 @@ function Navbar() {
     { label: "The problem", href: "#problem" },
     { label: "Scoreboard", href: "#scoreboard" },
     { label: "My approach", href: "#approach" },
+    { label: "Ways to work together", href: "#offers" },
     { label: "About", href: "#about" },
   ];
 
@@ -420,14 +422,14 @@ function ScoreboardSection() {
               )}
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <Button onClick={() => openLeadForm(`Conversion Leak Assessment: ${total}/10 · Priority: ${priorities.map((item) => item.title).join(", ") || "No priority area"}`)} className="gap-2 rounded-full px-6">
-                  Book a call to discuss my result <ArrowUpRight className="h-4 w-4" />
+                <Button onClick={() => openLeadForm("Free Conversion Review", { scores: answers as Record<StageKey, 0 | 1 | 2>, priority_areas: priorities.map((item) => item.key), answers })} className="gap-2 rounded-full px-6">
+                  Book my free Conversion Review <ArrowUpRight className="h-4 w-4" />
                 </Button>
                 <Button variant="outline" onClick={reset} className="gap-2 rounded-full">
                   <RotateCcw className="h-4 w-4" /> Start again
                 </Button>
               </div>
-              <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Your answers are calculated in this browser. They are not saved or emailed.</p>
+              <p className="mt-5 text-xs leading-relaxed text-muted-foreground">Your score is an initial guide, not a full diagnosis. In the free review, we’ll discuss your result and identify one useful next step. Your answers are not currently saved or emailed.</p>
             </div>
           )}
         </div>
@@ -459,6 +461,81 @@ function ApproachSection() {
             </article>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+
+function OfferPathSection() {
+  const { openLeadForm } = useLeadForm();
+  const offers = [
+    {
+      number: "01",
+      name: "Free Conversion Review",
+      label: "Start here",
+      description: "A short conversation about your business, your current customer journey and the result from your assessment.",
+      includes: ["Discuss your biggest conversion concern", "Identify one likely point of friction", "Decide whether a deeper audit makes sense"],
+      action: "Book my free review",
+      onClick: () => openLeadForm("Free Conversion Review"),
+      featured: true,
+    },
+    {
+      number: "02",
+      name: "Paid Conversion Leak Audit",
+      label: "The deep dive",
+      description: "A structured review for businesses that need to understand exactly where leads are being lost and what to fix first.",
+      includes: ["Review the journey from first click to sale", "Inspect enquiry, response and follow-up processes", "Receive a prioritised action plan with clear recommendations"],
+      action: "Discuss a paid audit",
+      onClick: () => openLeadForm("Interested in the paid Conversion Leak Audit"),
+      featured: false,
+    },
+    {
+      number: "03",
+      name: "Implementation",
+      label: "Make the fixes",
+      description: "When the plan is clear, I can help build and connect the right systems so the improvements work in day-to-day business.",
+      includes: ["Build or improve pages and lead capture", "Connect tools, follow-up and automation", "Test the customer journey and hand over the system"],
+      action: "Discuss implementation",
+      onClick: () => openLeadForm("Interested in Conversion System Implementation"),
+      featured: false,
+    },
+  ];
+
+  return (
+    <section id="offers" className="border-y border-border bg-surface-dim section-padding container-padding">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading
+          eyebrow="A clear way to work together"
+          title="Start with clarity. Pay for depth. Build when you’re ready."
+          description="You do not need to buy a big project just to start a conversation. We begin with a free review, then only move into paid work when the next step is clear."
+        />
+        <div className="grid gap-4 lg:grid-cols-3">
+          {offers.map((offer) => (
+            <article key={offer.number} className={`flex h-full flex-col border p-6 sm:p-7 ${offer.featured ? "border-primary bg-background shadow-sm" : "border-border bg-background"}`}>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-semibold tabular-nums text-primary">{offer.number}</span>
+                <span className="border border-border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{offer.label}</span>
+              </div>
+              <h3 className="display-font mt-7 text-2xl font-bold leading-tight">{offer.name}</h3>
+              <p className="mt-3 min-h-[84px] text-sm leading-relaxed text-muted-foreground">{offer.description}</p>
+              <ul className="mt-5 flex-1 space-y-3 border-t border-border pt-5">
+                {offer.includes.map((item) => (
+                  <li key={item} className="flex gap-3 text-sm leading-relaxed">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button onClick={offer.onClick} variant={offer.featured ? "default" : "outline"} className="mt-7 w-full rounded-full">
+                {offer.action} <ArrowUpRight className="ml-2 h-4 w-4" />
+              </Button>
+            </article>
+          ))}
+        </div>
+        <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground">
+          The free review is an initial conversation, not a full audit. Paid audit scope and implementation costs are agreed before work begins.
+        </p>
       </div>
     </section>
   );
@@ -499,11 +576,11 @@ function FinalCta() {
           <div className="max-w-3xl">
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary-foreground/75">Make the next step count</p>
             <h2 className="display-font mt-4 text-balance text-4xl font-bold leading-[0.98] tracking-[-0.045em] sm:text-6xl">You worked to get their attention. Let’s make it easier for them to become customers.</h2>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/80">Start with the Scoreboard or tell me where your customer journey feels stuck.</p>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/80">Start with a free Conversion Review. If a deeper investigation is needed, we can discuss a paid audit and implementation plan.</p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
             <Button size="lg" variant="secondary" className="rounded-full px-6" asChild><a href="#scoreboard">Take the Scoreboard <ArrowDown className="ml-2 h-4 w-4" /></a></Button>
-            <Button size="lg" variant="outline" className="rounded-full border-primary-foreground/40 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => openLeadForm("Homepage — discuss a conversion review")}>Book a 15-minute call <ArrowUpRight className="ml-2 h-4 w-4" /></Button>
+            <Button size="lg" variant="outline" className="rounded-full border-primary-foreground/40 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => openLeadForm("Free Conversion Review")}>Book a free review <ArrowUpRight className="ml-2 h-4 w-4" /></Button>
           </div>
         </div>
       </div>
