@@ -159,7 +159,7 @@ function LeadFormDialog({
       ? {
           name: review.name,
           email: review.email,
-          a2: `${review.siteName} — ${review.budget || "budget not set"}`,
+          a2: `${review.siteName} — ${review.budget || "timing not set"}`,
           a3: review.phone,
         }
       : {}),
@@ -397,7 +397,7 @@ function LeadFormDialog({
                   className="gap-1.5 rounded-full bg-secondary text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground"
                 >
                   <ShieldCheck className="h-3 w-3" />
-                  Your details stay private
+                  You choose what to send
                 </Badge>
               </div>
             </form>
