@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CalendarCheck, MessageCircle, Pencil, ShieldCheck, Phone } from "lucide-react";
 
 const WHATSAPP_NUMBER = "2348161123296";
-const CAL_BASE = "https://cal.com/autogrowhq/15";
+const CAL_BASE = "https://cal.com/kanayo/15";
 
 const FEATURE_OPTIONS = [
   "Lead capture",
@@ -149,6 +149,7 @@ function LeadFormDialog({
     window.open(url, "_blank", "noopener,noreferrer");
     onOpenChange(false);
     setReview(null);
+    window.location.assign("/thank-you?via=whatsapp");
   };
 
   const calLink = `${CAL_BASE}?${new URLSearchParams({
@@ -184,7 +185,7 @@ function LeadFormDialog({
             </DialogTitle>
             <DialogDescription className="text-sm">
               {review
-                 ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
+                 ? "Check your information below. When you continue, WhatsApp will open with your message addressed to Victor. Press Send in WhatsApp to submit your enquiry."
                  : "Share a little about your business and what is not working as it should. I’ll use it to understand the problem before suggesting a next step."}
             </DialogDescription>
           </DialogHeader>
@@ -229,7 +230,7 @@ function LeadFormDialog({
                 onClick={sendToWhatsApp}
               >
                 <MessageCircle className="h-4 w-4" />
-                Send on WhatsApp
+                Continue to WhatsApp
               </Button>
             </div>
 
@@ -375,7 +376,7 @@ function LeadFormDialog({
                 />
               </Field>
 
-              <p className="text-xs leading-relaxed text-muted-foreground">Your details are not saved on this website. You can review the message first, and nothing is sent until you choose to send it in WhatsApp.</p>
+              <p className="text-xs leading-relaxed text-muted-foreground">Your details are not stored by this website yet. You will review them before WhatsApp opens. Your enquiry is only sent when you press Send in WhatsApp.</p>
 
               <Button type="submit" size="lg" className="w-full gap-2 font-semibold">
                 <ArrowRight className="h-4 w-4" />
