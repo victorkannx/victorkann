@@ -12,30 +12,23 @@ const WHATSAPP_NUMBER = "2348161123296";
 const CAL_BASE = "https://cal.com/autogrowhq/15";
 
 const FEATURE_OPTIONS = [
+  "Lead capture",
+  "Follow-up",
+  "Conversion tracking",
+  "Sales funnel",
+  "CRM setup",
   "AI workflow",
-  "Lead generation",
-  "Funnel strategy",
-  "Automation",
-  "Content system",
-  "Landing page",
   "Email sequence",
-  "Analytics setup",
+  "Website / landing page",
 ];
 
 const BUDGET_OPTIONS = [
-  "Under ₦100k",
-  "₦100k — ₦200k",
-  "₦200k — ₦350k",
-  "Above ₦350k",
+  "Still exploring",
+  "Ready to improve this now",
+  "Planning for the next 30 days",
+  "Planning for later",
   "Not sure yet",
 ];
-
-function inferredPackagePrice(source: string) {
-  if (source.includes("Starter")) return { name: "Starter", price: "₦95k" };
-  if (source.includes("Growth")) return { name: "Growth", price: "₦195k" };
-  if (source.includes("Premium")) return { name: "Premium", price: "₦350k" };
-  return null;
-}
 
 const phoneRegex = /^[+0-9][\s0-9\-()]{6,}$/;
 
@@ -143,18 +136,11 @@ function LeadFormDialog({
       `Name: ${d.name}`,
       `Email: ${d.email}`,
       `WhatsApp number: ${d.phone}`,
-      `Website / apartment name: ${d.siteName}`,
-      `Features wanted: ${d.features}`,
-      `Budget: ${d.budget?.trim() ? d.budget.trim() : "—"}`,
-      `Other details: ${d.notes?.trim() ? d.notes.trim() : "—"}`,
+      `Business / website: ${d.siteName}`,
+      `Where the process feels stuck: ${d.features}`,
+      `Timing: ${d.budget?.trim() ? d.budget.trim() : "Not specified"}`,
+      `Additional context: ${d.notes?.trim() ? d.notes.trim() : "—"}`,
     ];
-    if (pkg) {
-      lines.push(
-        "",
-        `Package requested: ${pkg.name}`,
-        `Indicative price: ${pkg.price} (final quote depends on scope)`
-      );
-    }
     return lines.join("\n");
   };
 
@@ -195,12 +181,12 @@ function LeadFormDialog({
               {review ? `Step 2 of 2 · ${source}` : `Step 1 of 2 · ${source}`}
             </p>
             <DialogTitle className="display-font text-xl font-bold">
-              {review ? "Check your details" : "Tell me about your project"}
+              {review ? "Check your details" : "Tell me where the customer journey gets stuck"}
             </DialogTitle>
             <DialogDescription className="text-sm">
               {review
                  ? "Confirm everything looks right, then send it to me on WhatsApp or book a call."
-                 : "Share a few details about what you are building or improving. I’ll reply with a useful next step."}
+                 : "Share a little about your business and what is not working as it should. I’ll use it to understand the problem before suggesting a next step."}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -214,8 +200,8 @@ function LeadFormDialog({
                 ["WhatsApp number", review.phone],
                 ["Website / apartment", review.siteName],
                 ["Features", review.features],
-                ["Budget", review.budget?.trim() ? review.budget.trim() : "—"],
-                ["Other details", review.notes?.trim() ? review.notes.trim() : "—"],
+                ["Timing", review.budget?.trim() ? review.budget.trim() : "—"],
+                ["Additional context", review.notes?.trim() ? review.notes.trim() : "—"],
               ].map(([label, value]) => (
                 <div key={label} className="grid gap-1 px-4 py-3 sm:grid-cols-[9rem_1fr] sm:gap-4">
                   <dt className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
@@ -263,7 +249,7 @@ function LeadFormDialog({
                 className="gap-1.5 rounded-full bg-secondary text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground"
               >
                 <ShieldCheck className="h-3 w-3" />
-                Your details stay private
+                You review before sending
               </Badge>
             </div>
           </div>
@@ -311,17 +297,17 @@ function LeadFormDialog({
                 </Field>
               </div>
 
-               <Field id="siteName" label="Project / website name" error={errors.siteName}>
+               <Field id="siteName" label="Business / website" error={errors.siteName}>
                 <Input
                   id="siteName"
                   value={values.siteName}
                   maxLength={120}
                   onChange={(e) => set("siteName", e.target.value)}
-                  placeholder="e.g. OneLink Funnel or your business name"
+                  placeholder="e.g. Your business or website"
                 />
               </Field>
 
-              <Field id="features" label="What would you like to include?" error={errors.features}>
+              <Field id="features" label="Where are leads getting stuck?" error={errors.features}>
                 <div className="mb-3 flex flex-wrap gap-2">
                   {FEATURE_OPTIONS.map((feature) => {
                     const active = selectedFeatures.includes(feature);
@@ -348,17 +334,17 @@ function LeadFormDialog({
                   maxLength={600}
                   rows={2}
                   onChange={(e) => set("features", e.target.value)}
-                  placeholder="Tap the tags above or describe what you need"
+                  placeholder="Choose a gap above or describe what is happening"
                 />
               </Field>
 
-              <Field id="budget" label="Your budget" error={errors.budget} optional>
+              <Field id="budget" label="When are you looking to improve this?" error={errors.budget} optional>
                 <Input
                   id="budget"
                   value={values.budget}
                   maxLength={80}
                   onChange={(e) => set("budget", e.target.value)}
-                  placeholder="e.g. ₦150k, ₦200k — ₦350k, or 'not sure'"
+                  placeholder="Choose a rough timeframe"
                 />
                 <div className="mt-3 flex flex-wrap gap-2">
                   {BUDGET_OPTIONS.map((option) => (
@@ -379,14 +365,14 @@ function LeadFormDialog({
                 </div>
               </Field>
 
-              <Field id="notes" label="Anything else I should consider?" error={errors.notes} optional>
+              <Field id="notes" label="Anything else I should know?" error={errors.notes} optional>
                 <Textarea
                   id="notes"
                   value={values.notes ?? ""}
                   maxLength={800}
                   rows={3}
                   onChange={(e) => set("notes", e.target.value)}
-                  placeholder="Launch date, number of apartments, branding, etc."
+                  placeholder="A little context about your offer, audience or current process"
                 />
               </Field>
 
