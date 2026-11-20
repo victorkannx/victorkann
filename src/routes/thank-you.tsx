@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowUpRight, CalendarCheck, CheckCircle2, MessageCircle } from "lucide-react";
+import { ArrowLeft, CalendarCheck, CheckCircle2, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const WHATSAPP_URL = "https://wa.me/2348161123296";
@@ -19,8 +19,6 @@ export const Route = createFileRoute("/thank-you")({
 });
 
 function ThankYouPage() {
-  const viaWhatsApp = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("via") === "whatsapp";
-
   return (
     <main className="flex min-h-screen items-center justify-center bg-surface-dim px-4 py-12">
       <section className="w-full max-w-2xl border border-border bg-background p-6 shadow-sm sm:p-10">
@@ -29,15 +27,13 @@ function ThankYouPage() {
         </div>
         <p className="mt-7 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Your next step</p>
         <h1 className="display-font mt-3 text-3xl font-bold leading-tight tracking-tight sm:text-5xl">
-          {viaWhatsApp ? "Your enquiry message is ready." : "Thanks for getting in touch."}
+          "Your enquiry message is ready."
         </h1>
         <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-          {viaWhatsApp
-            ? "WhatsApp should have opened with your details addressed to Victor. Please check the message and press Send. Your enquiry is only submitted when you send that message."
-            : "You can book a short call with Victor or return to the assessment and review your answers."}
+          "WhatsApp should have opened with your details addressed to Victor. Please check the message and press Send. Your enquiry is only submitted when you send that message."
         </p>
 
-        {viaWhatsApp && (
+        {true && (
           <div className="mt-7 border-l-2 border-primary bg-surface-dim p-4">
             <p className="text-sm font-semibold">Before you leave WhatsApp</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
