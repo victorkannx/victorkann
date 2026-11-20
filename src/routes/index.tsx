@@ -1,49 +1,101 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { LeadFormProvider, useLeadForm } from "@/components/lead-form-dialog";
 import {
   ArrowDown,
   ArrowRight,
   ArrowUpRight,
-  Bot,
-  CalendarDays,
   Check,
-  ChevronDown,
-  ExternalLink,
-  GitBranch,
-  Layers3,
-  Mail,
+  CheckCircle2,
+  ChevronRight,
   Menu,
-  MessageCircle,
-  Network,
+  RotateCcw,
   X,
-  Workflow,
 } from "lucide-react";
-import { LeadFormProvider, useLeadForm } from "@/components/lead-form-dialog";
-import cozyNestImg from "@/assets/cozy-nest-yaba.jpg";
-import averyLekkiImg from "@/assets/avery-lekki.jpg";
 
-const CAL_LINK = "https://cal.com/autogrowhq/15";
+type StageKey = "attention" | "capture" | "response" | "follow_up" | "conversion";
+type Answers = Partial<Record<StageKey, 0 | 1 | 2>>;
+
+const stages: {
+  key: StageKey;
+  number: string;
+  title: string;
+  question: string;
+  options: [string, string, string];
+}[] = [
+  {
+    key: "attention",
+    number: "01",
+    title: "Turn attention into action",
+    question: "When someone discovers your business, is the next step to enquire or buy obvious?",
+    options: [
+      "Yes. The next step is clear wherever people find me.",
+      "It is there, but people can miss it.",
+      "There is no clear next step.",
+    ],
+  },
+  {
+    key: "capture",
+    number: "02",
+    title: "Capture interested leads",
+    question: "Can an interested visitor leave their details in a simple, reliable way?",
+    options: [
+      "Yes. Leads go into one reliable place.",
+      "Some are captured, but they come from scattered places.",
+      "I do not have a consistent way to capture leads.",
+    ],
+  },
+  {
+    key: "response",
+    number: "03",
+    title: "Respond to enquiries",
+    question: "Do new enquiries receive a useful response within one business day?",
+    options: [
+      "Yes. New enquiries are answered within one business day.",
+      "Sometimes replies are delayed or missed.",
+      "Enquiries are often delayed or go unanswered.",
+    ],
+  },
+  {
+    key: "follow_up",
+    number: "04",
+    title: "Follow up consistently",
+    question: "Does every lead who has not bought receive a planned follow-up?",
+    options: [
+      "Yes. Follow-up happens through a repeatable process.",
+      "Sometimes. It still depends on memory or manual effort.",
+      "No. There is no consistent follow-up process.",
+    ],
+  },
+  {
+    key: "conversion",
+    number: "05",
+    title: "Track conversion",
+    question: "Can you see which enquiries become paying customers and where others drop off?",
+    options: [
+      "Yes. I can follow an enquiry through to a sale.",
+      "I can see some of it, but the information is scattered.",
+      "No. I cannot reliably track what happens after an enquiry.",
+    ],
+  },
+];
 
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
     meta: [
-      { title: "Victor Kann — Business Systems & Automation Builder" },
+      { title: "Victor Kann | Turn Attention Into Customers" },
       {
         name: "description",
         content:
-          "Victor Kann builds the websites, funnels, booking systems, automations and AI workflows behind growing businesses.",
+          "I build systems that help online businesses turn attention into customers. Find the gaps in your customer journey with the Conversion Leak Scoreboard.",
       },
-      {
-        property: "og:title",
-        content: "Victor Kann — Business Systems & Automation Builder",
-      },
+      { property: "og:title", content: "Victor Kann | Turn Attention Into Customers" },
       {
         property: "og:description",
         content:
-          "I build the systems behind growing businesses: websites, funnels, booking systems, automations and AI workflows.",
+          "A clearer path from first click to paying customer. Find where leads are slipping through your business.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://victorkann.com" },
@@ -59,17 +111,14 @@ function Index() {
         <Navbar />
         <main>
           <Hero />
-          <ProblemSection />
-          <BuildSection />
-          <MessySystemSection />
-          <SelectedWorkSection />
-          <ProcessSection />
+          <FrictionSection />
+          <ScoreboardSection />
+          <ApproachSection />
           <AboutSection />
-          <EngagementSection />
           <FinalCta />
         </main>
         <Footer />
-        <FloatingBooking />
+        <FloatingContact />
       </div>
     </LeadFormProvider>
   );
@@ -78,40 +127,37 @@ function Index() {
 function Navbar() {
   const { openLeadForm } = useLeadForm();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navLinks = [
-    { label: "Work", href: "#work" },
-    { label: "Services", href: "#services" },
+  const links = [
+    { label: "The problem", href: "#problem" },
+    { label: "Scoreboard", href: "#scoreboard" },
+    { label: "My approach", href: "#approach" },
     { label: "About", href: "#about" },
-    { label: "Contact", href: "#contact" },
   ];
 
   const closeMenu = () => setMobileOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-background/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur-xl">
       <nav className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between container-padding">
-        <a href="#top" className="display-font text-sm font-bold tracking-[0.16em] text-foreground sm:text-base">
-          VICTOR KANN<span className="text-muted-foreground">.</span>
+        <a href="#top" className="display-font text-sm font-bold tracking-[0.13em] sm:text-base">
+          VICTOR KANN<span className="text-primary">.</span>
         </a>
-
-        <div className="hidden items-center gap-7 md:flex">
-          {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+        <div className="hidden items-center gap-8 md:flex">
+          {links.map((link) => (
+            <a key={link.href} href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               {link.label}
             </a>
           ))}
-          <Button size="sm" className="gap-2 font-semibold" asChild>
-            <a href={CAL_LINK} target="_blank" rel="noopener noreferrer">
-              Book a call
-              <ArrowUpRight className="h-4 w-4" />
+          <Button size="sm" className="gap-2 rounded-full px-5" asChild>
+            <a href="#scoreboard">
+              Find my leaks <ArrowUpRight className="h-4 w-4" />
             </a>
           </Button>
         </div>
-
         <Button
           variant="outline"
           size="icon"
-          className="border-border md:hidden"
+          className="rounded-full md:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((open) => !open)}
@@ -122,16 +168,13 @@ function Navbar() {
       {mobileOpen && (
         <div className="border-t border-border bg-background px-4 py-4 md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-1">
-            {navLinks.map((link) => (
-              <a key={link.label} href={link.href} onClick={closeMenu} className="border-b border-border py-3 text-sm font-medium text-muted-foreground last:border-0 hover:text-foreground">
+            {links.map((link) => (
+              <a key={link.href} href={link.href} onClick={closeMenu} className="border-b border-border py-3 text-sm text-muted-foreground last:border-0 hover:text-foreground">
                 {link.label}
               </a>
             ))}
-            <Button className="mt-3 w-full justify-between gap-2 font-semibold" asChild>
-              <a href={CAL_LINK} target="_blank" rel="noopener noreferrer" onClick={closeMenu}>
-                Book a call
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
+            <Button className="mt-3 w-full rounded-full" asChild>
+              <a href="#scoreboard" onClick={closeMenu}>Take the Scoreboard <ArrowUpRight className="ml-2 h-4 w-4" /></a>
             </Button>
           </div>
         </div>
@@ -142,120 +185,102 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="bg-ink text-ink-foreground">
-      <div className="mx-auto grid min-h-[680px] max-w-7xl items-center gap-14 container-padding section-padding lg:min-h-[min(820px,calc(100svh-4.5rem))] lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)] lg:gap-20">
+    <section className="hero-grid relative overflow-hidden bg-ink text-ink-foreground">
+      <div className="pointer-events-none absolute -right-32 -top-32 h-[34rem] w-[34rem] rounded-full border border-ink-border/70" />
+      <div className="pointer-events-none absolute -right-12 -top-12 h-[24rem] w-[24rem] rounded-full border border-ink-border/70" />
+      <div className="relative mx-auto grid min-h-[690px] max-w-7xl items-center gap-14 container-padding section-padding lg:min-h-[min(820px,calc(100svh-4.5rem))] lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
         <div className="max-w-3xl">
-          <p className="mb-7 text-[11px] font-semibold uppercase tracking-[0.25em] text-ink-muted">Business systems &amp; automation</p>
-          <h1 className="display-font max-w-3xl text-balance text-[clamp(3.1rem,8vw,7.3rem)] font-bold leading-[0.92]">
-            I build the systems behind growing businesses.
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-ink-border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-muted">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            Business systems · Conversion · Automation
+          </div>
+          <h1 className="display-font max-w-3xl text-balance text-[clamp(3.2rem,7.8vw,7.1rem)] font-bold leading-[0.92] tracking-[-0.055em]">
+            Attention is good. <span className="text-primary">Customers</span> are better.
           </h1>
           <p className="mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-ink-muted sm:text-xl">
-            Websites, funnels, booking systems and automations designed to turn attention into customers.
+            I build systems that help online businesses turn attention into customers. So fewer good leads get lost between the first click and the sale.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <Button size="lg" className="w-full gap-2 bg-ink-foreground text-ink hover:bg-ink-foreground/90 sm:w-auto" asChild>
-              <a href={CAL_LINK} target="_blank" rel="noopener noreferrer">
-                Book a call
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
+            <Button size="lg" className="w-full gap-2 rounded-full bg-primary px-7 text-primary-foreground hover:bg-primary/90 sm:w-auto" asChild>
+              <a href="#scoreboard">Find where leads are slipping <ArrowDown className="h-4 w-4" /></a>
             </Button>
-            <Button size="lg" variant="outline" className="w-full gap-2 border-ink-border bg-transparent text-ink-foreground hover:bg-ink-soft sm:w-auto" asChild>
-              <a href="#work">
-                View my work
-                <ArrowDown className="h-4 w-4" />
-              </a>
+            <Button size="lg" variant="outline" className="w-full rounded-full border-ink-border bg-transparent px-7 text-ink-foreground hover:bg-ink-soft sm:w-auto" asChild>
+              <a href="#approach">See how I work <ArrowRight className="h-4 w-4" /></a>
             </Button>
           </div>
+          <p className="mt-6 text-xs text-ink-muted">For founders, creators and small online businesses. Working globally.</p>
         </div>
-        <SystemFlow />
+        <JourneyPanel />
       </div>
     </section>
   );
 }
 
-function SystemFlow() {
-  const nodes = ["Visitor", "Website", "Lead", "Qualification", "Booking", "Customer"];
-
+function JourneyPanel() {
+  const steps = [
+    ["01", "Attention", "Someone finds you"],
+    ["02", "Capture", "They raise their hand"],
+    ["03", "Response", "They hear back"],
+    ["04", "Follow-up", "The conversation continues"],
+    ["05", "Conversion", "A customer is made"],
+  ];
   return (
-    <div className="relative border border-ink-border bg-ink-soft/40 p-5 sm:p-8" aria-label="Business system flow">
-      <div className="mb-8 flex items-center justify-between border-b border-ink-border pb-4">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">A connected system</span>
-        <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] text-ink-muted"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ink-foreground" />Live flow</span>
+    <div className="relative mx-auto w-full max-w-lg border border-ink-border bg-ink-soft/55 p-5 shadow-2xl shadow-black/10 sm:p-7">
+      <div className="flex items-center justify-between border-b border-ink-border pb-5">
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-ink-muted">The customer journey</p>
+          <p className="mt-1 text-sm font-medium text-ink-foreground">One connected path</p>
+        </div>
+        <span className="rounded-full border border-ink-border px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-ink-muted">5 stages</span>
       </div>
-      <div className="space-y-0">
-        {nodes.map((node, index) => (
-          <div key={node} className="system-flow-node flex items-center gap-4">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center border border-ink-border text-xs text-ink-muted">0{index + 1}</span>
-            <span className="display-font text-lg font-semibold capitalize text-ink-foreground sm:text-xl">{node}</span>
-            {index < nodes.length - 1 && <span className="ml-auto h-8 w-px bg-ink-border" />}
+      <div className="mt-5 space-y-2">
+        {steps.map(([number, title, description], index) => (
+          <div key={number} className="flex items-center gap-3 border border-ink-border/80 bg-ink/55 p-3.5 sm:p-4">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/15 text-[10px] font-semibold text-primary">{number}</span>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-ink-foreground">{title}</p>
+              <p className="mt-0.5 text-xs text-ink-muted">{description}</p>
+            </div>
+            {index < steps.length - 1 ? <ChevronRight className="ml-auto h-4 w-4 shrink-0 text-ink-muted" /> : <CheckCircle2 className="ml-auto h-4 w-4 shrink-0 text-primary" />}
           </div>
         ))}
       </div>
-      <p className="mt-8 border-t border-ink-border pt-4 text-xs leading-relaxed text-ink-muted">The right pieces, connected in the right order.</p>
+      <p className="mt-5 text-xs leading-relaxed text-ink-muted">A leak at any stage can make the next stage harder. The first step is finding it.</p>
     </div>
   );
 }
 
-function SectionHeading({ eyebrow, title, sub, light = false }: { eyebrow: string; title: string; sub?: string; light?: boolean }) {
+function SectionHeading({ eyebrow, title, description }: { eyebrow: string; title: string; description?: string }) {
   return (
     <div className="mb-12 max-w-3xl">
-      <p className={`text-[11px] font-semibold uppercase tracking-[0.22em] ${light ? "text-ink-muted" : "text-muted-foreground"}`}>{eyebrow}</p>
-      <h2 className={`display-font mt-4 text-balance text-3xl font-bold leading-[1.02] sm:text-5xl ${light ? "text-ink-foreground" : "text-foreground"}`}>{title}</h2>
-      {sub && <p className={`mt-5 max-w-2xl text-base leading-relaxed sm:text-lg ${light ? "text-ink-muted" : "text-muted-foreground"}`}>{sub}</p>}
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">{eyebrow}</p>
+      <h2 className="display-font mt-4 text-balance text-3xl font-bold leading-[1.02] tracking-[-0.035em] sm:text-5xl">{title}</h2>
+      {description && <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">{description}</p>}
     </div>
   );
 }
 
-function ProblemSection() {
-  const journey = ["Traffic", "Landing page", "Lead", "Follow-up", "Booking", "Customer"];
-  return (
-    <section className="section-padding container-padding">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow="The problem" title="Most businesses don’t need another website." sub="They need the pieces behind it to work together." />
-        <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:items-end">
-          <p className="max-w-md text-xl leading-relaxed text-muted-foreground sm:text-2xl">I design and build the infrastructure connecting those pieces.</p>
-          <div className="border-y border-border py-2">
-            {journey.map((step, index) => (
-              <div key={step} className="flex items-center gap-3 border-b border-border py-4 last:border-0 sm:gap-5 sm:py-5">
-                <span className="text-[10px] font-semibold text-muted-foreground">0{index + 1}</span>
-                <span className="display-font text-lg font-semibold sm:text-xl">{step}</span>
-                {index < journey.length - 1 && <ArrowRight className="ml-auto h-4 w-4 text-muted-foreground" />}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function BuildSection() {
-  const { openLeadForm } = useLeadForm();
-  const services = [
-    { number: "01", icon: <Layers3 className="h-5 w-5" />, title: "Websites", description: "Conversion-focused websites that give businesses a clear digital front door." },
-    { number: "02", icon: <GitBranch className="h-5 w-5" />, title: "Funnels", description: "Landing pages and customer journeys designed to turn traffic into leads and sales." },
-    { number: "03", icon: <CalendarDays className="h-5 w-5" />, title: "Booking systems", description: "Booking experiences that let customers discover, qualify, schedule and receive confirmations automatically." },
-    { number: "04", icon: <Workflow className="h-5 w-5" />, title: "Automation", description: "Workflows, integrations and AI systems that remove repetitive manual processes." },
+function FrictionSection() {
+  const friction = [
+    ["People are interested, but hesitate", "The next step is unclear, hard to find or asks for too much too soon."],
+    ["Enquiries arrive from everywhere", "Messages, forms and social channels make it hard to keep every lead in one place."],
+    ["Replies depend on someone remembering", "A busy day can mean a slow response or a promising conversation left hanging."],
+    ["You cannot see what turns into sales", "Without a clear view of the journey, it is difficult to know what needs fixing first."],
   ];
-
   return (
-    <section id="services" className="border-y border-border bg-surface-dim section-padding container-padding">
+    <section id="problem" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow="What I build" title="The infrastructure behind the attention." sub="Not isolated deliverables. Connected systems that help a business move with less friction." />
-        <div className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-2">
-          {services.map((service) => (
-            <article key={service.title} className="group flex min-h-[17rem] flex-col bg-background p-6 transition-colors hover:bg-ink hover:text-ink-foreground sm:p-8">
-              <div className="flex items-start justify-between">
-                <span className="text-muted-foreground transition-colors group-hover:text-ink-muted">{service.icon}</span>
-                <span className="text-xs text-muted-foreground transition-colors group-hover:text-ink-muted">{service.number}</span>
-              </div>
-              <div className="mt-auto pt-12">
-                <h3 className="display-font text-2xl font-semibold">{service.title}</h3>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-ink-muted">{service.description}</p>
-                <button type="button" onClick={() => openLeadForm(`${service.title} — discuss a project`)} className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-foreground transition-colors group-hover:text-ink-foreground">
-                  Discuss this system <ArrowUpRight className="h-3.5 w-3.5" />
-                </button>
-              </div>
+        <SectionHeading
+          eyebrow="Where growth gets stuck"
+          title="A lead rarely disappears all at once."
+          description="It usually slips through a few small gaps. A missed message. A confusing next step. A follow-up that never happens."
+        />
+        <div className="grid gap-0 border-y border-border sm:grid-cols-2">
+          {friction.map(([title, description], index) => (
+            <article key={title} className="border-b border-border py-7 sm:px-7 sm:py-9 [&:nth-child(2n)]:sm:border-l [&:nth-child(2n)]:sm:pl-9 [&:nth-last-child(-n+2)]:sm:border-b-0 [&:nth-child(odd)]:sm:pr-9">
+              <span className="text-xs font-semibold tabular-nums text-primary">0{index + 1}</span>
+              <h3 className="display-font mt-5 text-xl font-semibold sm:text-2xl">{title}</h3>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">{description}</p>
             </article>
           ))}
         </div>
@@ -264,106 +289,151 @@ function BuildSection() {
   );
 }
 
-function MessySystemSection() {
-  const before = ["WhatsApp messages", "Spreadsheets", "Missed leads", "Manual follow-ups", "Scattered customer information", "Repetitive admin work"];
-  const after = ["Lead", "Capture", "Qualify", "Automate", "Book", "Follow up", "Convert"];
-  return (
-    <section className="section-padding container-padding">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow="Messy → system" title="You bring me the messy process. I turn it into a system." />
-        <div className="grid border border-border lg:grid-cols-2">
-          <div className="border-b border-border p-6 sm:p-10 lg:border-b-0 lg:border-r">
-            <div className="flex items-center justify-between border-b border-border pb-5">
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Before</span>
-              <span className="text-xs text-muted-foreground">Disconnected</span>
-            </div>
-            <ul className="mt-7 space-y-4">
-              {before.map((item) => <li key={item} className="flex items-center gap-3 text-sm text-muted-foreground"><span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50" />{item}</li>)}
-            </ul>
-          </div>
-          <div className="bg-ink p-6 text-ink-foreground sm:p-10">
-            <div className="flex items-center justify-between border-b border-ink-border pb-5">
-              <span className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-foreground">After</span>
-              <span className="text-xs text-ink-muted">Connected</span>
-            </div>
-            <div className="mt-7 grid grid-cols-2 gap-px border border-ink-border bg-ink-border sm:grid-cols-3">
-              {after.map((item, index) => <div key={item} className="flex items-center gap-2 bg-ink p-3 text-sm font-medium"><Check className="h-3.5 w-3.5 text-ink-muted" />{item}<span className="ml-auto text-[10px] text-ink-muted">0{index + 1}</span></div>)}
-            </div>
-            <p className="mt-8 max-w-sm text-sm leading-relaxed text-ink-muted">Clear inputs. Useful automation. A business that can keep moving when you are not watching every step.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-type Project = { number: string; title: string; description: string; tags: string[]; image?: string; href?: string; alt?: string };
-
-function ProjectVisual({ project }: { project: Project }) {
-  if (project.image) return <img src={project.image} alt={project.alt ?? project.title} width={1280} height={800} loading="lazy" className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]" />;
-  const labels = project.title === "Real Estate Lead Recovery System" ? ["New lead", "AI qualification", "Recovery"] : project.title === "Service Booking Platform" ? ["Customer", "Provider", "Booking"] : ["Plan", "Schedule", "Publish"];
-  return (
-    <div className="flex h-full items-center justify-center bg-ink p-6 text-ink-foreground sm:p-10">
-      <div className="w-full max-w-sm border border-ink-border bg-ink-soft/50 p-4 sm:p-6">
-        <div className="mb-6 flex items-center justify-between border-b border-ink-border pb-4"><Network className="h-4 w-4 text-ink-muted" /><span className="text-[10px] uppercase tracking-[0.16em] text-ink-muted">System map</span></div>
-        <div className="space-y-2">{labels.map((label, index) => <div key={label} className="flex items-center gap-3 border border-ink-border p-3 text-sm"><span className="text-[10px] text-ink-muted">0{index + 1}</span><span>{label}</span><ArrowRight className="ml-auto h-3.5 w-3.5 text-ink-muted" /></div>)}</div>
-      </div>
-    </div>
-  );
-}
-
-function SelectedWorkSection() {
+function ScoreboardSection() {
   const { openLeadForm } = useLeadForm();
-  const projects: Project[] = [
-    { number: "01", title: "Real Estate Lead Recovery System", description: "AI-powered lead qualification and recovery system for turning missed conversations into organized next steps.", tags: ["Website", "AI", "CRM", "Automation"] },
-    { number: "02", title: "Service Booking Platform", description: "A booking system connecting customers with service providers through a clearer path from discovery to confirmation.", tags: ["Marketplace", "Booking", "Payments", "Database"] },
-    { number: "03", title: "X Dispatcher", description: "Content planning, scheduling and publishing system for a more consistent distribution workflow.", tags: ["SaaS", "Automation", "Scheduling", "AI"] },
-    { number: "04", title: "Cozy Nest — Yaba", description: "A direct booking website for a shortlet brand, built around clear information and a simple enquiry path.", tags: ["Website", "Hospitality", "Direct booking"], image: cozyNestImg, href: "https://cozy.victorkann.com", alt: "Cozy Nest Yaba direct booking website" },
-    { number: "05", title: "The Avery — Lekki", description: "An elevated hospitality website for a luxury apartment brand, with the experience doing the selling.", tags: ["Website", "Hospitality", "Luxury stay"], image: averyLekkiImg, href: "https://avery.victorkann.com", alt: "The Avery Lekki luxury apartment website" },
-  ];
+  const [answers, setAnswers] = useState<Answers>({});
+  const [showResult, setShowResult] = useState(false);
+  const completed = stages.every((stage) => answers[stage.key] !== undefined);
+  const answeredCount = stages.filter((stage) => answers[stage.key] !== undefined).length;
+  const total = stages.reduce((sum, stage) => sum + (answers[stage.key] ?? 0), 0);
+  const highest = Math.max(...stages.map((stage) => answers[stage.key] ?? 0));
+  const priorities = total === 0 ? [] : stages.filter((stage) => answers[stage.key] === highest);
+
+  const reset = () => {
+    setAnswers({});
+    setShowResult(false);
+  };
 
   return (
-    <section id="work" className="border-y border-border bg-surface-dim section-padding container-padding">
+    <section id="scoreboard" className="border-y border-border bg-surface-dim section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow="Selected work" title="Systems I’ve built." sub="A mix of platforms, workflows and websites. Each project is about making the next step clearer." />
-        <div className="grid gap-6 lg:grid-cols-2">
-          {projects.map((project) => (
-            <article key={project.title} className={`group overflow-hidden border border-border bg-background ${project.number === "01" ? "lg:col-span-2 lg:grid lg:grid-cols-[1.05fr_0.95fr]" : ""}`}>
-              <a href={project.href ?? "#contact"} target={project.href ? "_blank" : undefined} rel={project.href ? "noopener noreferrer" : undefined} className="block aspect-[16/10] overflow-hidden border-b border-border lg:border-b-0 lg:border-r">
-                <ProjectVisual project={project} />
-              </a>
-              <div className="p-6 sm:p-8">
-                <div className="flex items-start justify-between gap-5"><span className="text-xs font-semibold text-muted-foreground">PROJECT {project.number}</span><ArrowUpRight className="h-4 w-4 text-muted-foreground" /></div>
-                <h3 className="display-font mt-7 text-2xl font-semibold sm:text-3xl">{project.title}</h3>
-                <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted-foreground">{project.description}</p>
-                <div className="mt-6 flex flex-wrap gap-2">{project.tags.map((tag) => <Badge key={tag} variant="outline" className="rounded-full border-border text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground">{tag}</Badge>)}</div>
-                <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                  {project.href ? <Button className="w-full gap-2 font-semibold sm:w-auto" asChild><a href={project.href} target="_blank" rel="noopener noreferrer">View live site <ExternalLink className="h-4 w-4" /></a></Button> : <Button className="w-full gap-2 font-semibold sm:w-auto" onClick={() => openLeadForm(`${project.title} — discuss a case study`)}>View case study <ArrowUpRight className="h-4 w-4" /></Button>}
-                  <Button variant="outline" className="w-full gap-2 border-border font-semibold sm:w-auto" onClick={() => openLeadForm(`${project.title} — discuss a similar system`)}>Discuss a similar system</Button>
+        <div className="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+          <div className="lg:sticky lg:top-28 lg:self-start">
+            <SectionHeading
+              eyebrow="Free self-check"
+              title="Find the gaps between attention and sales."
+              description="The Conversion Leak Scoreboard is a short five-question check of the journey from first discovery to paying customer."
+            />
+            <div className="border-l-2 border-primary pl-5">
+              <p className="text-sm leading-relaxed text-muted-foreground">Answer based on what happens today, not what you hope happens. There are no trick questions and no made-up industry benchmarks.</p>
+            </div>
+            <p className="mt-7 text-xs text-muted-foreground">Five stages · About two minutes · Score from 0 to 10</p>
+          </div>
+
+          <div className="border border-border bg-background p-5 sm:p-8">
+            <div className="flex items-center justify-between gap-4 border-b border-border pb-5">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Conversion Leak Scoreboard</p>
+                <p className="mt-1 text-sm text-muted-foreground">{showResult ? "Your self-check result" : "Choose the answer that best describes today"}</p>
+              </div>
+              <span className="text-xs font-semibold tabular-nums text-muted-foreground">{answeredCount}/5</span>
+            </div>
+
+            {!showResult ? (
+              <>
+                <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-secondary">
+                  <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${(answeredCount / stages.length) * 100}%` }} />
                 </div>
+                <div className="mt-7 space-y-8">
+                  {stages.map((stage) => (
+                    <fieldset key={stage.key} className="border-b border-border pb-7 last:border-0 last:pb-0">
+                      <legend className="w-full">
+                        <div className="flex items-start gap-3">
+                          <span className="mt-0.5 text-xs font-semibold text-primary">{stage.number}</span>
+                          <div>
+                            <h3 className="text-base font-semibold">{stage.title}</h3>
+                            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{stage.question}</p>
+                          </div>
+                        </div>
+                      </legend>
+                      <div className="mt-4 space-y-2 pl-7">
+                        {stage.options.map((option, score) => {
+                          const selected = answers[stage.key] === score;
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              aria-pressed={selected}
+                              onClick={() => setAnswers((current) => ({ ...current, [stage.key]: score as 0 | 1 | 2 }))}
+                              className={`flex w-full items-start gap-3 border px-3.5 py-3 text-left text-sm transition-colors sm:px-4 ${selected ? "border-primary bg-primary/5 text-foreground" : "border-border hover:border-primary/50 hover:bg-surface-dim"}`}
+                            >
+                              <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-semibold ${selected ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40 text-muted-foreground"}`}>{selected ? <Check className="h-3 w-3" /> : score}</span>
+                              <span className="leading-relaxed">{option}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </fieldset>
+                  ))}
+                </div>
+                <div className="mt-8 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs text-muted-foreground">Your answers stay in this browser session.</p>
+                  <Button disabled={!completed} onClick={() => setShowResult(true)} className="gap-2 rounded-full px-6">
+                    See my result <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <div className="py-7">
+                <div className="grid gap-7 sm:grid-cols-[auto_1fr] sm:items-center">
+                  <div className="flex h-32 w-32 flex-col items-center justify-center rounded-full border-[6px] border-primary/20 text-center">
+                    <span className="display-font text-4xl font-bold tabular-nums">{total}<span className="text-xl text-muted-foreground">/10</span></span>
+                    <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">Your score</span>
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Your self-check is complete</p>
+                    <h3 className="display-font mt-3 text-2xl font-semibold sm:text-3xl">{total === 0 ? "No clear leak surfaced." : priorities.length > 1 ? "A few stages need attention." : "Start with this stage."}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{total === 0 ? "Your answers suggest these five steps are working consistently. Keep checking them as your business grows." : "Your highest-scoring stage or stages are the best place to begin a closer look. This score is a self-check, not a validated industry benchmark."}</p>
+                  </div>
+                </div>
+                {priorities.length > 0 && (
+                  <div className="mt-8 border border-primary/30 bg-primary/5 p-5">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.17em] text-primary">Priority {priorities.length > 1 ? "leaks" : "leak"}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {priorities.map((stage) => <span key={stage.key} className="rounded-full border border-primary/30 bg-background px-3 py-1.5 text-xs font-medium">{stage.title}</span>)}
+                    </div>
+                  </div>
+                )}
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Button onClick={() => openLeadForm(`Conversion Leak Scoreboard: ${total}/10 · Priority: ${priorities.map((stage) => stage.title).join(", ") || "No priority leak"}`)} className="gap-2 rounded-full px-6">
+                    Talk through my result <ArrowUpRight className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" onClick={reset} className="gap-2 rounded-full">
+                    <RotateCcw className="h-4 w-4" /> Retake the check
+                  </Button>
+                </div>
+                <p className="mt-5 text-xs leading-relaxed text-muted-foreground">This result is calculated in your browser. It is not saved or emailed. If you request a review, you can choose to send your details and result to Victor on WhatsApp.</p>
               </div>
-            </article>
-          ))}
+            )}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function ProcessSection() {
+function ApproachSection() {
   const steps = [
-    ["01", "Understand", "Map the business, customer journey and current process."],
-    ["02", "Architect", "Design the system, workflow and user experience."],
-    ["03", "Build", "Build the website, funnel, database, integrations and automations."],
-    ["04", "Launch", "Test everything, connect the components and launch."],
-    ["05", "Optimize", "Improve the system based on real usage and feedback."],
+    ["01", "Understand the journey", "We look at how people find you, enquire, hear back and decide to buy."],
+    ["02", "Find the biggest leak", "We identify where good leads are getting stuck and what is causing the friction."],
+    ["03", "Build the right fix", "Only then do we decide what needs to change, connect or be automated."],
   ];
   return (
-    <section className="section-padding container-padding">
+    <section id="approach" className="section-padding container-padding">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow="How I work" title="From idea to working system." />
-        <div className="grid border-y border-border md:grid-cols-5">
-          {steps.map(([number, title, description]) => <article key={number} className="border-b border-border p-6 last:border-0 md:border-b-0 md:border-r md:last:border-r-0 sm:p-7"><span className="text-xs font-semibold text-muted-foreground">{number}</span><h3 className="display-font mt-12 text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-relaxed text-muted-foreground">{description}</p></article>)}
+        <SectionHeading
+          eyebrow="The way I work"
+          title="Audit first. Build what the business actually needs."
+          description="No pile of tools for the sake of it. We start with the customer journey, find the weak point and make a practical plan."
+        />
+        <div className="grid border-y border-border md:grid-cols-3">
+          {steps.map(([number, title, description]) => (
+            <article key={number} className="border-b border-border py-7 md:border-b-0 md:border-r md:px-7 md:py-8 md:first:pl-0 md:last:border-r-0 md:last:pr-0">
+              <span className="text-xs font-semibold text-primary">{number}</span>
+              <h3 className="display-font mt-8 text-xl font-semibold sm:text-2xl">{title}</h3>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -372,47 +442,46 @@ function ProcessSection() {
 
 function AboutSection() {
   return (
-    <section id="about" className="border-y border-border bg-ink text-ink-foreground section-padding container-padding">
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.55fr_1.45fr] lg:items-center">
-        <div className="flex aspect-square max-w-xs items-end border border-ink-border bg-ink-soft/50 p-6 sm:p-8">
-          <div><div className="display-font text-7xl font-bold leading-none text-ink-foreground sm:text-8xl">VK</div><p className="mt-4 text-[10px] uppercase tracking-[0.2em] text-ink-muted">Based in Nigeria<br />Working globally</p></div>
+    <section id="about" className="border-y border-ink-border bg-ink text-ink-foreground section-padding container-padding">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.6fr_1.4fr] lg:items-center">
+        <div className="flex aspect-square max-w-xs items-end border border-ink-border bg-ink-soft p-6 sm:p-8">
+          <div>
+            <div className="display-font text-7xl font-bold leading-none sm:text-8xl">VK<span className="text-primary">.</span></div>
+            <p className="mt-4 text-[10px] uppercase tracking-[0.2em] text-ink-muted">Nigeria · Working globally</p>
+          </div>
         </div>
         <div className="max-w-3xl">
-          <SectionHeading eyebrow="About" title="I’m Victor Kann." light />
-          <div className="space-y-5 text-lg leading-relaxed text-ink-muted sm:text-xl"><p>I build digital systems for businesses.</p><p>My work sits somewhere between web development, automation, marketing and AI.</p><p>I like taking complicated business processes and turning them into simple systems that actually work.</p></div>
-          <div className="mt-9 flex flex-wrap gap-5 text-sm text-ink-muted"><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-ink-foreground">X <ExternalLink className="h-3.5 w-3.5" /></a></div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">A little about me</p>
+          <h2 className="display-font mt-4 text-4xl font-bold leading-[1.02] tracking-[-0.04em] sm:text-5xl">I’m Victor Kann.</h2>
+          <div className="mt-7 space-y-4 text-base leading-relaxed text-ink-muted sm:text-lg">
+            <p>I work with founders, creators and small online businesses that already have people paying attention, but need a clearer path from interest to sale.</p>
+            <p>My work brings strategy, websites and automation together around one simple goal: help the business move forward without making every step harder than it needs to be.</p>
+          </div>
+          <a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-ink-foreground transition-colors hover:text-primary">
+            Follow my thinking on X <ArrowUpRight className="h-4 w-4" />
+          </a>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function EngagementSection() {
-  const { openLeadForm } = useLeadForm();
-  const paths: Array<{ title: string; description: string; items: string[] }> = [
-    { title: "Build", description: "For businesses that need a new digital system.", items: ["Websites", "Funnels", "Booking", "Automation"] },
-    { title: "Automate", description: "For businesses that already have a process but want to remove manual work.", items: ["Workflows", "CRM", "AI", "Integrations"] },
-    { title: "Optimize", description: "For businesses that already have a system and want to improve it.", items: ["Conversion", "Automation", "UX", "Analytics"] },
-  ];
-  return (
-    <section id="contact" className="section-padding container-padding">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading eyebrow="Engagement" title="What can I build for you?" />
-        <div className="grid gap-px overflow-hidden border border-border bg-border md:grid-cols-3">
-          {paths.map(({ title, description, items }) => <article key={title} className="flex min-h-72 flex-col bg-background p-6 sm:p-8"><span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">{title}</span><p className="mt-7 max-w-xs text-base leading-relaxed">{description}</p><div className="mt-auto flex flex-wrap gap-2 pt-8">{items.map((item) => <span key={item} className="text-xs text-muted-foreground">{item}</span>)}</div></article>)}
-        </div>
-        <Button className="mt-8 gap-2 font-semibold" onClick={() => openLeadForm("Engagement — let’s discuss the project")}>Let’s discuss your project <ArrowRight className="h-4 w-4" /></Button>
       </div>
     </section>
   );
 }
 
 function FinalCta() {
+  const { openLeadForm } = useLeadForm();
   return (
-    <section className="border-y border-border bg-surface-dim section-padding container-padding">
-      <div className="mx-auto flex max-w-7xl flex-col gap-9 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-3xl"><p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">Start a conversation</p><h2 className="display-font mt-4 text-balance text-4xl font-bold leading-[0.98] sm:text-6xl">Have a business process that feels unnecessarily complicated?</h2><p className="mt-6 text-lg text-muted-foreground">Let’s turn it into a system.</p></div>
-        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row"><Button size="lg" className="w-full gap-2 font-semibold sm:w-auto" asChild><a href={CAL_LINK} target="_blank" rel="noopener noreferrer">Book a call <ArrowUpRight className="h-4 w-4" /></a></Button><Button size="lg" variant="outline" className="w-full gap-2 border-border font-semibold sm:w-auto" asChild><a href="mailto:iamvictorkann@outlook.com">Send an email <Mail className="h-4 w-4" /></a></Button></div>
+    <section className="section-padding container-padding">
+      <div className="mx-auto max-w-7xl overflow-hidden bg-primary p-7 text-primary-foreground sm:p-12 lg:p-16">
+        <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div className="max-w-3xl">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary-foreground/75">Make the next step count</p>
+            <h2 className="display-font mt-4 text-balance text-4xl font-bold leading-[0.98] tracking-[-0.045em] sm:text-6xl">You worked to get their attention. Let’s make it easier for them to become customers.</h2>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-primary-foreground/80">Start with the Scoreboard or tell me where your customer journey feels stuck.</p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <Button size="lg" variant="secondary" className="rounded-full px-6" asChild><a href="#scoreboard">Take the Scoreboard <ArrowDown className="ml-2 h-4 w-4" /></a></Button>
+            <Button size="lg" variant="outline" className="rounded-full border-primary-foreground/40 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => openLeadForm("Homepage — discuss a conversion review")}>Talk to Victor <ArrowUpRight className="ml-2 h-4 w-4" /></Button>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -420,15 +489,37 @@ function FinalCta() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border py-10 container-padding">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-10 md:grid-cols-[1fr_auto] md:items-start"><div><a href="#top" className="display-font text-base font-bold tracking-[0.14em]">VICTOR KANN</a><p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">Building websites, funnels, booking systems and automations for modern businesses.</p></div><div className="grid grid-cols-2 gap-x-10 gap-y-3 text-sm text-muted-foreground"><a href="#work" className="hover:text-foreground">Work</a><a href="#services" className="hover:text-foreground">Services</a><a href="#about" className="hover:text-foreground">About</a><a href="#contact" className="hover:text-foreground">Contact</a><a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:text-foreground">X <ExternalLink className="h-3 w-3" /></a><a href="mailto:iamvictorkann@outlook.com" className="inline-flex items-center gap-2 hover:text-foreground">Email <Mail className="h-3 w-3" /></a></div></div>
-        <div className="mt-10 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"><span>© 2026 Victor Kann</span><span>Business systems · Automation · AI</span></div>
+    <footer className="border-t border-border py-9 container-padding">
+      <div className="mx-auto flex max-w-7xl flex-col gap-7 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <a href="#top" className="display-font text-sm font-bold tracking-[0.13em]">VICTOR KANN<span className="text-primary">.</span></a>
+          <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">Systems that help online businesses turn attention into customers.</p>
+        </div>
+        <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-muted-foreground">
+          <a href="#scoreboard" className="hover:text-foreground">Conversion Leak Scoreboard</a>
+          <a href="#approach" className="hover:text-foreground">My approach</a>
+          <a href="https://x.com/iamVictorKann" target="_blank" rel="noopener noreferrer" className="hover:text-foreground">X</a>
+          <a href="mailto:iamvictorkann@outlook.com" className="hover:text-foreground">Email</a>
+        </div>
+      </div>
+      <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-2 border-t border-border pt-5 text-xs text-muted-foreground sm:flex-row sm:justify-between">
+        <span>© {new Date().getFullYear()} Victor Kann</span>
+        <span>Based in Nigeria · Working globally</span>
       </div>
     </footer>
   );
 }
 
-function FloatingBooking() {
-  return <Button type="button" asChild aria-label="Book a call" className="fixed bottom-4 right-4 z-50 h-12 gap-2 rounded-full px-4 font-semibold shadow-lg shadow-foreground/15 transition-transform hover:scale-105 sm:bottom-6 sm:right-6"><a href={CAL_LINK} target="_blank" rel="noopener noreferrer"><MessageCircle className="h-4 w-4" /><span>Book a call</span></a></Button>;
+function FloatingContact() {
+  const { openLeadForm } = useLeadForm();
+  return (
+    <Button
+      type="button"
+      onClick={() => openLeadForm("Floating contact button")}
+      aria-label="Talk to Victor"
+      className="fixed bottom-4 right-4 z-50 h-12 gap-2 rounded-full px-5 font-semibold shadow-lg shadow-primary/20 transition-transform hover:scale-105 sm:bottom-6 sm:right-6"
+    >
+      Talk to Victor <ArrowUpRight className="h-4 w-4" />
+    </Button>
+  );
 }
