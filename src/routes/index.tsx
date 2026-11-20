@@ -401,7 +401,7 @@ function ScoreboardSection() {
                 )}
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Button onClick={() => openLeadForm(`Conversion Leak Scoreboard: ${total}/10 · Priority: ${priorities.map((stage) => stage.title).join(", ") || "No priority leak"}`)} className="gap-2 rounded-full px-6">
-                    Talk through my result <ArrowUpRight className="h-4 w-4" />
+                    Book a call to discuss my result <ArrowUpRight className="h-4 w-4" />
                   </Button>
                   <Button variant="outline" onClick={reset} className="gap-2 rounded-full">
                     <RotateCcw className="h-4 w-4" /> Retake the check
@@ -484,7 +484,7 @@ function FinalCta() {
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
             <Button size="lg" variant="secondary" className="rounded-full px-6" asChild><a href="#scoreboard">Take the Scoreboard <ArrowDown className="ml-2 h-4 w-4" /></a></Button>
-            <Button size="lg" variant="outline" className="rounded-full border-primary-foreground/40 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => openLeadForm("Homepage — discuss a conversion review")}>Talk to Victor <ArrowUpRight className="ml-2 h-4 w-4" /></Button>
+            <Button size="lg" variant="outline" className="rounded-full border-primary-foreground/40 bg-transparent px-6 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => openLeadForm("Homepage — discuss a conversion review")}>Book a 15-minute call <ArrowUpRight className="ml-2 h-4 w-4" /></Button>
           </div>
         </div>
       </div>
@@ -521,7 +521,7 @@ function FloatingContact() {
     <Button
       type="button"
       onClick={() => openLeadForm("Floating contact button")}
-      aria-label="Talk to Victor"
+      aria-label="Book a 15-minute call"
       className="fixed bottom-4 right-4 z-50 h-12 gap-2 rounded-full px-5 font-semibold shadow-lg shadow-primary/20 transition-transform hover:scale-105 sm:bottom-6 sm:right-6"
     >
       Talk to Victor <ArrowUpRight className="h-4 w-4" />
